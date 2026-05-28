@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Builder Profile — Dare Homes (Mockup)</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1a1a2e;
+    --accent: #1a1a2e;
+    --accent-light: rgba(26,26,46,0.06);
+    --text: #1a1a2e;
+    --text-light: #64748b;
+    --text-xlight: #94a3b8;
+    --bg: #ffffff;
+    --bg-alt: #f8fafc;
+    --border: #e2e8f0;
+    --success: #059669;
+    --radius: 14px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Montserrat',sans-serif; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; }
+  
+  /* Hero Section */
+  .builder-hero {
+    position:relative;
+    width:100%;
+    height:420px;
+    overflow:hidden;
+    background:#0a0a1a;
+  }
+  .builder-hero img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0.7;
+  }
+  .builder-hero-overlay {
+    position:absolute;
+    bottom:0; left:0; right:0;
+    padding:40px 24px 32px;
+    background:linear-gradient(transparent, rgba(0,0,0,0.8));
+    color:#fff;
+  }
+  .builder-hero-logo {
+    height:48px;
+    margin-bottom:16px;
+    filter:brightness(10);
+  }
+  .builder-hero h1 {
+    font-size:32px;
+    font-weight:900;
+    margin-bottom:8px;
+    letter-spacing:-0.5px;
+  }
+  .builder-hero-tagline {
+    font-size:14px;
+    font-weight:500;
+    opacity:0.85;
+    max-width:600px;
+    line-height:1.6;
+  }
+
+  /* Stats Bar */
+  .builder-stats {
+    display:flex;
+    gap:0;
+    background:var(--primary);
+    color:#fff;
+    overflow-x:auto;
+  }
+  .builder-stat {
+    flex:1;
+    min-width:100px;
+    padding:20px 16px;
+    text-align:center;
+    border-right:1px solid rgba(255,255,255,0.1);
+  }
+  .builder-stat:last-child { border-right:none; }
+  .builder-stat-value {
+    font-size:24px;
+    font-weight:900;
+    margin-bottom:4px;
+  }
+  .builder-stat-label {
+    font-size:10px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    opacity:0.7;
+  }
+
+  /* Content */
+  .builder-content {
+    max-width:900px;
+    margin:0 auto;
+    padding:32px 20px;
+  }
+
+  /* Section */
+  .section-title {
+    font-size:20px;
+    font-weight:800;
+    color:var(--primary);
+    margin-bottom:6px;
+  }
+  .section-subtitle {
+    font-size:13px;
+    color:var(--text-light);
+    margin-bottom:24px;
+    line-height:1.5;
+  }
+
+  /* Story Section */
+  .builder-story {
+    display:flex;
+    gap:24px;
+    margin-bottom:40px;
+    align-items:center;
+  }
+  .builder-story-img {
+    width:160px;
+    height:160px;
+    border-radius:50%;
+    object-fit:cover;
+    flex-shrink:0;
+    border:4px solid var(--bg-alt);
+    box-shadow:var(--shadow);
+  }
+  .builder-story-text {
+    font-size:14px;
+    color:var(--text);
+    line-height:1.8;
+  }
+  .builder-story-text .founder-name {
+    display:block;
+    font-weight:800;
+    font-size:15px;
+    color:var(--primary);
+    margin-top:12px;
+  }
+  .builder-story-text .founder-role {
+    font-size:12px;
+    color:var(--text-light);
+    font-weight:600;
+  }
+
+  /* Key Differentiators */
+  .diff-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(250px, 1fr));
+    gap:16px;
+    margin-bottom:40px;
+  }
+  .diff-card {
+    background:var(--bg-alt);
+    border:1.5px solid var(--border);
+    border-radius:var(--radius);
+    padding:24px;
+    transition:all 0.2s;
+  }
+  .diff-card:hover {
+    border-color:var(--accent);
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  }
+  .diff-icon {
+    font-size:28px;
+    margin-bottom:12px;
+  }
+  .diff-title {
+    font-size:14px;
+    font-weight:800;
+    color:var(--primary);
+    margin-bottom:6px;
+  }
+  .diff-desc {
+    font-size:12px;
+    color:var(--text-light);
+    line-height:1.6;
+  }
+
+  /* Gallery */
+  .gallery-grid {
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:8px;
+    margin-bottom:40px;
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .gallery-grid img {
+    width:100%;
+    height:200px;
+    object-fit:cover;
+    transition:transform 0.3s;
+    cursor:pointer;
+  }
+  .gallery-grid img:hover {
+    transform:scale(1.05);
+  }
+  .gallery-grid img:first-child {
+    grid-column:span 2;
+    grid-row:span 2;
+    height:100%;
+  }
+
+  /* Inclusions */
+  .inclusions-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
+    gap:12px;
+    margin-bottom:40px;
+  }
+  .inclusion-item {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 16px;
+    background:var(--bg-alt);
+    border-radius:10px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--text);
+  }
+  .inclusion-check {
+    color:var(--success);
+    font-weight:900;
+    font-size:16px;
+    flex-shrink:0;
+  }
+
+  /* CTA Section */
+  .builder-cta {
+    background:var(--primary);
+    color:#fff;
+    border-radius:var(--radius);
+    padding:40px 32px;
+    text-align:center;
+    margin-bottom:40px;
+  }
+  .builder-cta h3 {
+    font-size:22px;
+    font-weight:900;
+    margin-bottom:8px;
+  }
+  .builder-cta p {
+    font-size:13px;
+    opacity:0.7;
+    margin-bottom:24px;
+    max-width:500px;
+    margin-left:auto;
+    margin-right:auto;
+    line-height:1.6;
+  }
+  .cta-btn {
+    display:inline-block;
+    background:#fff;
+    color:var(--primary);
+    padding:14px 40px;
+    border-radius:10px;
+    font-family:'Montserrat',sans-serif;
+    font-size:14px;
+    font-weight:800;
+    text-decoration:none;
+    transition:all 0.2s;
+    border:none;
+    cursor:pointer;
+  }
+  .cta-btn:hover {
+    transform:translateY(-2px);
+    box-shadow:0 8px 24px rgba(0,0,0,0.2);
+  }
+
+  /* Awards / Trust */
+  .trust-bar {
+    display:flex;
+    gap:24px;
+    justify-content:center;
+    align-items:center;
+    padding:24px 16px;
+    margin-bottom:40px;
+    flex-wrap:wrap;
+  }
+  .trust-item {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    font-weight:700;
+    color:var(--text-light);
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+  }
+  .trust-icon {
+    font-size:18px;
+  }
+
+  /* Design Cards Preview */
+  .designs-preview {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+    gap:16px;
+    margin-bottom:40px;
+  }
+  .design-preview-card {
+    border:1.5px solid var(--border);
+    border-radius:var(--radius);
+    overflow:hidden;
+    background:var(--bg);
+    transition:all 0.2s;
+    cursor:pointer;
+  }
+  .design-preview-card:hover {
+    border-color:var(--accent);
+    box-shadow:0 4px 16px rgba(0,0,0,0.08);
+    transform:translateY(-2px);
+  }
+  .design-preview-img {
+    width:100%;
+    height:160px;
+    object-fit:cover;
+  }
+  .design-preview-info {
+    padding:16px;
+  }
+  .design-preview-name {
+    font-size:15px;
+    font-weight:800;
+    color:var(--primary);
+    margin-bottom:4px;
+  }
+  .design-preview-specs {
+    font-size:12px;
+    color:var(--text-light);
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  .design-preview-price {
+    font-size:14px;
+    font-weight:800;
+    color:var(--success);
+  }
+
+  /* Responsive */
+  @media (max-width:640px) {
+    .builder-hero { height:320px; }
+    .builder-hero h1 { font-size:24px; }
+    .builder-story { flex-direction:column; text-align:center; }
+    .builder-story-img { width:120px; height:120px; }
+    .gallery-grid { grid-template-columns:1fr 1fr; }
+    .gallery-grid img:first-child { grid-column:span 2; height:200px; }
+    .gallery-grid img { height:140px; }
+    .builder-stat-value { font-size:20px; }
+    .designs-preview { grid-template-columns:repeat(2, 1fr); }
+  }
+
+  /* Back button */
+  .back-bar {
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    background:rgba(255,255,255,0.95);
+    backdrop-filter:blur(10px);
+    padding:12px 20px;
+    display:flex;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+  }
+  .back-btn {
+    background:none;
+    border:none;
+    font-family:'Montserrat',sans-serif;
+    font-size:13px;
+    font-weight:600;
+    color:var(--text-light);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .back-btn:hover { color:var(--primary); }
+</style>
+</head>
+<body>
+
+<!-- Back Bar -->
+<div class="back-bar">
+  <button class="back-btn" onclick="history.back()">&#8592; Back to Builders</button>
+</div>
+
+<!-- Hero -->
+<div class="builder-hero" style="margin-top:48px">
+  <img src="https://framerusercontent.com/images/HGdxHW56Y6bjSsLKxYLhp3le99I.jpg?scale-down-to=1024&width=2000&height=1333" alt="Dare Homes">
+  <div class="builder-hero-overlay">
+    <img class="builder-hero-logo" src="img/builders/dare.svg" alt="Dare Homes" onerror="this.style.display='none'">
+    <h1>Dare Homes</h1>
+    <div class="builder-hero-tagline">We've spent our lives building homes for Queenslanders. 1,800+ homes delivered with upfront designs, transparent pricing, and personal service from start to finish.</div>
+  </div>
+</div>
+
+<!-- Stats Bar -->
+<div class="builder-stats">
+  <div class="builder-stat">
+    <div class="builder-stat-value">1,800+</div>
+    <div class="builder-stat-label">Homes Built</div>
+  </div>
+  <div class="builder-stat">
+    <div class="builder-stat-value">30+</div>
+    <div class="builder-stat-label">Years Experience</div>
+  </div>
+  <div class="builder-stat">
+    <div class="builder-stat-value">20+</div>
+    <div class="builder-stat-label">Standard Designs</div>
+  </div>
+  <div class="builder-stat">
+    <div class="builder-stat-value">QBCC</div>
+    <div class="builder-stat-label">Fully Licensed</div>
+  </div>
+</div>
+
+<!-- Trust Badges -->
+<div class="trust-bar">
+  <div class="trust-item"><span class="trust-icon">&#9733;</span> HIA Member</div>
+  <div class="trust-item"><span class="trust-icon">&#9733;</span> QBCC Licensed</div>
+  <div class="trust-item"><span class="trust-icon">&#9733;</span> Fixed Price Contracts</div>
+  <div class="trust-item"><span class="trust-icon">&#9733;</span> Family Owned</div>
+</div>
+
+<div class="builder-content">
+
+  <!-- Founder Story -->
+  <h2 class="section-title">The Story Behind Dare</h2>
+  <p class="section-subtitle">Built on vision. Backed by legacy.</p>
+  
+  <div class="builder-story">
+    <img class="builder-story-img" src="https://framerusercontent.com/images/AprgxoyOs46Jf793JD3wczMxUtQ.jpg?width=400&height=400" alt="Tom Egan">
+    <div class="builder-story-text">
+      "At 18, I set out to build my first home. Halfway through, my builder folded. All I had was an unfinished frame and a choice: give up, or finish it myself. I rallied my mates, rolled up my sleeves, and saw it through. That experience didn't just give me a roof over my head — it gave me the resolve to change how this industry works."
+      <span class="founder-name">Tom Egan</span>
+      <span class="founder-role">Managing Director, Dare Homes</span>
+    </div>
+  </div>
+
+  <!-- Key Differentiators -->
+  <h2 class="section-title">Why Dare</h2>
+  <p class="section-subtitle">What makes Dare different from every other volume builder</p>
+  
+  <div class="diff-grid">
+    <div class="diff-card">
+      <div class="diff-icon">&#127968;</div>
+      <div class="diff-title">Upfront Designs</div>
+      <div class="diff-desc">Every design is thoughtfully curated and priced before you walk in. No surprises, no hidden costs, no "we'll get back to you."</div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">&#128176;</div>
+      <div class="diff-title">Fixed Price Guarantee</div>
+      <div class="diff-desc">The price you sign is the price you pay. Full transparency from day one — no variations, no escalation clauses.</div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">&#129309;</div>
+      <div class="diff-title">Personal Service</div>
+      <div class="diff-desc">You'll deal directly with the people who build your home. Not a call centre. Not a sales team. The actual builders.</div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">&#127793;</div>
+      <div class="diff-title">Queensland Born</div>
+      <div class="diff-desc">30+ years building across SEQ. We know the soil, the climate, the covenants, and the local trades. This is home.</div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">&#128200;</div>
+      <div class="diff-title">1,800+ Homes Delivered</div>
+      <div class="diff-desc">Not a startup. Not an experiment. A proven track record spanning three decades of Queensland builds.</div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">&#128736;</div>
+      <div class="diff-title">Quality Trades Network</div>
+      <div class="diff-desc">Long-standing relationships with premium local trades who know our standards and deliver consistently.</div>
+    </div>
+  </div>
+
+  <!-- Gallery -->
+  <h2 class="section-title">Recent Builds</h2>
+  <p class="section-subtitle">Completed homes across South East Queensland</p>
+  
+  <div class="gallery-grid">
+    <img src="https://framerusercontent.com/images/HGdxHW56Y6bjSsLKxYLhp3le99I.jpg?scale-down-to=512&width=1200&height=800" alt="Dare Home 1">
+    <img src="https://framerusercontent.com/images/nNCyCPdGshL81u34qVwK6jPzAso.jpg?width=600&height=400" alt="Dare Home 2">
+    <img src="https://framerusercontent.com/images/QwyrGqeKIeb73onAxOWMnpMHbHs.jpg?width=600&height=400" alt="Dare Home 3">
+    <img src="https://framerusercontent.com/images/lH6oSEDbTnXNHoqYQqH6JXY6aV0.jpg?width=600&height=400" alt="Dare Home 4">
+    <img src="https://framerusercontent.com/images/7N3UQTEUq2LA6L0iTYkkEMTfBeg.jpg?width=600&height=400" alt="Dare Home 5">
+  </div>
+
+  <!-- Standard Inclusions -->
+  <h2 class="section-title">Standard Inclusions</h2>
+  <p class="section-subtitle">Every Dare home comes with these as standard — not as upgrades</p>
+  
+  <div class="inclusions-grid">
+    <div class="inclusion-item"><span class="inclusion-check">&#10003;</span> 2590mm Ceiling Height</div>
+    <div class="inclusion-item"><span class="inclusion-check">&#10003;</span> Colorbond Roof</div>
+    <div class="inclusion-item"><span class="inclusion-check">&#10003;</span> Stone Benchtops</div>
+    <div class="inclusion-item"><span class="inclusion-check">&#10003;</span> 900mm Appliances</div>
+    <div class="inclusion-item"><span class="inclusion-check">&#10003;</span> Tiled Ensuite + Bathroom</div>
+    <div class="inclusion-item"><span class="inclusion-check">&#10003;</span> LED Downlights Throughout</div>
+    <div class="inclusion-item"><span class="inclusion-check">&#10003;</span> Double Lock-Up Garage</div>
+    <div class="inclusion-item"><span class="inclusion-check">&#10003;</span> Termite Protection</div>
+    <div class="inclusion-item"><span class="inclusion-check">&#10003;</span> NBN Ready</div>
+    <div class="inclusion-item"><span class="inclusion-check">&#10003;</span> Timber-Look Flooring</div>
+    <div class="inclusion-item"><span class="inclusion-check">&#10003;</span> Fully Rendered Facade</div>
+    <div class="inclusion-item"><span class="inclusion-check">&#10003;</span> 6 Year Structural Warranty</div>
+  </div>
+
+  <!-- Designs Preview -->
+  <h2 class="section-title">Popular Designs</h2>
+  <p class="section-subtitle">Curated designs that fit ProjX project land sizes</p>
+  
+  <div class="designs-preview">
+    <div class="design-preview-card">
+      <img class="design-preview-img" src="https://framerusercontent.com/images/HGdxHW56Y6bjSsLKxYLhp3le99I.jpg?scale-down-to=512&width=500&height=350" alt="Latigo 210">
+      <div class="design-preview-info">
+        <div class="design-preview-name">Latigo 210</div>
+        <div class="design-preview-specs">4 Bed | 2 Bath | 2 Car | 210m2</div>
+        <div class="design-preview-price">From $365,000</div>
+      </div>
+    </div>
+    <div class="design-preview-card">
+      <img class="design-preview-img" src="https://framerusercontent.com/images/lH6oSEDbTnXNHoqYQqH6JXY6aV0.jpg?width=500&height=350" alt="Maryland 210">
+      <div class="design-preview-info">
+        <div class="design-preview-name">Maryland 210</div>
+        <div class="design-preview-specs">4 Bed | 2 Bath | 2 Car | 210m2</div>
+        <div class="design-preview-price">From $372,000</div>
+      </div>
+    </div>
+    <div class="design-preview-card">
+      <img class="design-preview-img" src="https://framerusercontent.com/images/nNCyCPdGshL81u34qVwK6jPzAso.jpg?width=500&height=350" alt="Harmony">
+      <div class="design-preview-info">
+        <div class="design-preview-name">Harmony</div>
+        <div class="design-preview-specs">4 Bed | 2 Bath | 2 Car | 210m2</div>
+        <div class="design-preview-price">From $358,000</div>
+      </div>
+    </div>
+    <div class="design-preview-card">
+      <img class="design-preview-img" src="https://framerusercontent.com/images/7N3UQTEUq2LA6L0iTYkkEMTfBeg.jpg?width=500&height=350" alt="Beverly">
+      <div class="design-preview-info">
+        <div class="design-preview-name">Beverly</div>
+        <div class="design-preview-specs">4 Bed | 2 Bath | 2 Car | 201m2</div>
+        <div class="design-preview-price">From $342,000</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="builder-cta">
+    <h3>Ready to explore Dare Homes?</h3>
+    <p>Browse their full design range matched to available ProjX lots. Our team will guide you through every step.</p>
+    <button class="cta-btn" onclick="alert('This would open the design selection wizard filtered to Dare Homes')">View Dare Designs &#8594;</button>
+  </div>
+
+</div>
+
+</body>
+</html>

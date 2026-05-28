@@ -1,0 +1,3408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>ProjX — House & Land Design Portal</title>
+ <link rel="icon" href="favicon.ico">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+ <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+ <style>
+ *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+ :root {
+ --primary: #1B2432;
+ --primary-light: #2D3748;
+ --accent: #3B7DDD;
+ --accent-hover: #2B6BC0;
+ --success: #059669;
+ --warm: #C8A96E;
+ --bg: #FFFFFF;
+ --bg-alt: #F8F9FA;
+ --bg-dark: #1B2432;
+ --text: #374151;
+ --text-light: #6B7280;
+ --text-xlight: #9CA3AF;
+ --border: #E5E7EB;
+ --card-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+ --card-shadow-hover: 0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
+ --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.05);
+ --shadow-lg: 0 10px 32px rgba(0,0,0,0.10), 0 4px 12px rgba(0,0,0,0.06);
+ --shadow-xl: 0 20px 60px rgba(0,0,0,0.12);
+ --radius: 12px;
+ --radius-lg: 18px;
+ --transition: all 0.22s cubic-bezier(0.4,0,0.2,1);
+ }
+
+ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+ body {
+ font-family: 'Montserrat', sans-serif;
+ background: var(--bg-alt);
+ color: var(--text);
+ line-height: 1.6;
+ overflow-x: hidden;
+ -webkit-tap-highlight-color: transparent;
+ }
+
+ img { max-width: 100%; height: auto; }
+
+ /* ─── PASSWORD GATE ─────────────────────────────────────── */
+ #gate {
+ position: fixed; inset: 0; z-index: 9999;
+ background: var(--bg-alt);
+ display: flex; align-items: center; justify-content: center;
+ flex-direction: column;
+ }
+
+ .gate-inner {
+ background: var(--bg);
+ border: 1px solid var(--border);
+ border-radius: var(--radius-lg);
+ box-shadow: var(--shadow-xl);
+ padding: 56px 48px;
+ text-align: center;
+ width: min(480px, 92vw);
+ position: relative;
+ }
+
+ .gate-logo {
+ display: flex; align-items: center; justify-content: center;
+ margin-bottom: 8px;
+ }
+
+ .gate-tagline {
+ font-size: 12px; font-weight: 600; letter-spacing: 2.5px;
+ color: var(--text-light); text-transform: uppercase; margin-bottom: 32px;
+ }
+
+ .invite-badge {
+ display: inline-flex; align-items: center; gap: 6px;
+ background: rgba(59,125,221,0.08); border: 1px solid rgba(59,125,221,0.2);
+ color: var(--accent); font-size: 11px; font-weight: 700;
+ letter-spacing: 1.5px; text-transform: uppercase;
+ padding: 6px 14px; border-radius: 50px; margin-bottom: 32px;
+ }
+ .invite-badge::before { content: '🔒'; font-size: 10px; }
+
+ .gate-subtitle {
+ color: var(--text-light); font-size: 13px; margin-bottom: 28px;
+ }
+
+ .gate-input-wrap { position: relative; margin-bottom: 16px; }
+
+ .gate-input {
+ width: 100%;
+ background: var(--bg-alt);
+ border: 1.5px solid var(--border);
+ border-radius: 10px;
+ color: var(--primary);
+ font-family: 'Montserrat', sans-serif;
+ font-size: 16px; font-weight: 600;
+ letter-spacing: 6px; text-align: center;
+ padding: 16px 20px;
+ outline: none;
+ transition: var(--transition);
+ }
+ .gate-input::placeholder { letter-spacing: 2px; font-size: 13px; font-weight: 400; color: var(--text-xlight); }
+ .gate-input:focus { border-color: var(--accent); background: var(--bg); box-shadow: 0 0 0 3px rgba(59,125,221,0.1); }
+ .gate-input.error { border-color: #ef4444; animation: shake 0.4s ease; }
+
+ @keyframes shake {
+ 0%,100% { transform: translateX(0); }
+ 20%,60% { transform: translateX(-6px); }
+ 40%,80% { transform: translateX(6px); }
+ }
+
+ .gate-btn {
+ width: 100%; padding: 16px;
+ background: var(--primary);
+ border: none; border-radius: 10px;
+ color: #fff; font-family: 'Montserrat', sans-serif;
+ font-size: 15px; font-weight: 700; letter-spacing: 0.5px;
+ cursor: pointer; transition: var(--transition);
+ }
+ .gate-btn:hover { background: var(--primary-light); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+ .gate-error {
+ color: #ef4444; font-size: 12px; margin-top: 10px;
+ opacity: 0; transition: opacity 0.2s;
+ }
+ .gate-error.show { opacity: 1; }
+
+ /* ─── NAVBAR ─────────────────────────────────────────────── */
+ #navbar {
+ position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+ background: var(--bg);
+ border-bottom: 1px solid var(--border);
+ transition: var(--transition);
+ }
+
+ .nav-inner {
+ max-width: 1280px; margin: 0 auto;
+ display: flex; align-items: center; justify-content: space-between;
+ padding: 0 32px; height: 68px;
+ }
+
+ .nav-logo {
+ display: flex; align-items: center;
+ text-decoration: none;
+ }
+
+ .nav-links {
+ display: flex; align-items: center; gap: 4px; list-style: none;
+ }
+ .nav-links a {
+ color: var(--text-light); text-decoration: none;
+ font-size: 13px; font-weight: 600; letter-spacing: 0.3px;
+ padding: 8px 14px; border-radius: 8px;
+ transition: var(--transition);
+ }
+ .nav-links a:hover { color: var(--primary); background: var(--bg-alt); }
+
+ .nav-cta {
+ background: var(--primary) !important;
+ color: #fff !important;
+ padding: 9px 20px !important;
+ border-radius: 8px !important;
+ }
+ .nav-cta:hover { background: var(--primary-light) !important; color: #fff !important; transform: translateY(-1px); box-shadow: var(--shadow-md) !important; }
+
+ .nav-hamburger {
+ display: none; flex-direction: column; gap: 5px;
+ background: none; border: none; cursor: pointer; padding: 4px;
+ }
+ .nav-hamburger span {
+ display: block; width: 22px; height: 2px;
+ background: var(--primary); border-radius: 2px;
+ transition: var(--transition);
+ }
+
+ /* ─── HERO ───────────────────────────────────────────────── */
+ #hero {
+ min-height: 55vh;
+ background: linear-gradient(160deg, var(--bg-alt) 0%, #eef0f3 50%, var(--bg) 100%);
+ display: flex; align-items: center; justify-content: center;
+ padding: 100px 32px 60px;
+ border-bottom: 1px solid var(--border);
+ }
+
+ .hero-pattern {
+ position: absolute; inset: 0; pointer-events: none;
+ background-image:
+ radial-gradient(circle at 80% 20%, rgba(59,125,221,0.05) 0%, transparent 50%),
+ radial-gradient(circle at 20% 80%, rgba(200,169,110,0.04) 0%, transparent 40%);
+ }
+
+ .hero-inner {
+ max-width: 1280px; margin: 0 auto; width: 100%;
+ display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+ position: relative; z-index: 1;
+ }
+
+ .hero-badge {
+ display: inline-flex; align-items: center; gap: 8px;
+ background: rgba(59,125,221,0.08); border: 1px solid rgba(59,125,221,0.2);
+ color: var(--accent); font-size: 11px; font-weight: 700;
+ letter-spacing: 2px; text-transform: uppercase;
+ padding: 8px 16px; border-radius: 50px; margin-bottom: 24px;
+ }
+ .hero-badge .dot { width: 6px; height: 6px; background: var(--success); border-radius: 50%; animation: pulse 2s infinite; }
+ @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+
+ .hero-title {
+ font-size: clamp(36px, 4.5vw, 60px);
+ font-weight: 900; line-height: 1.07; letter-spacing: -2.5px;
+ color: var(--primary); margin-bottom: 20px;
+ }
+ .hero-title .accent { color: var(--accent); }
+
+ .hero-subtitle {
+ font-size: clamp(15px, 1.6vw, 17px); font-weight: 400;
+ color: var(--text-light); line-height: 1.75;
+ max-width: 500px; margin-bottom: 40px;
+ }
+
+ .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 56px; }
+
+ .btn-primary {
+ display: inline-flex; align-items: center; gap: 8px;
+ background: var(--primary);
+ color: #fff; padding: 15px 30px;
+ border-radius: 10px; font-family: 'Montserrat', sans-serif;
+ font-size: 14px; font-weight: 700; letter-spacing: 0.3px;
+ border: none; cursor: pointer; text-decoration: none;
+ transition: var(--transition);
+ }
+ .btn-primary:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+ .btn-outline {
+ display: inline-flex; align-items: center; gap: 8px;
+ background: transparent; color: var(--primary);
+ padding: 14px 28px; border-radius: 10px;
+ border: 1.5px solid var(--border);
+ font-family: 'Montserrat', sans-serif;
+ font-size: 14px; font-weight: 600; letter-spacing: 0.3px;
+ cursor: pointer; text-decoration: none; transition: var(--transition);
+ }
+ .btn-outline:hover { border-color: var(--primary); background: var(--bg-alt); transform: translateY(-2px); }
+
+ .hero-stats {
+ display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+ background: var(--primary);
+ border-radius: var(--radius); overflow: hidden;
+ }
+
+ .stat-item {
+ padding: 20px 16px; text-align: center;
+ border-right: 1px solid rgba(255,255,255,0.08);
+ }
+ .stat-item:last-child { border-right: none; }
+
+ .stat-number {
+ font-size: clamp(22px, 2.5vw, 30px); font-weight: 900;
+ color: #fff; letter-spacing: -1px; line-height: 1;
+ margin-bottom: 4px;
+ }
+
+ .stat-label {
+ font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.45);
+ letter-spacing: 1px; text-transform: uppercase;
+ }
+
+ .hero-visual { position: relative; }
+
+ .hero-img-stack { position: relative; height: 480px; }
+
+ .hero-img-main {
+ position: absolute; top: 0; right: 0;
+ width: 85%; height: 360px;
+ border-radius: var(--radius-lg); overflow: hidden;
+ box-shadow: var(--shadow-xl);
+ }
+ .hero-img-main img { width: 100%; height: 100%; object-fit: cover; }
+
+ .hero-img-secondary {
+ position: absolute; bottom: 0; left: 0;
+ width: 55%; height: 220px;
+ border-radius: var(--radius); overflow: hidden;
+ box-shadow: var(--shadow-xl);
+ border: 3px solid var(--bg);
+ }
+ .hero-img-secondary img { width: 100%; height: 100%; object-fit: cover; }
+
+ .hero-img-badge {
+ position: absolute; top: 20px; left: 0;
+ background: var(--success); color: #fff;
+ padding: 8px 16px; border-radius: 8px;
+ font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
+ box-shadow: var(--shadow-md);
+ }
+
+ /* ─── SECTION COMMON ─────────────────────────────────────── */
+ section { padding: 96px 32px; }
+
+ .section-inner { max-width: 1280px; margin: 0 auto; }
+
+ .section-badge {
+ display: inline-flex; align-items: center; gap: 6px;
+ background: rgba(59,125,221,0.07); border: 1px solid rgba(59,125,221,0.15);
+ color: var(--accent); font-size: 11px; font-weight: 700;
+ letter-spacing: 2px; text-transform: uppercase;
+ padding: 6px 14px; border-radius: 50px; margin-bottom: 14px;
+ }
+
+ .section-title {
+ font-size: clamp(26px, 3vw, 40px); font-weight: 900;
+ letter-spacing: -1.5px; color: var(--primary); line-height: 1.1;
+ margin-bottom: 12px;
+ }
+
+ .section-subtitle {
+ font-size: 15px; color: var(--text-light); font-weight: 400;
+ max-width: 600px; line-height: 1.75;
+ }
+
+ .section-header { margin-bottom: 52px; }
+
+ /* ─── FADE IN ──────────────────────────────────────────────── */
+ .fade-in {
+ opacity: 0; transform: translateY(24px);
+ transition: opacity 0.6s ease, transform 0.6s ease;
+ }
+ .fade-in.visible { opacity: 1; transform: translateY(0); }
+ .fade-in-delay-1 { transition-delay: 0.1s; }
+ .fade-in-delay-2 { transition-delay: 0.2s; }
+ .fade-in-delay-3 { transition-delay: 0.3s; }
+ .fade-in-delay-4 { transition-delay: 0.4s; }
+
+ /* ─── PROJECTS ───────────────────────────────────────────── */
+ #projects { background: var(--bg-alt); }
+
+ .projects-grid {
+ display: grid;
+ grid-template-columns: repeat(3, 1fr);
+ gap: 24px;
+ }
+
+ .project-card {
+ background: var(--bg); border-radius: var(--radius-lg);
+ overflow: hidden; box-shadow: var(--card-shadow);
+ transition: var(--transition); border: 1px solid var(--border);
+ }
+ .project-card:hover {
+ transform: translateY(-5px); box-shadow: var(--card-shadow-hover);
+ border-color: rgba(59,125,221,0.25);
+ }
+
+ .project-img {
+ width: 100%; height: 200px; overflow: hidden; position: relative;
+ }
+ .project-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; }
+ .project-card:hover .project-img img { transform: scale(1.05); }
+
+ .project-lots-badge {
+ position: absolute; top: 12px; right: 12px;
+ background: var(--success); color: #fff;
+ font-size: 11px; font-weight: 800; letter-spacing: 0.3px;
+ padding: 5px 11px; border-radius: 6px;
+ }
+
+ .project-body { padding: 20px; }
+
+ .project-region {
+ display: inline-block;
+ font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+ text-transform: uppercase; padding: 4px 10px; border-radius: 4px;
+ margin-bottom: 10px;
+ }
+
+ .project-name {
+ font-size: 18px; font-weight: 800; color: var(--primary);
+ letter-spacing: -0.5px; margin-bottom: 2px;
+ }
+
+ .project-suburb {
+ font-size: 13px; color: var(--text-light); margin-bottom: 14px;
+ }
+
+ .project-price {
+ font-size: 13px; color: var(--text-light); margin-bottom: 16px;
+ }
+ .project-price strong { color: var(--primary); font-weight: 700; }
+
+ .project-footer {
+ display: flex; align-items: center; justify-content: space-between;
+ padding-top: 14px; border-top: 1px solid var(--border);
+ }
+
+ .project-lots-count {
+ font-size: 13px; font-weight: 700; color: var(--success);
+ }
+
+ .btn-sm {
+ font-family: 'Montserrat', sans-serif;
+ font-size: 12px; font-weight: 700; letter-spacing: 0.3px;
+ background: var(--primary);
+ color: #fff; border: none; padding: 9px 18px;
+ border-radius: 8px; cursor: pointer; text-decoration: none;
+ transition: var(--transition);
+ }
+ .btn-sm:hover { background: var(--primary-light); transform: translateY(-1px); box-shadow: var(--card-shadow-hover); }
+
+ /* ─── MAP ────────────────────────────────────────────────── */
+ #map {
+ height: 520px; border-radius: var(--radius-lg);
+ overflow: hidden; box-shadow: var(--card-shadow-hover);
+ border: 1px solid var(--border);
+ }
+
+ /* ─── ESTATES ───────────────────────────────────────────── */
+ #estates { background: var(--bg-alt); }
+
+ .estates-header {
+ display: flex;
+ align-items: flex-start;
+ justify-content: space-between;
+ margin-bottom: 32px;
+ flex-wrap: wrap;
+ gap: 16px;
+ }
+
+ .view-toggle {
+ display: flex;
+ gap: 4px;
+ background: var(--bg-alt);
+ border: 1px solid var(--border);
+ border-radius: 10px;
+ padding: 4px;
+ }
+
+ .toggle-btn {
+ display: flex;
+ align-items: center;
+ gap: 6px;
+ padding: 8px 16px;
+ border: none;
+ border-radius: 8px;
+ background: transparent;
+ color: var(--text-light);
+ font-family: 'Montserrat', sans-serif;
+ font-size: 13px;
+ font-weight: 600;
+ cursor: pointer;
+ transition: all 0.2s ease;
+ }
+
+ .toggle-btn.active {
+ background: var(--bg);
+ color: var(--primary);
+ box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+ }
+
+ .toggle-btn:hover:not(.active) {
+ color: var(--primary);
+ }
+
+ /* ─── BUILDERS ───────────────────────────────────────────── */
+ #builders { background: var(--bg-alt); }
+
+ .builders-grid {
+ display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;
+ }
+
+ .builder-card {
+ background: var(--bg); border-radius: var(--radius-lg);
+ overflow: hidden; border: 1px solid var(--border);
+ box-shadow: var(--card-shadow);
+ transition: var(--transition);
+ }
+ .builder-card:hover {
+ transform: translateY(-5px); box-shadow: var(--card-shadow-hover);
+ border-color: rgba(59,125,221,0.25);
+ }
+
+ /* builder-img removed - using logo only */
+
+ .builder-body { padding: 18px; }
+
+ .builder-logo-circle {
+ width: 48px; height: 48px; border-radius: 50%;
+ display: flex; align-items: center; justify-content: center;
+ font-size: 14px; font-weight: 900; color: #fff;
+ margin-bottom: 10px; margin-top: -34px; position: relative;
+ box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+ border: 2.5px solid var(--bg);
+ }
+
+ .builder-tier {
+ display: inline-block; font-size: 10px; font-weight: 700;
+ letter-spacing: 1px; text-transform: uppercase;
+ padding: 3px 9px; border-radius: 4px; margin-bottom: 8px;
+ background: var(--bg-alt); color: var(--text-light);
+ border: 1px solid var(--border);
+ }
+
+ .builder-name {
+ font-size: 16px; font-weight: 800; color: var(--primary);
+ letter-spacing: -0.3px; margin-bottom: 4px;
+ }
+
+ .builder-tagline {
+ font-size: 11px; color: var(--text-light); margin-bottom: 12px; line-height: 1.5;
+ }
+
+ .builder-meta {
+ display: flex; gap: 14px; margin-bottom: 14px;
+ }
+ .builder-meta-item { font-size: 11px; color: var(--text-light); }
+ .builder-meta-item strong { color: var(--primary); font-weight: 700; font-size: 13px; }
+
+ .builder-price {
+ font-size: 13px; font-weight: 700; color: var(--accent);
+ margin-bottom: 14px;
+ }
+
+ /* ─── DESIGNS ────────────────────────────────────────────── */
+ #designs { background: var(--bg); }
+
+ .filter-chips {
+ display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 36px;
+ }
+
+ .filter-chip {
+ padding: 9px 20px; border-radius: 50px;
+ font-family: 'Montserrat', sans-serif;
+ font-size: 13px; font-weight: 700;
+ border: 1.5px solid var(--border);
+ background: var(--bg-alt); color: var(--text-light);
+ cursor: pointer; transition: var(--transition);
+ }
+ .filter-chip:hover, .filter-chip.active {
+ background: var(--primary); color: #fff; border-color: var(--primary);
+ }
+
+ .designs-grid {
+ display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;
+ }
+
+ .design-card {
+ background: var(--bg); border-radius: var(--radius);
+ overflow: hidden; box-shadow: var(--card-shadow);
+ border: 1px solid var(--border); transition: var(--transition);
+ }
+ .design-card:hover { transform: translateY(-5px); box-shadow: var(--card-shadow-hover); border-color: rgba(59,125,221,0.25); }
+ .design-card.hidden { display: none; }
+
+ .design-img {
+ width: 100%; height: 160px; overflow: hidden;
+ }
+ .design-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+ .design-card:hover .design-img img { transform: scale(1.05); }
+
+ .design-body { padding: 14px; }
+
+ .design-name {
+ font-size: 14px; font-weight: 800; color: var(--primary);
+ letter-spacing: -0.3px; margin-bottom: 2px;
+ }
+
+ .design-builder {
+ font-size: 11px; color: var(--accent); font-weight: 600;
+ margin-bottom: 10px;
+ }
+
+ .design-specs {
+ display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;
+ }
+ .design-spec {
+ display: flex; align-items: center; gap: 3px;
+ font-size: 11px; color: var(--text-light); font-weight: 500;
+ }
+ .design-spec .icon { font-size: 12px; }
+
+ .design-footer {
+ display: flex; align-items: center; justify-content: space-between;
+ padding-top: 10px; border-top: 1px solid var(--border);
+ }
+
+ .design-price { font-size: 14px; font-weight: 800; color: var(--primary); }
+ .design-sqm { font-size: 11px; color: var(--text-xlight); }
+
+ /* ─── CALCULATOR ─────────────────────────────────────────── */
+ #calculator { background: var(--bg-alt); }
+
+ .calc-grid {
+ display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+ background: var(--bg);
+ border: 1px solid var(--border);
+ border-radius: var(--radius-lg);
+ padding: 48px; box-shadow: var(--card-shadow);
+ }
+
+ .calc-group { margin-bottom: 28px; }
+ .calc-label {
+ display: flex; justify-content: space-between; align-items: center;
+ font-size: 13px; font-weight: 700; color: var(--primary);
+ margin-bottom: 10px;
+ }
+ .calc-label span { font-size: 14px; color: var(--accent); font-weight: 800; }
+
+ .calc-slider {
+ width: 100%; -webkit-appearance: none; appearance: none;
+ height: 4px; border-radius: 3px; outline: none;
+ background: linear-gradient(to right, var(--accent) 0%, var(--border) 0%);
+ cursor: pointer;
+ }
+ .calc-slider::-webkit-slider-thumb {
+ -webkit-appearance: none; width: 20px; height: 20px;
+ border-radius: 50%; background: var(--accent);
+ border: 2px solid #fff; box-shadow: 0 2px 8px rgba(59,125,221,0.3);
+ cursor: pointer; transition: transform 0.15s;
+ }
+ .calc-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+ .calc-input-row {
+ display: flex; gap: 12px; align-items: center; margin-top: 10px;
+ }
+ .calc-input {
+ flex: 1; padding: 10px 14px; border: 1.5px solid var(--border);
+ border-radius: 8px; font-family: 'Montserrat', sans-serif;
+ font-size: 14px; font-weight: 600; color: var(--primary);
+ outline: none; transition: var(--transition); background: var(--bg-alt);
+ }
+ .calc-input:focus { border-color: var(--accent); background: var(--bg); box-shadow: 0 0 0 3px rgba(59,125,221,0.1); }
+
+ .loan-toggle {
+ display: flex; gap: 0; background: var(--border); border-radius: 8px; padding: 3px;
+ }
+ .loan-toggle-btn {
+ padding: 8px 20px; border: none; background: transparent;
+ font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
+ color: var(--text-light); cursor: pointer; border-radius: 6px;
+ transition: var(--transition);
+ }
+ .loan-toggle-btn.active { background: var(--primary); color: #fff; }
+
+ .calc-results { display: flex; flex-direction: column; justify-content: center; }
+
+ .calc-result-main {
+ background: var(--primary);
+ border-radius: var(--radius); padding: 32px;
+ text-align: center; margin-bottom: 20px;
+ }
+
+ .calc-result-label { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+ .calc-result-value { font-size: 48px; font-weight: 900; color: #fff; letter-spacing: -2px; line-height: 1; }
+ .calc-result-sub { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 6px; }
+
+ .calc-result-row {
+ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;
+ }
+ .calc-result-item {
+ background: var(--bg-alt); border: 1px solid var(--border); border-radius: 10px; padding: 16px;
+ }
+ .calc-result-item-label { font-size: 11px; color: var(--text-xlight); font-weight: 600; letter-spacing: 0.5px; margin-bottom: 4px; }
+ .calc-result-item-value { font-size: 16px; font-weight: 800; color: var(--primary); }
+
+ .btn-green {
+ display: block; width: 100%; padding: 16px;
+ background: var(--success);
+ color: #fff; border: none; border-radius: 10px;
+ font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 700;
+ cursor: pointer; text-align: center; transition: var(--transition);
+ }
+ .btn-green:hover { background: #047857; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(5,150,105,0.3); }
+
+ .calc-powered {
+ text-align: center; font-size: 11px; color: var(--text-xlight);
+ margin-top: 10px; font-weight: 600;
+ }
+
+ /* ─── PARTNER SERVICES ───────────────────────────────────── */
+ #services { background: var(--bg); border-top: 1px solid var(--border); }
+
+ .services-grid {
+ display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+ }
+
+ .service-card {
+ background: var(--bg-alt); border-radius: var(--radius-lg);
+ padding: 32px; border: 1px solid var(--border);
+ box-shadow: var(--card-shadow);
+ transition: var(--transition); text-align: center;
+ }
+ .service-card:hover {
+ transform: translateY(-5px); box-shadow: var(--card-shadow-hover);
+ border-color: rgba(59,125,221,0.25); background: var(--bg);
+ }
+
+ .service-icon {
+ width: 60px; height: 60px; border-radius: 16px;
+ display: flex; align-items: center; justify-content: center;
+ font-size: 26px; margin: 0 auto 18px;
+ }
+
+ .service-title {
+ font-size: 17px; font-weight: 800; color: var(--primary);
+ margin-bottom: 8px; letter-spacing: -0.3px;
+ }
+
+ .service-desc {
+ font-size: 13px; color: var(--text-light); line-height: 1.65;
+ margin-bottom: 20px;
+ }
+
+ .service-highlight {
+ font-size: 13px; font-weight: 700; color: var(--accent);
+ margin-bottom: 20px;
+ }
+
+ /* ─── FOR BUILDERS ───────────────────────────────────────── */
+ #for-builders {
+ background: var(--bg-dark);
+ padding: 96px 32px;
+ position: relative; overflow: hidden;
+ }
+
+ .builders-pattern {
+ position: absolute; inset: 0; pointer-events: none;
+ background-image: radial-gradient(circle at 10% 50%, rgba(59,125,221,0.05) 0%, transparent 50%),
+ radial-gradient(circle at 90% 30%, rgba(200,169,110,0.04) 0%, transparent 40%);
+ }
+
+ #for-builders .section-title { color: #fff; }
+ #for-builders .section-subtitle { color: rgba(255,255,255,0.55); }
+ #for-builders .section-badge { background: rgba(59,125,221,0.12); border-color: rgba(59,125,221,0.25); }
+
+ .value-props {
+ display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+ margin-bottom: 56px;
+ }
+
+ .value-prop {
+ background: rgba(255,255,255,0.04);
+ border: 1px solid rgba(255,255,255,0.08);
+ border-radius: var(--radius-lg); padding: 36px;
+ transition: var(--transition);
+ }
+ .value-prop:hover { background: rgba(255,255,255,0.07); border-color: rgba(59,125,221,0.3); }
+
+ .value-prop-icon {
+ width: 52px; height: 52px; border-radius: 12px;
+ background: rgba(59,125,221,0.12); border: 1px solid rgba(59,125,221,0.2);
+ display: flex; align-items: center; justify-content: center;
+ font-size: 22px; margin-bottom: 20px;
+ }
+
+ .value-prop-title {
+ font-size: 20px; font-weight: 800; color: #fff;
+ letter-spacing: -0.5px; margin-bottom: 10px;
+ }
+
+ .value-prop-desc {
+ font-size: 14px; color: rgba(255,255,255,0.55); line-height: 1.75;
+ }
+
+ .builders-stats {
+ display: grid; grid-template-columns: repeat(4, 1fr);
+ background: rgba(255,255,255,0.04);
+ border: 1px solid rgba(255,255,255,0.08);
+ border-radius: var(--radius); overflow: hidden;
+ margin-bottom: 48px;
+ }
+
+ .builders-stat {
+ padding: 28px; text-align: center;
+ border-right: 1px solid rgba(255,255,255,0.08);
+ }
+ .builders-stat:last-child { border-right: none; }
+ .builders-stat-num { font-size: 36px; font-weight: 900; color: #fff; letter-spacing: -1.5px; }
+ .builders-stat-label { font-size: 12px; color: rgba(255,255,255,0.4); font-weight: 600; letter-spacing: 0.5px; margin-top: 4px; }
+
+ .builders-cta { text-align: center; }
+
+ /* ─── EOI FORM ───────────────────────────────────────────── */
+ #contact { background: var(--bg-alt); }
+
+ .form-card {
+ max-width: 720px; margin: 0 auto;
+ background: var(--bg); border-radius: var(--radius-lg);
+ padding: 52px; box-shadow: var(--shadow-lg);
+ border: 1px solid var(--border);
+ }
+
+ .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+ .form-group { display: flex; flex-direction: column; gap: 6px; }
+ .form-group.full { grid-column: 1 / -1; }
+
+ .form-label {
+ font-size: 11px; font-weight: 700; color: var(--primary);
+ letter-spacing: 0.8px; text-transform: uppercase;
+ }
+
+ .form-input, .form-select, .form-textarea {
+ padding: 13px 16px;
+ border: 1.5px solid var(--border); border-radius: 9px;
+ font-family: 'Montserrat', sans-serif; font-size: 14px;
+ color: var(--text); outline: none; transition: var(--transition);
+ background: var(--bg-alt);
+ }
+ .form-input:focus, .form-select:focus, .form-textarea:focus {
+ border-color: var(--accent); background: var(--bg);
+ box-shadow: 0 0 0 3px rgba(59,125,221,0.1);
+ }
+
+ .form-textarea { resize: vertical; min-height: 100px; }
+
+ .form-submit {
+ width: 100%; margin-top: 8px; padding: 16px;
+ background: var(--primary);
+ color: #fff; border: none; border-radius: 10px;
+ font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 700;
+ cursor: pointer; transition: var(--transition); letter-spacing: 0.3px;
+ }
+ .form-submit:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+ /* ─── MODAL ──────────────────────────────────────────────── */
+ .modal-overlay {
+ display: none; position: fixed; inset: 0; z-index: 9998;
+ background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+ align-items: center; justify-content: center;
+ }
+ .modal-overlay.show { display: flex; }
+
+ .modal-box {
+ background: var(--bg); border-radius: var(--radius-lg);
+ padding: 48px; text-align: center; max-width: 440px; width: 90%;
+ animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+ border: 1px solid var(--border); box-shadow: var(--shadow-xl);
+ }
+ @keyframes modalIn { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+ .modal-icon { font-size: 52px; margin-bottom: 16px; }
+ .modal-title { font-size: 26px; font-weight: 900; color: var(--primary); letter-spacing: -1px; margin-bottom: 8px; }
+ .modal-ref { font-size: 16px; color: var(--accent); font-weight: 700; margin-bottom: 12px; }
+ .modal-desc { font-size: 14px; color: var(--text-light); line-height: 1.65; margin-bottom: 28px; }
+ .modal-close {
+ padding: 13px 32px; background: var(--primary); color: #fff;
+ border: none; border-radius: 9px; font-family: 'Montserrat', sans-serif;
+ font-size: 14px; font-weight: 700; cursor: pointer; transition: var(--transition);
+ }
+ .modal-close:hover { background: var(--primary-light); }
+
+ /* ─── FOOTER ─────────────────────────────────────────────── */
+ footer {
+ background: var(--bg-dark);
+ padding: 64px 32px 32px; color: rgba(255,255,255,0.6);
+ }
+
+ .footer-inner { max-width: 1280px; margin: 0 auto; }
+
+ .footer-grid {
+ display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+ gap: 48px; margin-bottom: 48px;
+ }
+
+ .footer-brand-logo {
+ display: flex; align-items: center; margin-bottom: 14px;
+ }
+
+ .footer-desc {
+ font-size: 13px; line-height: 1.75; color: rgba(255,255,255,0.4);
+ max-width: 280px; margin-bottom: 20px;
+ }
+
+ .footer-contact { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.9; }
+ .footer-contact a { color: rgba(255,255,255,0.7); text-decoration: none; transition: var(--transition); }
+ .footer-contact a:hover { color: #fff; }
+
+ .footer-col-title {
+ font-size: 11px; font-weight: 700; letter-spacing: 2px;
+ text-transform: uppercase; color: rgba(255,255,255,0.9); margin-bottom: 16px;
+ }
+
+ .footer-links { list-style: none; }
+ .footer-links li { margin-bottom: 10px; }
+ .footer-links a {
+ font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none;
+ transition: var(--transition);
+ }
+ .footer-links a:hover { color: #fff; }
+
+ .footer-socials { display: flex; gap: 10px; margin-top: 18px; }
+ .footer-social {
+ width: 36px; height: 36px; border-radius: 8px;
+ background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+ display: flex; align-items: center; justify-content: center;
+ font-size: 14px; cursor: pointer; transition: var(--transition); text-decoration: none;
+ }
+ .footer-social:hover { background: var(--accent); border-color: var(--accent); }
+
+ .footer-bottom {
+ padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.07);
+ display: flex; align-items: center; justify-content: space-between;
+ gap: 12px; flex-wrap: wrap;
+ }
+ .footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); }
+ .footer-disclaimer { font-size: 11px; color: rgba(255,255,255,0.25); max-width: 500px; text-align: right; }
+
+ /* ─── LEAFLET POPUP ──────────────────────────────────────── */
+ /* Map pins — clean dot + label */
+ .map-pin { position: relative; }
+ .pin-dot {
+ width: 12px; height: 12px;
+ background: #1B2432;
+ border: 2.5px solid #fff;
+ border-radius: 50%;
+ box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+ position: relative; z-index: 2;
+ }
+ .pin-label {
+ position: absolute;
+ top: 14px; left: 50%;
+ transform: translateX(-50%);
+ pointer-events: none;
+ background: rgba(27,36,50,0.9);
+ color: #fff;
+ font-family: 'Montserrat', sans-serif;
+ font-size: 10px;
+ font-weight: 700;
+ padding: 2px 6px;
+ border-radius: 4px;
+ white-space: nowrap;
+ pointer-events: none;
+ letter-spacing: 0.2px;
+ }
+ @media (max-width: 640px) {
+ .pin-label { font-size: 9px; padding: 2px 5px; }
+ .pin-dot { width: 10px; height: 10px; }
+ }
+
+ .leaflet-popup-content-wrapper {
+ background: var(--bg); color: var(--text); border-radius: 14px;
+ box-shadow: 0 8px 30px rgba(0,0,0,0.15); border: none;
+ padding: 0; overflow: hidden;
+ }
+ .leaflet-popup-content { margin: 0; padding: 0; overflow: hidden; border-radius: 14px; }
+ .leaflet-popup-tip { display: none; }
+ .leaflet-control-attribution { display: none !important; }
+    .pin-tooltip {
+      background: rgba(27,36,50,0.9) !important;
+      color: #fff !important;
+      border: none !important;
+      border-radius: 4px !important;
+      font-family: 'Montserrat', sans-serif !important;
+      font-size: 10px !important;
+      font-weight: 700 !important;
+      padding: 2px 6px !important;
+      box-shadow: none !important;
+      white-space: nowrap !important;
+    }
+    .pin-tooltip::before { display: none !important; }
+ .leaflet-popup-content { margin: 0; padding: 0; }
+ .leaflet-popup-tip { background: var(--bg); }
+
+ /* ─── RESPONSIVE ─────────────────────────────────────────── */
+ @media (max-width: 1100px) {
+ .builders-grid { grid-template-columns: repeat(3, 1fr); }
+ .designs-grid { grid-template-columns: repeat(3, 1fr); }
+ .projects-grid { grid-template-columns: repeat(2, 1fr); }
+ .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+ }
+
+ @media (max-width: 900px) {
+ .hero-inner { grid-template-columns: 1fr; gap: 32px; }
+ .hero-visual { display: none; }
+ #hero { min-height: auto; padding: 88px 24px 48px; }
+ .hero-stats { grid-template-columns: repeat(2, 1fr); }
+ .hero-btns { flex-direction: column; gap: 10px; }
+ .hero-btns .btn-primary, .hero-btns .btn-outline { width: 100%; justify-content: center; text-align: center; }
+ .calc-grid { grid-template-columns: 1fr; }
+ .services-grid { grid-template-columns: repeat(2, 1fr); }
+ .value-props { grid-template-columns: 1fr; }
+ .builders-stats { grid-template-columns: repeat(2, 1fr); }
+ .builders-grid { grid-template-columns: repeat(2, 1fr); }
+ .nav-inner { height: 56px; padding: 0 16px; }
+ .nav-links { display: none; }
+ .nav-links.open {
+ display: flex; flex-direction: column;
+ position: fixed; top: 56px; left: 0; right: 0;
+ background: var(--bg); border-bottom: 1px solid var(--border);
+ padding: 16px 24px; gap: 4px;
+ box-shadow: var(--shadow-md);
+ z-index: 999;
+ }
+ .nav-links.open a { padding: 12px 16px; font-size: 15px; }
+ .nav-hamburger { display: flex; }
+ #map { height: 380px; }
+ .section-header { margin-bottom: 32px; }
+ }
+
+ @media (max-width: 640px) {
+ section { padding: 48px 16px; }
+ #hero { padding: 72px 16px 40px; }
+ .hero-title { margin-bottom: 14px; }
+ .hero-subtitle { margin-bottom: 24px; font-size: 14px; }
+ .hero-btns { margin-bottom: 32px; }
+ .hero-badge { font-size: 10px; padding: 6px 12px; letter-spacing: 1.5px; }
+ .stat-item { padding: 14px 8px; }
+ .stat-number { font-size: 20px; }
+ .stat-label { font-size: 9px; letter-spacing: 0.5px; }
+ .projects-grid { grid-template-columns: 1fr; }
+ .project-img { height: 200px; }
+ .builders-grid { grid-template-columns: 1fr 1fr; }
+ .designs-grid { grid-template-columns: 1fr 1fr; }
+ .design-img { height: 140px; }
+ .services-grid { grid-template-columns: 1fr; }
+ .builders-stats { grid-template-columns: 1fr 1fr; }
+ .form-grid { grid-template-columns: 1fr; }
+ .form-card { padding: 24px 16px; }
+ .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+ .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+ .footer-disclaimer { text-align: left; }
+ .gate-inner { padding: 32px 24px; max-width: 360px; }
+ .gate-inner h2 { font-size: 20px; }
+ #map { height: 300px; border-radius: var(--radius); }
+ .section-title { margin-bottom: 8px; }
+ .section-subtitle { font-size: 14px; }
+ .filter-chips { gap: 8px; }
+ .filter-chip { padding: 8px 16px; font-size: 12px; min-height: 40px; }
+ .btn-primary, .btn-outline { min-height: 48px; font-size: 14px; }
+ .btn-sm { min-height: 44px; padding: 10px 16px; }
+ .calc-result { padding: 24px 16px; }
+ .builders-stat { padding: 16px 12px; }
+ .builders-stat-num { font-size: 22px; }
+ .value-prop { padding: 28px 20px; }
+ }
+
+ @media (max-width: 400px) {
+ #hero { padding: 64px 14px 32px; }
+ section { padding: 40px 14px; }
+ .designs-grid { grid-template-columns: 1fr; }
+ .builders-grid { grid-template-columns: 1fr; }
+ .hero-stats { grid-template-columns: repeat(2, 1fr); }
+ .stat-item { padding: 12px 6px; }
+ .stat-number { font-size: 18px; }
+ .project-body { padding: 16px; }
+ .project-name { font-size: 16px; }
+ .gate-inner { padding: 28px 20px; }
+ }
+
+ /* ─── SCROLLBAR ──────────────────────────────────────────── */
+ ::-webkit-scrollbar { width: 8px; }
+ ::-webkit-scrollbar-track { background: var(--bg-alt); }
+ ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+ ::-webkit-scrollbar-thumb:hover { background: var(--text-xlight); }
+
+ /* ─── MAIN HIDDEN UNTIL UNLOCKED ─────────────────────────── */
+ #main-content { display: none; }
+
+ /* ─── REGION COLOR MAP ───────────────────────────────────── */
+
+ /* ─── BUYER WIZARD ───────────────────────────────────────── */
+ #wizard {
+ display: none;
+ position: fixed;
+ inset: 0;
+ z-index: 2000;
+ background: var(--bg);
+ overflow-y: auto;
+ animation: fadeIn 0.3s ease;
+ }
+ #wizard.open { display: block; }
+ @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+ .wizard-progress-bar {
+ position: fixed;
+ top: 0; left: 0; right: 0;
+ height: 3px;
+ background: var(--border);
+ z-index: 2100;
+ }
+ .wizard-progress-fill {
+ height: 100%;
+ background: var(--accent);
+ transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+ }
+
+ .wizard-header {
+ position: sticky;
+ top: 0;
+ z-index: 2050;
+ background: var(--bg);
+ border-bottom: 1px solid var(--border);
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ padding: 0 32px;
+ height: 68px;
+ gap: 16px;
+ }
+
+ /* wizard-header-logo removed — back button replaces logo */
+
+ .wizard-step-info {
+ display: flex; flex-direction: column; align-items: center;
+ gap: 6px; flex: 1;
+ }
+ .wizard-step-label {
+ font-size: 12px; font-weight: 700; color: var(--text-light); letter-spacing: 0.5px;
+ }
+ .wizard-step-dots { display: flex; gap: 6px; align-items: center; }
+ .wizard-step-dot {
+ width: 8px; height: 8px; border-radius: 50%;
+ background: var(--border); transition: var(--transition);
+ }
+ .wizard-step-dot.active { background: var(--accent); width: 20px; border-radius: 4px; }
+ .wizard-step-dot.done { background: var(--success); }
+
+ .wizard-close-btn {
+ flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%;
+ background: var(--bg-alt); border: 1.5px solid var(--border);
+ display: flex; align-items: center; justify-content: center;
+ cursor: pointer; font-size: 16px; color: var(--text-light);
+ transition: var(--transition); font-family: inherit; line-height: 1;
+ }
+ .wizard-close-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+ .wizard-body { max-width: 1200px; margin: 0 auto; padding: 52px 32px; }
+
+ .wizard-step-heading { text-align: center; margin-bottom: 48px; }
+ .wizard-step-heading h2 {
+ font-size: clamp(24px, 3.5vw, 40px); font-weight: 900;
+ letter-spacing: -1.5px; color: var(--primary); margin-bottom: 10px;
+ }
+ .wizard-step-heading p {
+ font-size: 15px; color: var(--text-light); max-width: 520px;
+ margin: 0 auto; line-height: 1.65;
+ }
+
+ .wizard-back-btn {
+ position: sticky;
+ top: 12px;
+ z-index: 10;
+ display: inline-flex; align-items: center; gap: 6px;
+ background: none; border: 1.5px solid var(--border); color: var(--text-light);
+ padding: 9px 18px; border-radius: 8px;
+ font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 600;
+ cursor: pointer; margin-bottom: 32px; transition: var(--transition); min-height: 40px;
+ }
+ .wizard-back-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+ .wizard-card-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+ gap: 20px;
+ }
+ .wizard-card-grid-lg {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+ gap: 24px;
+ }
+
+ /* Region cards */
+ .wizard-region-card {
+ background: var(--bg); border: 1.5px solid var(--border);
+ border-radius: var(--radius-lg); padding: 28px 24px;
+ cursor: pointer; transition: var(--transition);
+ box-shadow: var(--card-shadow);
+ display: flex; flex-direction: column; gap: 8px;
+ min-height: 130px;
+ }
+ .wizard-region-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: var(--card-shadow-hover); }
+ .wizard-region-name { font-size: 18px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+ .wizard-region-meta { font-size: 13px; color: var(--text-light); }
+ .wizard-region-meta strong { color: var(--accent); }
+ .wizard-region-arrow { margin-top: auto; font-size: 20px; color: var(--accent); }
+
+ /* Project cards in wizard */
+ .wizard-project-card {
+ background: var(--bg); border: 1.5px solid var(--border);
+ border-radius: var(--radius-lg); overflow: hidden;
+ cursor: pointer; transition: var(--transition); box-shadow: var(--card-shadow);
+ }
+ .wizard-project-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: var(--card-shadow-hover); }
+ .wizard-project-img { width: 100%; height: 160px; overflow: hidden; position: relative; }
+ .wizard-project-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+ .wizard-project-card:hover .wizard-project-img img { transform: scale(1.05); }
+ .wizard-project-body { padding: 16px; }
+ .wizard-project-name { font-size: 16px; font-weight: 800; color: var(--primary); letter-spacing: -0.3px; margin-bottom: 2px; }
+ .wizard-project-suburb { font-size: 12px; color: var(--text-light); margin-bottom: 10px; }
+ .wizard-project-meta { display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
+ .wizard-project-lots { color: var(--success); font-weight: 700; }
+ .wizard-project-price { color: var(--accent); font-weight: 600; }
+
+ /* Lot summary */
+ .wizard-lot-summary {
+ max-width: 600px; margin: 0 auto 40px;
+ background: var(--bg-alt); border: 1.5px solid var(--border);
+ border-radius: var(--radius-lg); padding: 36px 40px; text-align: center;
+ }
+ .wizard-lot-summary h3 { font-size: 24px; font-weight: 900; color: var(--primary); letter-spacing: -1px; margin-bottom: 8px; }
+ .wizard-lot-summary-details { display: flex; justify-content: center; gap: 32px; margin: 20px 0; flex-wrap: wrap; }
+ .wizard-lot-detail { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+ .wizard-lot-detail-label { font-size: 11px; color: var(--text-xlight); font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+ .wizard-lot-detail-value { font-size: 18px; font-weight: 800; color: var(--primary); }
+ .wizard-lot-location { font-size: 14px; color: var(--text-light); margin-bottom: 24px; }
+ .wizard-proceed-btn {
+ display: inline-flex; align-items: center; gap: 8px;
+ background: var(--accent); color: #fff; padding: 16px 36px;
+ border-radius: 10px; border: none; cursor: pointer;
+ font-family: 'Montserrat', sans-serif; font-size: 15px; font-weight: 700;
+ transition: var(--transition); min-height: 52px;
+ }
+ .wizard-proceed-btn:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59,125,221,0.3); }
+
+ /* Builder filter tabs */
+ .wizard-filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; justify-content: center; }
+ .wizard-filter-tab {
+ padding: 9px 20px; border-radius: 50px;
+ font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
+ border: 1.5px solid var(--border); background: var(--bg-alt); color: var(--text-light);
+ cursor: pointer; transition: var(--transition); min-height: 40px;
+ }
+ .wizard-filter-tab:hover, .wizard-filter-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+ /* Design cards in wizard */
+ .wizard-design-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+ gap: 18px;
+ }
+ .wizard-design-card {
+ background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--radius);
+ overflow: hidden; transition: var(--transition); box-shadow: var(--card-shadow);
+ display: flex; flex-direction: column;
+ }
+ .wizard-design-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: var(--card-shadow-hover); }
+ .wizard-design-img { width: 100%; height: 150px; overflow: hidden; }
+ .wizard-design-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+ .wizard-design-card:hover .wizard-design-img img { transform: scale(1.05); }
+ .wizard-design-body { padding: 14px; flex: 1; display: flex; flex-direction: column; }
+ .wizard-design-name { font-size: 14px; font-weight: 800; color: var(--primary); margin-bottom: 2px; }
+ .wizard-design-builder-tag { font-size: 11px; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+ .wizard-design-specs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; font-size: 11px; color: var(--text-light); }
+ .wizard-design-price-row {
+ display: flex; align-items: center; justify-content: space-between;
+ padding-top: 8px; border-top: 1px solid var(--border); margin-top: auto;
+ }
+ .wizard-design-price { font-size: 14px; font-weight: 800; color: var(--primary); }
+ .wizard-select-btn {
+ font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700;
+ background: var(--primary); color: #fff; border: none; padding: 7px 14px;
+ border-radius: 6px; cursor: pointer; transition: var(--transition); min-height: 32px;
+ }
+ .wizard-select-btn:hover { background: var(--accent); }
+
+ /* Builder cards in wizard */
+ .wizard-builder-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+ gap: 20px; max-width: 960px; margin: 0 auto;
+ }
+ .wizard-builder-card {
+ background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--radius-lg);
+ overflow: hidden; transition: var(--transition); box-shadow: var(--card-shadow);
+ }
+ .wizard-builder-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: var(--card-shadow-hover); }
+ .wizard-builder-img { width: 100%; height: 140px; overflow: hidden; }
+ .wizard-builder-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+ .wizard-builder-card:hover .wizard-builder-img img { transform: scale(1.05); }
+ .wizard-builder-body { padding: 18px; }
+ .wizard-builder-logo-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+ .wizard-builder-logo {
+ width: 44px; height: 44px; border-radius: 50%;
+ display: flex; align-items: center; justify-content: center;
+ font-size: 14px; font-weight: 900; color: #fff; flex-shrink: 0;
+ }
+ .wizard-builder-name-wrap .wizard-builder-card-name { font-size: 15px; font-weight: 800; color: var(--primary); letter-spacing: -0.3px; }
+ .wizard-builder-name-wrap .wizard-builder-card-tier { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-light); }
+ .wizard-builder-tagline { font-size: 12px; color: var(--text-light); margin-bottom: 12px; line-height: 1.5; }
+ .wizard-builder-meta-row { display: flex; gap: 16px; margin-bottom: 12px; }
+ .wizard-builder-meta-item { font-size: 11px; color: var(--text-light); }
+ .wizard-builder-meta-item strong { color: var(--primary); font-weight: 700; font-size: 13px; display: block; }
+ .wizard-builder-price-tag { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 14px; }
+ .wizard-browse-btn {
+ display: block; width: 100%; font-family: 'Montserrat', sans-serif;
+ font-size: 13px; font-weight: 700; background: var(--primary); color: #fff;
+ border: none; padding: 11px 18px; border-radius: 8px; cursor: pointer;
+ text-align: center; transition: var(--transition); min-height: 44px;
+ }
+ .wizard-browse-btn:hover { background: var(--accent); }
+
+ /* Lead capture layout */
+ .wizard-package-layout {
+ display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+ max-width: 1000px; margin: 0 auto;
+ }
+ .wizard-summary-panel {
+ background: var(--bg-alt); border: 1.5px solid var(--border);
+ border-radius: var(--radius-lg); padding: 28px;
+ }
+ .wizard-summary-title {
+ font-size: 12px; font-weight: 700; color: var(--text-light);
+ letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 16px;
+ }
+ .wizard-summary-item {
+ display: flex; flex-direction: column; gap: 2px;
+ padding: 12px 0; border-bottom: 1px solid var(--border);
+ }
+ .wizard-summary-item:last-of-type { border-bottom: none; }
+ .wizard-summary-item-label { font-size: 11px; color: var(--text-xlight); font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
+ .wizard-summary-item-value { font-size: 15px; font-weight: 700; color: var(--primary); }
+ .wizard-summary-item-sub { font-size: 12px; color: var(--text-light); }
+ .wizard-summary-price {
+ margin-top: 16px; background: var(--primary);
+ border-radius: var(--radius); padding: 16px; text-align: center;
+ }
+ .wizard-summary-price-label { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+ .wizard-summary-price-value { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: -1px; }
+
+ .wizard-form-panel {
+ background: var(--bg); border: 1.5px solid var(--border);
+ border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--card-shadow);
+ }
+ .wizard-form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+ .wizard-form-label { font-size: 11px; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; text-transform: uppercase; }
+ .wizard-form-input, .wizard-form-select, .wizard-form-textarea {
+ padding: 13px 16px; border: 1.5px solid var(--border); border-radius: 9px;
+ font-family: 'Montserrat', sans-serif; font-size: 14px; color: var(--text);
+ outline: none; transition: var(--transition); background: var(--bg-alt); min-height: 48px;
+ }
+ .wizard-form-input:focus, .wizard-form-select:focus, .wizard-form-textarea:focus {
+ border-color: var(--accent); background: var(--bg); box-shadow: 0 0 0 3px rgba(59,125,221,0.1);
+ }
+ .wizard-form-textarea { resize: vertical; min-height: 90px; }
+ .wizard-submit-btn {
+ width: 100%; padding: 16px; background: var(--accent); color: #fff;
+ border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif;
+ font-size: 15px; font-weight: 700; cursor: pointer; transition: var(--transition); min-height: 52px;
+ }
+ .wizard-submit-btn:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59,125,221,0.3); }
+
+ /* Wizard success screen */
+ .wizard-success { max-width: 600px; margin: 0 auto; text-align: center; padding: 40px 24px; }
+ .wizard-success-icon {
+ width: 80px; height: 80px; border-radius: 50%;
+ background: rgba(5,150,105,0.1); border: 2px solid rgba(5,150,105,0.25);
+ display: flex; align-items: center; justify-content: center;
+ font-size: 36px; margin: 0 auto 24px;
+ animation: successPop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+ }
+ @keyframes successPop { from { transform: scale(0.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+ .wizard-success h2 { font-size: 32px; font-weight: 900; letter-spacing: -1px; color: var(--primary); margin-bottom: 8px; }
+ .wizard-success p { font-size: 15px; color: var(--text-light); margin-bottom: 8px; line-height: 1.65; }
+ .wizard-success-ref {
+ display: inline-block;
+ background: rgba(59,125,221,0.08); border: 1px solid rgba(59,125,221,0.2);
+ color: var(--accent); font-size: 14px; font-weight: 700;
+ padding: 8px 20px; border-radius: 8px; margin: 12px 0 24px;
+ }
+ .wizard-success-summary {
+ background: var(--bg-alt); border: 1px solid var(--border);
+ border-radius: var(--radius); padding: 20px; margin-bottom: 32px; text-align: left;
+ }
+ .wizard-success-summary-row {
+ display: flex; justify-content: space-between; align-items: center;
+ padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+ }
+ .wizard-success-summary-row:last-child { border-bottom: none; }
+ .wizard-success-summary-row span:first-child { color: var(--text-light); }
+ .wizard-success-summary-row span:last-child { color: var(--primary); font-weight: 700; }
+ .wizard-success-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+ .wizard-restart-btn {
+ display: inline-flex; align-items: center; gap: 8px;
+ background: var(--primary); color: #fff; padding: 14px 28px; border-radius: 10px;
+ border: none; cursor: pointer; font-family: 'Montserrat', sans-serif;
+ font-size: 14px; font-weight: 700; transition: var(--transition); min-height: 48px;
+ }
+ .wizard-restart-btn:hover { background: var(--primary-light); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+ .wizard-portal-btn {
+ display: inline-flex; align-items: center; gap: 8px;
+ background: transparent; color: var(--primary); padding: 13px 26px; border-radius: 10px;
+ border: 1.5px solid var(--border); font-family: 'Montserrat', sans-serif;
+ font-size: 14px; font-weight: 600; cursor: pointer; transition: var(--transition); min-height: 48px;
+ }
+ .wizard-portal-btn:hover { border-color: var(--primary); background: var(--bg-alt); transform: translateY(-2px); }
+
+ /* Wizard responsive */
+ @media (max-width: 900px) {
+ .wizard-package-layout { grid-template-columns: 1fr; gap: 24px; }
+ .wizard-body { padding: 32px 20px; }
+ .wizard-header { padding: 0 16px; }
+ }
+ @media (max-width: 640px) {
+ .wizard-card-grid { grid-template-columns: 1fr; }
+ .wizard-card-grid-lg { grid-template-columns: 1fr; }
+ .wizard-design-grid { grid-template-columns: 1fr 1fr; }
+ .wizard-builder-grid { grid-template-columns: 1fr; max-width: 100%; }
+ .wizard-body { padding: 24px 14px; }
+ .wizard-step-heading h2 { font-size: 22px; letter-spacing: -0.5px; }
+ .wizard-lot-summary { padding: 24px 16px; }
+ .wizard-lot-summary-details { gap: 16px; }
+ .wizard-success h2 { font-size: 26px; }
+ }
+ @media (max-width: 400px) {
+ .wizard-design-grid { grid-template-columns: 1fr; }
+ }
+
+ /* ─── COMPARE PACKAGES ──────────────────────────────────────── */
+ .compare-pill {
+ position: fixed;
+ bottom: 24px;
+ left: 50%;
+ transform: translateX(-50%);
+ background: var(--primary);
+ color: #fff;
+ padding: 12px 28px;
+ border-radius: 50px;
+ font-family: 'Montserrat', sans-serif;
+ font-size: 14px;
+ font-weight: 700;
+ box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+ cursor: pointer;
+ z-index: 2100;
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ transition: all 0.2s ease;
+ }
+ .compare-pill:hover { transform: translateX(-50%) translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.25); }
+
+ /* ─── TESTIMONIALS ──────────────────────────────────────────── */
+ .testimonial-card {
+ background: var(--bg);
+ border: 1px solid var(--border);
+ border-radius: var(--radius-lg);
+ padding: 28px 32px;
+ box-shadow: var(--card-shadow);
+ transition: var(--transition);
+ display: flex;
+ flex-direction: column;
+ gap: 14px;
+ }
+ .testimonial-card:hover {
+ transform: translateY(-4px);
+ box-shadow: var(--card-shadow-hover);
+ border-color: rgba(59,125,221,0.2);
+ }
+ .testimonial-quote {
+ font-size: 14px;
+ color: var(--text);
+ line-height: 1.8;
+ font-style: italic;
+ flex: 1;
+ }
+ .testimonial-stars { font-size: 15px; letter-spacing: 2px; }
+ .testimonial-author { font-size: 13px; font-weight: 700; color: var(--primary); }
+ .testimonial-estate { font-size: 12px; color: var(--text-light); font-weight: 500; }
+
+ @media (max-width: 640px) {
+ #testimonials { padding: 48px 16px !important; }
+ }
+ </style>
+</head>
+<body>
+
+<!-- ═══════════════════ PASSWORD GATE ═══════════════════ -->
+<div id="gate">
+ <div class="gate-inner">
+ <div class="gate-logo">
+ <img src="projx-logo-dark.png" alt="ProjX" style="height:40px" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+ <span style="display:none;font-size:28px;font-weight:900;letter-spacing:-1px;color:var(--primary)">ProjX</span>
+ </div>
+ <div class="gate-tagline">House &amp; Land Design Portal</div>
+ <div class="invite-badge">Invitation Only</div>
+ <p class="gate-subtitle">This portal is exclusively available to invited buyers and partners.</p>
+ <div class="gate-input-wrap">
+ <input type="password" class="gate-input" id="gateInput" placeholder="Enter access code" maxlength="20" autocomplete="off" />
+ </div>
+ <button class="gate-btn" onclick="checkPassword()">Access Portal</button>
+ <p class="gate-error" id="gateError">Incorrect access code. Please try again.</p>
+ </div>
+</div>
+
+<!-- ═══════════════════ MAIN CONTENT ═══════════════════ -->
+<div id="main-content">
+
+<!-- ─── NAVBAR ─── -->
+<nav id="navbar" style="display:none">
+ <div class="nav-inner">
+ <a href="#hero" class="nav-logo">
+ <img src="projx-logo-dark.png" alt="ProjX" style="height:36px" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+ <span style="display:none;font-size:22px;font-weight:900;letter-spacing:-0.5px;color:var(--primary)">ProjX</span>
+ </a>
+ <ul class="nav-links" id="navLinks">
+ <li><a href="#estates">Estates</a></li>
+ <li><a href="#builders">Builders</a></li>
+ <li><a href="#" class="nav-cta" onclick="event.preventDefault();openWizard('land')">Register Interest</a></li>
+ </ul>
+ <button class="nav-hamburger" id="hamburger" onclick="toggleNav()" aria-label="Menu">
+ <span></span><span></span><span></span>
+ </button>
+ </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero" style="min-height:100vh;padding:12vh 32px 0;background:linear-gradient(160deg, var(--bg-alt) 0%, var(--bg) 60%);display:flex;align-items:center">
+ <div style="max-width:750px;margin:0 auto;text-align:center">
+ 
+ <h1 class="hero-title" style="font-size:clamp(32px,5vw,52px);margin-bottom:18px;letter-spacing:-2.5px;line-height:1.05">Your Dream Home,<br><span style="color:var(--accent)">One Click Away</span></h1>
+ <p style="font-size:clamp(15px,1.6vw,18px);color:var(--text);margin-bottom:12px;line-height:1.7;max-width:560px;margin-left:auto;margin-right:auto;font-weight:500">Made possible by South East Queensland’s strongest active house &amp; land pipeline.</p>
+ <p style="font-size:13px;color:var(--text-xlight);margin-bottom:40px">4,500+ lots · 18 projects · 4 builder partners</p>
+ <a href="#estates" style="display:inline-flex;align-items:center;gap:8px;background:var(--primary);color:#fff;padding:16px 36px;border-radius:10px;font-family:Montserrat,sans-serif;font-size:14px;font-weight:700;text-decoration:none;transition:all 0.2s">Explore Estates ↓</a>
+ <div style="margin-top:48px;display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.4">
+ <span style="font-size:11px;color:var(--text-light);font-weight:500">Powered by</span>
+ <img src="projx-logo-plain.png" alt="ProjX" style="height:16px" onerror="this.parentElement.innerHTML='<span style=font-size:11px;font-weight:700;color:var(--text-light)>ProjX Australia</span>'"/>
+ </div>
+ </div>
+</section>
+
+<!-- ─── ESTATES ─── -->
+<section id="estates">
+ <div class="section-inner">
+ <div class="estates-header fade-in">
+ <div>
+ <h2 class="section-title">Our Estates</h2>
+ <p class="section-subtitle">18 active projects — 4,500+ lots available</p>
+ </div>
+ <div class="view-toggle">
+ <button class="toggle-btn active" onclick="switchView('list')" id="toggleList">
+ <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="0" y="1" width="16" height="2.5" rx="1"/><rect x="0" y="6.75" width="16" height="2.5" rx="1"/><rect x="0" y="12.5" width="16" height="2.5" rx="1"/></svg>
+ List
+ </button>
+ <button class="toggle-btn" onclick="switchView('map')" id="toggleMap">
+ <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M5 1L0 3v12l5-2 6 2 5-2V1l-5 2-6-2zm0 1.5v10l-3.5 1.4V3.5L5 2.5zm1 10V2.5L11 4.3v10.2l-5-1.7zm6 .1V2.6l3.5-1.4v10.4L12 12.6z"/></svg>
+ Map
+ </button>
+ </div>
+ </div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
+ <div style="display:flex;gap:4px;background:var(--bg-alt);border:1px solid var(--border);border-radius:10px;padding:4px;margin-right:8px">
+ <button id="budgetModePackage" style="padding:6px 14px;border:none;border-radius:8px;font-family:Montserrat,sans-serif;font-size:12px;font-weight:600;cursor:pointer;background:var(--primary);color:#fff;transition:all 0.2s" onclick="switchBudgetMode('package')">Package Budget</button>
+ <button id="budgetModeLand" style="padding:6px 14px;border:none;border-radius:8px;font-family:Montserrat,sans-serif;font-size:12px;font-weight:600;cursor:pointer;background:transparent;color:var(--text-light);transition:all 0.2s" onclick="switchBudgetMode('land')">Land Budget</button>
+ </div>
+ <button class="filter-chip estate-budget" data-budget="400" onclick="filterByBudget('400')">Under <span class="budget-val">$645,000</span></button>
+ <button class="filter-chip estate-budget" data-budget="600" onclick="filterByBudget('600')"><span class="budget-val">$645,000</span> – <span class="budget-val">$845,000</span></button>
+ <button class="filter-chip estate-budget" data-budget="800" onclick="filterByBudget('800')"><span class="budget-val">$845,000</span> – <span class="budget-val">$1,045,000</span></button>
+ <button class="filter-chip estate-budget" data-budget="1000" onclick="filterByBudget('1000')"><span class="budget-val">$1,045,000</span> – <span class="budget-val">$1,245,000</span></button>
+ <button class="filter-chip estate-budget" data-budget="1001" onclick="filterByBudget('1001')"><span class="budget-val">$1,245,000</span>+</button>
+ <button class="filter-chip estate-budget active" data-budget="all" onclick="filterByBudget('all')">All Budgets</button>
+ </div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px">
+ <button class="estate-filter filter-chip active" data-filter="all" onclick="renderProjects('all')">All Estates</button>
+ <button class="estate-filter filter-chip" data-filter="available" onclick="renderProjects('available')" style="color:#059669">• Available Now</button>
+ <button class="estate-filter filter-chip" data-filter="coming-soon" onclick="renderProjects('coming-soon')" style="color:#D97706">• Coming Soon</button>
+ </div>
+ <div id="listView">
+ <div id="projectsGrid" class="projects-grid"></div>
+ </div>
+ <div id="mapView" style="display:none">
+ <div id="map" style="height:600px"></div>
+ </div>
+ </div>
+</section>
+
+<!-- ─── BUILDERS ─── -->
+<section id="builders" style="padding-top:24px">
+ <div class="section-inner">
+ <div class="section-header fade-in">
+ <h2 class="section-title">Our Builders</h2>
+ <p class="section-subtitle">Browse designs from our trusted builder network</p>
+ </div>
+ <div class="builders-grid" id="buildersGrid"></div>
+ </div>
+</section>
+
+<!-- ─── TESTIMONIALS ─── -->
+
+
+<!-- ─── FOOTER ─── -->
+<footer>
+ <div class="footer-inner">
+ <div style="margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+ <div>
+ <div class="footer-brand-logo">
+ <img src="projx-logo-light.png" alt="ProjX" style="height:36px" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+ <span style="display:none;font-size:24px;font-weight:900;letter-spacing:-0.5px;color:#fff">ProjX</span>
+ </div>
+ </div>
+ <div class="footer-contact">
+ <a href="mailto:info@projxaustralia.com.au">info@projxaustralia.com.au</a>
+ </div>
+ </div>
+ <div class="footer-bottom">
+ <p class="footer-copy">© 2026 ProjX Group Australia. All rights reserved.</p>
+ <p class="footer-disclaimer">Prices are indicative only. Images are for illustration purposes. All information is subject to change without notice. Consult a licensed professional before making any financial decision.</p>
+ </div>
+ </div>
+ <div style="text-align:center;padding:16px 0;font-size:11px;color:rgba(255,255,255,0.3)"><span style="display:flex;align-items:center;gap:6px;justify-content:center">Powered by <img src="projx-logo-plain.png" alt="ProjX" style="height:14px;opacity:0.5" onerror="this.outerHTML='ProjX Australia'"/></span></div>
+</footer>
+
+<!-- ─── BUYER WIZARD ─── -->
+<div id="wizard">
+ <div class="wizard-progress-bar"><div class="wizard-progress-fill" id="wizardProgressFill"></div></div>
+ <div class="wizard-header">
+ <button onclick="headerBack()" style="display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:Montserrat,sans-serif;font-size:13px;font-weight:600;color:var(--text-light);padding:8px 12px;border-radius:8px;transition:all 0.2s;flex-shrink:0" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-light)'">← Back</button>
+ <div class="wizard-step-info">
+ <div class="wizard-step-label" id="wizardStepLabel">Step 1</div>
+ <div class="wizard-step-dots" id="wizardStepDots"></div>
+ </div>
+ <button class="wizard-close-btn" onclick="closeWizard()" aria-label="Close wizard">✕</button>
+ </div>
+ <div class="wizard-body" id="wizardBody"></div>
+ <!-- Compare floating pill -->
+ <div class="compare-pill" id="comparePill" onclick="openCompareModal()" style="display:none">
+ <span style="font-size:16px">Saved</span> Compare (<span id="compareCount">0</span>)
+ </div>
+ <!-- Compare modal -->
+ <div id="compareModal" style="display:none;position:fixed;inset:0;z-index:2200;background:#fff;overflow-y:auto;"></div>
+</div>
+
+</div><!-- /main-content -->
+
+<!-- ─── SUCCESS MODAL ─── -->
+<div class="modal-overlay" id="successModal">
+ <div class="modal-box">
+ <div class="modal-icon">🎉</div>
+ <div class="modal-title">You're on the list!</div>
+ <div class="modal-ref" id="modalRef">Reference: PX-00000</div>
+ <div class="modal-desc">Thanks for your expression of interest. Our team will be in touch within 1 business day to discuss your perfect lot and builder match.</div>
+ <button class="modal-close" onclick="closeModal()">Back to Portal</button>
+ </div>
+</div>
+
+<script>
+ // ─── DESIGN IMAGES ────────────────────────────────────────────────
+ const DESIGN_IMAGES = {
+ // FRD
+ 'FRD Classic 170': 'https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R1_10_Gable-Hampton_Fairview-20_230523-1.jpg',
+ 'FRD Ranch 210': 'https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R1_10_Gable_Hillcrest-16_DS_230530-1-scaled.jpg',
+ 'FRD Hampton 230': 'https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R2_12.5_Hamptons_Silverwood-45_LS_240321.jpg',
+ 'FRD Estate 280': 'https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R2_12.5_Hip_Silverwood-45_LS_240321.jpg',
+ // Creation
+ 'Hillcrest 18': 'https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R1_10_Hip_Hillcrest-16_DS_230530-scaled.jpg',
+ 'Southcote 23': 'https://qld.creationhomes.com.au/wp-content/uploads/2024/07/R1_12.5_Flat_Southcote-23_LS_230524-scaled.jpg',
+ 'Willow 26': 'https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R2_12.5_Hamptons_Brookside-33_LS3_230428.jpg',
+ 'Fernbrook 28': 'https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R2_12.5_Gable_Silverwood-45_LS_240321.jpg',
+ // AVIA
+ 'Marseille': 'https://framerusercontent.com/images/4SYNhhT0LE7A7F9ibPpaMypqCVU.jpg?scale-down-to=1024',
+ 'Dublin': 'https://framerusercontent.com/images/8jJn3N4PRgDX1wwiJWy3Iy251vY.jpg?scale-down-to=1024',
+ 'Almada 210': 'https://framerusercontent.com/images/MR5sh6ih0HrjUC2Gu5VL5LriU0.jpg?scale-down-to=1024',
+ 'Catalina': 'https://framerusercontent.com/images/PWYwpjw5FfGTUDtL5wUQ2nt941Q.jpg?scale-down-to=1024',
+ // Metricon
+ 'Kirra': 'https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R1_10_Skillion_Hillcrest-16_LS_230530-scaled.jpg',
+ 'Ella': 'https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R1_10_Flat_Hillcrest-16_LS_230524-scaled.jpg',
+ 'Glendale': 'https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R2_12.5_Flat_Brookside-33_LS_230524.jpg',
+ 'Fintona': 'https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R2_12.5_Gable_Brookside-33_LS_230523.jpg'
+ };
+
+ // Fallback pool for project cards (premium renders cycling)
+ // Per-project images — from ProjX website API (projx.at.ondicomdigital.com)
+ const PROJECT_IMAGE_MAP = {
+ 'oaklandestate': 'img/oakland.jpg',
+ 'woodchester': 'img/woodchester.jpg',
+ 'riverina': 'img/riverina.jpg',
+ 'harvestestate': 'img/harvest.jpg',
+ 'lakeviewestate': 'img/lakeview.jpg',
+ 'sorensenrise': 'img/gympie.jpg',
+ 'ormistonpoint': 'img/ormiston.jpg',
+ 'cranley': 'img/toowoomba.jpg',
+ 'markwellroad': 'img/caboolture.jpg',
+ 'fernvale': 'img/fernvale.jpg',
+ 'hoya': 'img/hoya.jpg',
+ 'sevenhills': 'img/warwick.jpg',
+ 'peregian': 'img/lakeview.jpg',
+ 'bellmere': 'img/caboolture.jpg',
+ 'hellidon': 'img/hellidon.jpg',
+ 'oakey': 'img/toowoomba.jpg',
+ 'barrensroad': 'img/brookdale.jpg',
+ 'banorapoint': 'img/eade.jpg'
+ };
+ function getProjectImage(p) {
+ return PROJECT_IMAGE_MAP[p.id] || 'img/oakland.jpg';
+ }
+ const PROJECT_IMAGES = Object.values(PROJECT_IMAGE_MAP);
+
+ // ─── DATA ─────────────────────────────────────────────────────────
+ const PROJECTS = [
+ {id:"peregian", name:"Peregian Springs", suburb:"Peregian Springs", region:"Sunshine Coast", lat:-26.49, lng:153.09, totalLots:1500, availLots:1500, minPrice:0, maxPrice:0},
+ {id:"bellmere", name:"Bellmere", suburb:"Bellmere", region:"Moreton Bay", lat:-27.08, lng:152.88, totalLots:1200, availLots:1200, minPrice:0, maxPrice:0},
+ {id:"woodchester", name:"Woodchester Estate", suburb:"Gatton", region:"Lockyer Valley", lat:-27.55, lng:152.28, totalLots:450, availLots:450, minPrice:322000, maxPrice:402000},
+ {id:"lakeviewestate", name:"Lakeview Estate", suburb:"Gatton", region:"Lockyer Valley", lat:-27.56, lng:152.27, totalLots:392, availLots:392, minPrice:330000, maxPrice:455000},
+ {id:"hoya", name:"Hoya", suburb:"Boonah", region:"Scenic Rim", lat:-27.97, lng:152.68, totalLots:190, availLots:190, minPrice:0, maxPrice:0},
+ {id:"hellidon", name:"Hellidon", suburb:"Hellidon", region:"Lockyer Valley", lat:-27.55, lng:152.12, totalLots:110, availLots:110, minPrice:0, maxPrice:0},
+ {id:"harvestestate", name:"Harvest Estate", suburb:"Harvest Estate", region:"Regional QLD", lat:-28.65, lng:153.61, totalLots:100, availLots:100, minPrice:0, maxPrice:0},
+ {id:"fernvale", name:"Fernvale", suburb:"Fernvale", region:"Somerset", lat:-27.46, lng:152.65, totalLots:92, availLots:92, minPrice:0, maxPrice:0},
+ {id:"oakey", name:"Oakey", suburb:"Oakey", region:"Toowoomba", lat:-27.43, lng:151.72, totalLots:90, availLots:90, minPrice:0, maxPrice:0},
+ {id:"barrensroad", name:"Barrens Road", suburb:"South Ripley", region:"Ipswich", lat:-27.70, lng:152.83, totalLots:82, availLots:82, minPrice:0, maxPrice:0},
+ {id:"sorensenrise", name:"Sorensen Rise", suburb:"Southside", region:"Gympie", lat:-26.20, lng:152.65, totalLots:65, availLots:65, minPrice:350000, maxPrice:475000},
+ {id:"banorapoint", name:"Banora Point", suburb:"Banora Point", region:"Northern NSW", lat:-28.22, lng:153.54, totalLots:60, availLots:60, minPrice:0, maxPrice:0},
+ {id:"oaklandestate", name:"Oakland Estate", suburb:"Beaudesert", region:"Scenic Rim", lat:-27.99, lng:152.97, totalLots:48, availLots:48, minPrice:395000, maxPrice:520000},
+ {id:"sevenhills", name:"Seven Hills", suburb:"Warwick", region:"Southern Downs", lat:-28.22, lng:152.03, totalLots:40, availLots:40, minPrice:0, maxPrice:0},
+ {id:"cranley", name:"Cranley", suburb:"Toowoomba", region:"Toowoomba", lat:-27.58, lng:151.93, totalLots:25, availLots:25, minPrice:0, maxPrice:0},
+ {id:"markwellroad", name:"Markwell Road", suburb:"Caboolture", region:"Moreton Bay", lat:-27.08, lng:152.95, totalLots:25, availLots:25, minPrice:0, maxPrice:0},
+ {id:"riverina", name:"Riverina", suburb:"Carrara", region:"Gold Coast", lat:-28.02, lng:153.37, totalLots:20, availLots:20, minPrice:510000, maxPrice:780000},
+ {id:"ormistonpoint", name:"Ormiston Point", suburb:"Ormiston", region:"Redlands", lat:-27.52, lng:153.26, totalLots:12, availLots:12, minPrice:0, maxPrice:0}
+ ];
+
+ const BUILDERS = [
+ {id:'frd', name:'FRD Homes', color:'#059669', tier:'Wholesale', tagline:'Queensland\'s #1 wholesale builder — proven, consistent, trusted', designs:4, priceRange:'$245k – $380k'},
+ {id:'creation', name:'Creation Homes', color:'#3B7DDD', tier:'Entry–Mid', tagline:'Award-winning QLD builder — fixed-price, premium inclusions', designs:4, priceRange:'$285k – $460k'},
+ {id:'avia', name:'AVIA Homes', color:'#7C3AED', tier:'Mid-Range', tagline:'Homes worth living in — 1,200+ completed, on time, above standard', designs:4, priceRange:'$340k – $520k'},
+ {id:'metricon', name:'Metricon', color:'#C8A96E', tier:'Premium', tagline:'Australia\'s largest builder — HomeSolution to Signature range', designs:4, priceRange:'$380k – $650k'}
+ ];
+
+ const DESIGNS = [
+ // FRD Homes — 4 designs (entry single, larger single, entry double, larger double)
+ {name:'FRD Classic 170', builder:'FRD Homes', beds:3, baths:2, garage:1, sqm:170, price:'$245,000', frontage:'10m+', tier:'entry'},
+ {name:'FRD Ranch 210', builder:'FRD Homes', beds:4, baths:2, garage:2, sqm:210, price:'$295,000', frontage:'12.5m+', tier:'entry'},
+ {name:'FRD Hampton 230', builder:'FRD Homes', beds:4, baths:2, garage:2, sqm:230, price:'$335,000', frontage:'10m+', tier:'mid'},
+ {name:'FRD Estate 280', builder:'FRD Homes', beds:5, baths:3, garage:2, sqm:280, price:'$380,000', frontage:'12.5m+', tier:'mid'},
+ // Creation Homes — 4 designs
+ {name:'Hillcrest 18', builder:'Creation Homes', beds:4, baths:2, garage:1, sqm:165, price:'$285,000', frontage:'10m+', tier:'entry'},
+ {name:'Southcote 23', builder:'Creation Homes', beds:4, baths:2, garage:2, sqm:215, price:'$365,000', frontage:'12.5m+', tier:'mid'},
+ {name:'Willow 26', builder:'Creation Homes', beds:4, baths:2, garage:2, sqm:243, price:'$395,000', frontage:'10m+', tier:'mid'},
+ {name:'Fernbrook 28', builder:'Creation Homes', beds:5, baths:3, garage:2, sqm:265, price:'$440,000', frontage:'12.5m+', tier:'mid'},
+ // AVIA Homes — 4 designs
+ {name:'Marseille', builder:'AVIA Homes', beds:4, baths:2, garage:1, sqm:161, price:'$340,000', frontage:'10m+', tier:'mid'},
+ {name:'Dublin', builder:'AVIA Homes', beds:4, baths:2, garage:2, sqm:180, price:'$395,000', frontage:'12.5m+', tier:'mid'},
+ {name:'Almada 210', builder:'AVIA Homes', beds:4, baths:2, garage:2, sqm:211, price:'$450,000', frontage:'12.5m+', tier:'mid'},
+ {name:'Catalina', builder:'AVIA Homes', beds:4, baths:2, garage:2, sqm:210, price:'$490,000', frontage:'14m+', tier:'premium'},
+ // Metricon — 4 designs
+ {name:'Kirra', builder:'Metricon', beds:3, baths:2, garage:2, sqm:168, price:'$380,000', frontage:'12.5m+', tier:'mid'},
+ {name:'Ella', builder:'Metricon', beds:4, baths:2, garage:2, sqm:195, price:'$435,000', frontage:'12.5m+', tier:'mid'},
+ {name:'Glendale', builder:'Metricon', beds:4, baths:2, garage:2, sqm:235, price:'$510,000', frontage:'14m+', tier:'premium'},
+ {name:'Fintona', builder:'Metricon', beds:5, baths:3, garage:2, sqm:280, price:'$580,000', frontage:'14m+', tier:'premium'}
+ ];
+
+ // ─── SUBURB LIFESTYLE DATA ───────────────────────────────────────────────
+ const SUBURB_DATA = {
+ 'oaklandestate': {
+ schools: ['Beaudesert State School (1.2km)', 'St Mary\'s Catholic Primary (2km)', 'Beaudesert SHS (1.5km)'],
+ commute: '65 min to Brisbane CBD',
+ amenities: ['Beaudesert Town Centre (1km)', 'Beaudesert Hospital (2km)', 'Scenic Rim Regional Library'],
+ medianPrice: '$485,000',
+ growth: '+8.2% annual'
+ },
+ 'woodchester': {
+ schools: ['Gatton State School (3km)', 'Faith Lutheran College (5km)', 'Lockyer District SHS (4km)'],
+ commute: '70 min to Brisbane CBD',
+ amenities: ['Gatton Town Centre (3km)', 'Lake Apex (2km)', 'University of Qld Gatton Campus (5km)'],
+ medianPrice: '$420,000',
+ growth: '+12.5% annual'
+ },
+ 'lakeviewestate': {
+ schools: ['Gatton State School (2km)', 'Faith Lutheran College (4km)'],
+ commute: '70 min to Brisbane CBD',
+ amenities: ['Gatton Town Centre (2km)', 'Lake Apex Park', 'Lockyer Valley Cultural Centre'],
+ medianPrice: '$420,000',
+ growth: '+12.5% annual'
+ },
+ 'sorensenrise': {
+ schools: ['Southside State School (2km)', 'Victory College (5km)', 'Gympie SHS (5km)'],
+ commute: '90 min to Sunshine Coast',
+ amenities: ['Gympie Town Centre (4km)', 'Mary Valley Rail Trail', 'Gympie Aquatic Centre'],
+ medianPrice: '$385,000',
+ growth: '+9.8% annual'
+ },
+ 'riverina': {
+ schools: ['Emmanuel College (3km)', 'All Saints Anglican (2km)', 'Nerang SHS (4km)'],
+ commute: '15 min to Surfers Paradise',
+ amenities: ['Metricon Stadium (2km)', 'Pacific Fair (10km)', 'Carrara Markets'],
+ medianPrice: '$820,000',
+ growth: '+6.1% annual'
+ },
+ 'peregian': {
+ schools: ['Coolum State School (5km)', 'St Andrew\'s Anglican (8km)'],
+ commute: '90 min to Brisbane CBD, 20 min to Noosa',
+ amenities: ['Peregian Beach (3km)', 'Noosa National Park (15km)', 'Peregian Village'],
+ medianPrice: '$950,000',
+ growth: '+7.3% annual'
+ },
+ 'bellmere': {
+ schools: ['Caboolture East State School (3km)', 'Grace Lutheran College (5km)'],
+ commute: '50 min to Brisbane CBD',
+ amenities: ['Morayfield Shopping Centre (5km)', 'Caboolture Hospital (6km)', 'Abbey Museum'],
+ medianPrice: '$580,000',
+ growth: '+11.2% annual'
+ },
+ 'hoya': {
+ schools: ['Boonah State School (5km)', 'Boonah SHS (5km)'],
+ commute: '75 min to Brisbane CBD',
+ amenities: ['Boonah Town Centre (5km)', 'Lake Moogerah (15km)', 'Mt French Lookout'],
+ medianPrice: '$520,000',
+ growth: '+10.5% annual'
+ },
+ 'barrensroad': {
+ schools: ['Ripley Valley State School (2km)', 'Faith Lutheran College Plainland (15km)'],
+ commute: '45 min to Brisbane CBD',
+ amenities: ['Orion Springfield Central (10km)', 'Ripley Town Centre (planned)', 'Flinders-Goolman Conservation'],
+ medianPrice: '$620,000',
+ growth: '+14.1% annual'
+ }
+ };
+
+ // ─── BUILDER TOUR LINKS ───────────────────────────────────────────────────
+ const BUILDER_LOGOS = {
+ 'frd': 'img/builders/frd-dark.png',
+ 'creation': 'img/builders/creation.png',
+ 'avia': 'img/builders/avia-v2.png',
+ 'metricon': 'img/builders/metricon.png'
+ };
+
+ const BUILDER_TOUR_LINKS = {
+ 'FRD Homes': 'https://frdhomes.com.au/',
+ 'Creation Homes': 'https://qld.creationhomes.com.au/designs/',
+ 'AVIA Homes': 'https://www.aviahomes.com.au/homes',
+ 'Metricon': 'https://www.metricon.com.au/house-designs/queensland'
+ };
+
+ // ─── PASSWORD GATE ────────────────────────────────────────────────
+ function checkPassword() {
+ const val = document.getElementById('gateInput').value.trim().toUpperCase();
+ const err = document.getElementById('gateError');
+ const inp = document.getElementById('gateInput');
+ if (val === 'LV9') {
+ const gate = document.getElementById('gate');
+ gate.style.opacity = '0';
+ gate.style.transition = 'opacity 0.5s ease';
+ setTimeout(() => {
+ gate.style.display = 'none';
+ document.getElementById('main-content').style.display = 'block';
+ initPortal();
+ }, 500);
+ } else {
+ inp.classList.add('error');
+ err.classList.add('show');
+ setTimeout(() => inp.classList.remove('error'), 500);
+ setTimeout(() => err.classList.remove('show'), 3000);
+ }
+ }
+
+ document.addEventListener('keydown', e => {
+ if (e.key === 'Enter' && document.getElementById('gate').style.display !== 'none') checkPassword();
+ });
+
+
+ // Design descriptions for detail view (AVIA-style)
+ const DESIGN_DESCRIPTIONS = {
+ 'FRD Classic 170': 'A compact single-storey home perfect for first buyers or investors. Three bedrooms, open-plan living flowing to the alfresco, and a functional kitchen. Proven FRD quality at an entry price point.',
+ 'FRD Ranch 210': 'A generous single-storey with four bedrooms, two bathrooms, and double garage. The open-plan living hub connects kitchen, dining and lounge with seamless flow to outdoor entertaining.',
+ 'FRD Hampton 230': 'A smart double-storey with living downstairs and sleeping upstairs. Four bedrooms, double garage, and the signature FRD Hamptons facade. Perfect for families on standard lots.',
+ 'FRD Estate 280': 'FRD\'s premium double-storey — five bedrooms, three bathrooms, and expansive living across two levels. Multiple living zones, butler\'s pantry option, and architectural facade.',
+ 'Hillcrest 18': 'A thoughtful single-storey designed for 10m lots. Four bedrooms, two bathrooms, and a seamless flow from kitchen to living to alfresco. Proves you don\'t need a wide lot to live well.',
+ 'Southcote 23': 'Generous proportions and a smart floorplan. The open-plan hub connects kitchen, dining and living, while four bedrooms are zoned for privacy. Practical everyday living.',
+ 'Willow 26': 'A clever double-storey that delivers space on a narrow lot. Four bedrooms upstairs with the master suite enjoying walk-in robe and ensuite. Open-plan living downstairs flows to alfresco.',
+ 'Fernbrook 28': 'A striking double-storey with five bedrooms and three bathrooms. Downstairs is designed for entertaining — open kitchen, living and dining flowing to the alfresco. Upstairs is a private family retreat.',
+ 'Marseille': 'Everyday moments feel elevated in the Marseille. Soft light, stylish finishes and a thoughtful layout create a warm, welcoming home with open-plan spaces alongside restful corners.',
+ 'Dublin': 'The Dublin delivers generous living with a practical footprint. An expansive open-plan zone anchors the home, with the master suite privately positioned for a true retreat.',
+ 'Almada 210': 'Centred around a light-filled open-plan kitchen, dining and living space that flows effortlessly to the rear alfresco. The master suite is thoughtfully positioned for privacy.',
+ 'Catalina': 'Architecturally considered with a focus on natural light and connection. The Catalina\'s open-plan living is complemented by distinct zones for rest and retreat. Feels larger than its footprint.',
+ 'Kirra': 'Purpose-built for Queensland\'s climate and lifestyle. Open-plan living with seamless indoor-outdoor flow, three bedrooms, and a compact yet functional kitchen. Ideal for first buyers.',
+ 'Ella': 'A single-storey family home with four bedrooms, open-plan living, and flexible spaces. The Ella adapts to your lifestyle — from home office to kids\' play area.',
+ 'Glendale': 'A family favourite with multiple living zones, four bedrooms, and a gourmet kitchen. The Glendale\'s flexible floorplan adapts to your lifestyle with room to grow.',
+ 'Fintona': 'A premium double-storey with five bedrooms, three bathrooms, and statement living spaces. Ground floor features a grand open-plan area, while upstairs provides a private family wing.'
+ };
+
+ // Auto-init (gate disabled during development)
+ document.addEventListener('DOMContentLoaded', function() { initPortal(); });
+
+ // ─── INIT ─────────────────────────────────────────────────────────
+ function initPortal() {
+ renderProjects();
+ renderBuilders();
+ initObserver();
+ }
+
+ // ─── NAV ──────────────────────────────────────────────────────────
+ function toggleNav() {
+ document.getElementById('navLinks').classList.toggle('open');
+ }
+
+ // ─── FORMAT CURRENCY ──────────────────────────────────────────────
+ function fmtPrice(n) {
+ if (n >= 1000000) return '$' + n.toLocaleString();
+ return '$' + n.toLocaleString();
+ }
+
+ // ─── PROJECTS ─────────────────────────────────────────────────────
+ function getProjectStatus(p) {
+ return p.minPrice > 0 ? 'available' : 'coming-soon';
+ }
+
+ var currentStatusFilter = 'all';
+ var currentBudgetFilter = 'all';
+ var currentBudgetMode = 'package'; // 'package' or 'land'
+ var CHEAPEST_BUILD = 245000;
+
+ function switchBudgetMode(mode) {
+ currentBudgetMode = mode;
+ document.getElementById('budgetModePackage').style.background = mode === 'package' ? 'var(--primary)' : 'transparent';
+ document.getElementById('budgetModePackage').style.color = mode === 'package' ? '#fff' : 'var(--text-light)';
+ document.getElementById('budgetModeLand').style.background = mode === 'land' ? 'var(--primary)' : 'transparent';
+ document.getElementById('budgetModeLand').style.color = mode === 'land' ? '#fff' : 'var(--text-light)';
+ // Update the chip labels
+ var ranges = mode === 'package'
+ ? [['$645,000',''],['$645,000','$845,000'],['$845,000','$1,045,000'],['$1,045,000','$1,245,000'],['$1,245,000','']]
+ : [['$400,000',''],['$400,000','$600,000'],['$600,000','$800,000'],['$800,000','$1,000,000'],['$1,000,000','']];
+ var chips = document.querySelectorAll('.estate-budget[data-budget]:not([data-budget="all"])');
+ var labels = mode === 'package'
+ ? ['Under $645,000','$645,000 \u2013 $845,000','$845,000 \u2013 $1,045,000','$1,045,000 \u2013 $1,245,000','$1,245,000+']
+ : ['Under $400,000','$400,000 \u2013 $600,000','$600,000 \u2013 $800,000','$800,000 \u2013 $1,000,000','$1,000,000+'];
+ chips.forEach(function(chip, i) { chip.innerHTML = labels[i] || ''; });
+ // Re-filter with current selection
+ filterByBudget(currentBudgetFilter);
+ }
+
+ function filterByBudget(budget) {
+ currentBudgetFilter = budget;
+ document.querySelectorAll('.estate-budget').forEach(function(btn) {
+ btn.classList.toggle('active', btn.dataset.budget === budget);
+ });
+ renderProjects(null);
+ }
+
+
+ function updateMapMarkers() {
+ if (!window._mapMarkers || !window._portalMap) return;
+ var offset = currentBudgetMode === 'package' ? CHEAPEST_BUILD : 0;
+ PROJECTS.forEach(function(p) {
+ var marker = window._mapMarkers[p.id];
+ if (!marker) return;
+ var show = true;
+ // Status filter
+ if (currentStatusFilter !== 'all' && getProjectStatus(p) !== currentStatusFilter) show = false;
+ // Budget filter
+ if (show && currentBudgetFilter !== 'all') {
+ var maxBudget = parseInt(currentBudgetFilter);
+ var comparePrice = p.minPrice + offset;
+ if (p.minPrice === 0) { show = true; }
+ else if (maxBudget <= 1000) {
+ var minBudget = maxBudget === 400 ? 0 : maxBudget === 600 ? 400000 : maxBudget === 800 ? 600000 : 800000;
+ var maxB = maxBudget * 1000;
+ show = comparePrice < maxB && (minBudget === 0 || comparePrice >= minBudget);
+ } else {
+ show = comparePrice >= 1000000;
+ }
+ }
+ if (show) { marker.addTo(window._portalMap); }
+ else { window._portalMap.removeLayer(marker); }
+ });
+ }
+
+ function renderProjects(filter) {
+ if (filter !== null && filter !== undefined) currentStatusFilter = filter;
+ filter = currentStatusFilter;
+ filter = filter || 'all';
+ const grid = document.getElementById('projectsGrid');
+ var filtered = filter === 'all' ? PROJECTS : PROJECTS.filter(function(p) { return getProjectStatus(p) === filter; });
+ // Apply budget filter
+ if (currentBudgetFilter !== 'all') {
+ var maxBudget = parseInt(currentBudgetFilter);
+ var offset = currentBudgetMode === 'package' ? CHEAPEST_BUILD : 0;
+ if (maxBudget <= 1000) {
+ var minBudget = maxBudget === 400 ? 0 : maxBudget === 600 ? 400000 : maxBudget === 800 ? 600000 : 800000;
+ var maxB = maxBudget * 1000;
+ filtered = filtered.filter(function(p) {
+ if (p.minPrice === 0) return true;
+ var comparePrice = p.minPrice + offset;
+ return comparePrice < maxB && (minBudget === 0 || comparePrice >= minBudget);
+ });
+ } else {
+ filtered = filtered.filter(function(p) { return (p.minPrice + offset) >= 1000000 || p.minPrice === 0; });
+ }
+ }
+ grid.innerHTML = filtered.map((p, i) => {
+ const status = getProjectStatus(p);
+ const statusLabel = status === 'available' ? 'Available Now' : 'Coming Soon';
+ const statusColor = status === 'available' ? '#059669' : '#D97706';
+ const statusBg = status === 'available' ? 'rgba(5,150,105,0.1)' : 'rgba(217,119,6,0.1)';
+ return `
+ <div class="project-card fade-in" data-status="${status}" style="transition-delay:${(i%3)*0.08}s">
+ <div class="project-img">
+ <img src="${getProjectImage(p)}" alt="${p.name}" loading="lazy"
+ onerror="this.src='https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop&q=80'" />
+ <div style="position:absolute;top:10px;right:10px;background:${status === 'available' ? '#059669' : '#D97706'};color:#fff;font-size:10px;font-weight:700;padding:5px 12px;border-radius:6px;letter-spacing:0.3px;box-shadow:0 2px 8px rgba(0,0,0,0.25)">${statusLabel}</div>
+ </div>
+ <div class="project-body">
+ <div class="project-region region-${p.region.replace(/ /g, '\\ ')}">${p.region}</div>
+ <div class="project-name">${p.name}</div>
+ <div class="project-suburb"> ${p.suburb}</div>
+ <div class="project-price"><strong>${p.minPrice > 0 ? fmtPrice(p.minPrice) + ' \u2013 ' + fmtPrice(p.maxPrice) : 'Pricing TBA'}</strong>${p.minPrice > 0 ? ' lot price range' : ''}</div>
+ <div class="project-footer">
+ <span class="project-lots-count">${p.totalLots} total lots</span>
+ <a href="#" class="btn-sm" onclick="event.preventDefault();openWizardForProject('${p.id}')">${status === 'available' ? 'Explore →' : 'Register Interest →'}</a>
+ </div>
+ </div>
+ </div>`;
+ }).join('');
+ // Update filter chip active states
+ document.querySelectorAll('.estate-filter').forEach(function(btn) {
+ btn.classList.toggle('active', btn.dataset.filter === filter);
+ });
+ // Re-trigger fade-in for newly rendered cards
+ requestAnimationFrame(function() {
+ grid.querySelectorAll('.fade-in').forEach(function(el) { el.classList.add('visible'); });
+ });
+ updateMapMarkers();
+ }
+
+ // ─── MAP ──────────────────────────────────────────────────────────
+ let mapInited = false;
+ function initMap() {
+ if (mapInited) return;
+ mapInited = true;
+ window._portalMap = L.map('map', { zoomControl: true, scrollWheelZoom: false, tap: true, dragging: !L.Browser.mobile }).setView([-27.5, 153.0], 7);
+ setTimeout(() => window._portalMap.invalidateSize(), 200);
+ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+ attribution: '© OpenStreetMap © CARTO',
+ subdomains: 'abcd', maxZoom: 20
+ }).addTo(window._portalMap);
+
+ // Short name for pin labels
+ function shortName(name) {
+ if (name.length <= 12) return name;
+ return name.replace(' Estate', '').replace(' Springs', '').replace(' Point', ' Pt').replace('North Pine Golf Estate', 'Nth Pine Golf');
+ }
+
+ window._mapMarkers = {};
+ PROJECTS.forEach(p => {
+ const label = shortName(p.name);
+ const status = getProjectStatus(p);
+ const dotColor = status === 'available' ? '#059669' : '#D97706';
+ const marker = L.circleMarker([p.lat, p.lng], {radius: 6, fillColor: dotColor, color: '#fff', weight: 2, fillOpacity: 1}).addTo(window._portalMap);
+      marker.bindTooltip(label, {permanent: true, direction: 'bottom', offset: [0, 10], className: 'pin-tooltip'});
+ window._mapMarkers[p.id] = marker;
+ marker.bindPopup(
+ '<div style="font-family:Montserrat,sans-serif">' +
+ '<div style="height:140px;overflow:hidden"><img src="' + getProjectImage(p) + '" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null"/></div>' +
+ '<div style="padding:16px 18px 18px">' +
+ '<div style="font-size:16px;font-weight:800;color:#1B2432;letter-spacing:-0.3px;margin-bottom:3px">' + p.name + '</div>' +
+ '<div style="font-size:12px;color:#9CA3AF;margin-bottom:14px">' + p.suburb + ' \u00b7 ' + p.region + '</div>' +
+ '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:13px">' +
+ '<span style="font-weight:700;color:#059669">' + p.availLots + ' lots available</span>' +
+ '<span style="color:#6B7280">' + (p.minPrice > 0 ? 'From $' + (p.minPrice + 245000).toLocaleString() : 'Pricing TBA') + '</span>' +
+ '</div>' +
+ '<a href="#" onclick="event.preventDefault();openWizardForProject(\'' + p.id + '\')" style="display:block;text-align:center;background:#1B2432;color:#fff;padding:12px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:0.3px;transition:opacity 0.2s">Explore ' + p.name + ' \u2192</a>' +
+ '</div></div>'
+ , {maxWidth: 300, minWidth: 280, className: 'projx-popup'});
+ });
+ }
+
+ // ─── BUILDERS ─────────────────────────────────────────────────────
+ function renderBuilders() {
+ const grid = document.getElementById('buildersGrid');
+ // Builder cards show logos only (no facade images)
+ grid.innerHTML = BUILDERS.map((b, i) => {
+ // Per-builder logo styling for consistency
+ const logoStyles = {
+ 'frd': 'max-height:70px;max-width:140px;',
+ 'creation': 'max-height:50px;max-width:50px;',
+ 'avia': 'max-height:60px;max-width:160px;',
+ 'metricon': 'max-height:70px;max-width:70px;'
+ };
+ const logoStyle = logoStyles[b.id] || 'max-height:60px;max-width:160px;';
+ const needsLabel = (b.id === 'creation'); // Creation icon has no text
+
+ return `
+ <div class="builder-card fade-in fade-in-delay-${i%4+1}" style="display:flex;flex-direction:column">
+ <div style="height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg-alt);padding:20px;gap:8px">
+ <img src="${BUILDER_LOGOS[b.id]}" alt="${b.name}" style="${logoStyle}object-fit:contain" onerror="this.onerror=null;this.style.display='none'"/>
+ ${needsLabel ? '<div style="font-size:11px;font-weight:800;color:var(--primary);letter-spacing:1.5px;text-transform:uppercase">Creation Homes</div>' : ''}
+ </div>
+ <div style="padding:18px;flex:1;display:flex;flex-direction:column">
+ <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:var(--bg-alt);color:var(--text-light);border:1px solid var(--border);display:inline-block;width:fit-content;margin-bottom:8px">${b.tier}</div>
+ <div style="font-size:16px;font-weight:800;color:var(--primary);letter-spacing:-0.3px;margin-bottom:4px">${b.name}</div>
+ <div style="font-size:11px;color:var(--text-light);margin-bottom:12px;line-height:1.5;flex:1">${b.tagline}</div>
+ <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:14px">${b.priceRange}</div>
+ <a href="#" class="btn-sm" style="display:block;text-align:center" onclick="event.preventDefault();openWizardForBuilder('${b.id}')">View Designs →</a>
+ </div>
+ </div>`;
+ }).join('');
+ }
+
+ // ─── DESIGNS ──────────────────────────────────────────────────────
+ function renderDesigns() {
+ const grid = document.getElementById('designsGrid');
+ const fallbackImgs = Object.values(DESIGN_IMAGES);
+ grid.innerHTML = DESIGNS.map((d, i) => {
+ const imgSrc = DESIGN_IMAGES[d.name] || fallbackImgs[i % fallbackImgs.length];
+ return `
+ <div class="design-card" data-tier="${d.tier}" style="cursor:pointer" onclick="openWizardForDesign('${d.name.replace(/'/g, "\\'")}')">
+ <div class="design-img">
+ <img src="${imgSrc}" alt="${d.name}" loading="lazy"
+ onerror="this.src='https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop&q=80'" />
+ </div>
+ <div class="design-body">
+ <div class="design-name">${d.name}</div>
+ <div class="design-builder">${d.builder}</div>
+ <div class="design-specs">
+ <div class="design-spec"><span class="icon"></span> ${d.beds}</div>
+ <div class="design-spec"><span class="icon"></span> ${d.baths}</div>
+ <div class="design-spec"><span class="icon"></span> ${d.garage}</div>
+ <div class="design-spec"><span class="icon"></span> ${d.frontage}</div>
+ </div>
+ <div class="design-footer">
+ <span class="design-price">${d.price}</span>
+ <span class="design-sqm">${d.sqm}m² • Select →</span>
+ </div>
+ </div>
+ </div>`;
+ }).join('');
+ }
+
+ function filterDesigns(filter) {
+ document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+ document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+ document.querySelectorAll('.design-card').forEach(card => {
+ const tier = card.dataset.tier;
+ if (filter === 'all') {
+ card.classList.remove('hidden');
+ } else if (filter === 'entry') {
+ card.classList.toggle('hidden', tier !== 'entry');
+ } else if (filter === 'mid') {
+ card.classList.toggle('hidden', tier !== 'mid');
+ } else if (filter === 'premium') {
+ card.classList.toggle('hidden', tier !== 'premium');
+ }
+ });
+ }
+
+ // ─── CALCULATOR ───────────────────────────────────────────────────
+ let loanTerm = 25;
+
+ function setTerm(years) {
+ loanTerm = years;
+ document.getElementById('term25').classList.toggle('active', years === 25);
+ document.getElementById('term30').classList.toggle('active', years === 30);
+ updateCalc();
+ }
+
+ function formatMoney(n) {
+ return '$' + Math.round(n).toLocaleString('en-AU');
+ }
+
+ function updateCalc() {
+ const price = parseInt(document.getElementById('priceSlider').value);
+ const depositPct = parseInt(document.getElementById('depositSlider').value);
+ const rateRaw = parseFloat(document.getElementById('rateInput').value) || 6.29;
+ const depositAmt = Math.round(price * depositPct / 100);
+ const loan = price - depositAmt;
+ const monthly_rate = rateRaw / 100 / 12;
+ const n = loanTerm * 12;
+ const monthly = loan * (monthly_rate * Math.pow(1 + monthly_rate, n)) / (Math.pow(1 + monthly_rate, n) - 1);
+ const totalRepayment = monthly * n;
+ const totalInterest = totalRepayment - loan;
+ const lvr = Math.round((loan / price) * 100);
+
+ document.getElementById('priceDisplay').textContent = formatMoney(price);
+ document.getElementById('depositDisplay').textContent = depositPct + '% (' + formatMoney(depositAmt) + ')';
+ document.getElementById('rateDisplay').textContent = rateRaw.toFixed(2) + '%';
+ document.getElementById('priceInput').value = formatMoney(price);
+ document.getElementById('monthlyResult').textContent = formatMoney(monthly);
+ document.getElementById('loanAmount').textContent = formatMoney(loan);
+ document.getElementById('totalInterest').textContent = formatMoney(totalInterest);
+ document.getElementById('totalRepayment').textContent = formatMoney(totalRepayment);
+ document.getElementById('lvr').textContent = lvr + '%';
+
+ syncSliders();
+ }
+
+ function syncSliders() {
+ ['priceSlider', 'depositSlider'].forEach(id => {
+ const el = document.getElementById(id);
+ if (!el) return;
+ const min = parseFloat(el.min), max = parseFloat(el.max), val = parseFloat(el.value);
+ const pct = ((val - min) / (max - min)) * 100;
+ el.style.background = `linear-gradient(to right, #3B7DDD ${pct}%, #E5E7EB ${pct}%)`;
+ });
+ }
+
+ function syncFromInput(type) {
+ const raw = document.getElementById('priceInput').value.replace(/[^0-9]/g, '');
+ const val = parseInt(raw) || 650000;
+ const clamped = Math.min(2000000, Math.max(300000, val));
+ document.getElementById('priceSlider').value = clamped;
+ updateCalc();
+ }
+
+ // ─── FORM ─────────────────────────────────────────────────────────
+ function renderForm() {
+ const pSel = document.getElementById('projectSelect');
+ pSel.innerHTML = '<option value="">Select a project...</option>' + PROJECTS.map(p => `<option>${p.name} — ${p.suburb}</option>`).join('');
+ const bSel = document.getElementById('builderSelect');
+ bSel.innerHTML = '<option value="none">No Preference</option>' + BUILDERS.map(b => `<option>${b.name}</option>`).join('');
+ }
+
+ function submitEOI(e) {
+ e.preventDefault();
+ const ref = 'PX-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+ document.getElementById('modalRef').textContent = 'Reference: ' + ref;
+ document.getElementById('successModal').classList.add('show');
+ e.target.reset();
+ }
+
+ function closeModal() {
+ document.getElementById('successModal').classList.remove('show');
+ }
+
+ // ─── INTERSECTION OBSERVER ────────────────────────────────────────
+ function initObserver() {
+ const obs = new IntersectionObserver((entries) => {
+ entries.forEach(e => {
+ if (e.isIntersecting) {
+ e.target.classList.add('visible');
+ obs.unobserve(e.target);
+ }
+ });
+ }, { threshold: 0.08 });
+ document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+ }
+
+ // ─── COUNTER ANIMATION ────────────────────────────────────────────
+ function initCounters() {
+ const counters = document.querySelectorAll('.stat-number[data-target]');
+ const obs = new IntersectionObserver((entries) => {
+ entries.forEach(e => {
+ if (e.isIntersecting) {
+ animateCounter(e.target);
+ obs.unobserve(e.target);
+ }
+ });
+ }, { threshold: 0.5 });
+ counters.forEach(c => obs.observe(c));
+ }
+
+ function animateCounter(el) {
+ const target = parseInt(el.dataset.target);
+ const suffix = el.dataset.suffix || '';
+ const duration = 1400;
+ const start = performance.now();
+ function update(now) {
+ const elapsed = now - start;
+ const progress = Math.min(elapsed / duration, 1);
+ const eased = 1 - Math.pow(1 - progress, 3);
+ el.textContent = Math.floor(eased * target) + (progress >= 1 ? suffix : '');
+ if (progress < 1) requestAnimationFrame(update);
+ }
+ requestAnimationFrame(update);
+ }
+
+ // ─── MOBILE NAV CLOSE ON LINK ─────────────────────────────────────
+ document.addEventListener('click', e => {
+ if (e.target.tagName === 'A' && document.getElementById('navLinks').classList.contains('open')) {
+ document.getElementById('navLinks').classList.remove('open');
+ }
+ });
+
+ // Allow enter key on gate
+ document.getElementById('gateInput').addEventListener('keydown', e => {
+ if (e.key === 'Enter') checkPassword();
+ });
+
+ // ─── VIEW SWITCHER ────────────────────────────────────────────
+ function switchView(view) {
+ document.getElementById('listView').style.display = view === 'list' ? 'block' : 'none';
+ document.getElementById('mapView').style.display = view === 'map' ? 'block' : 'none';
+ document.getElementById('toggleList').classList.toggle('active', view === 'list');
+ document.getElementById('toggleMap').classList.toggle('active', view === 'map');
+ if (view === 'map' && !mapInited) {
+ initMap();
+ }
+ if (view === 'map' && mapInited && window._portalMap) {
+ setTimeout(function() { window._portalMap.invalidateSize(); }, 100);
+ }
+ }
+
+ // ─── WIZARD CALCULATOR ──────────────────────────────────────
+ function updateWizardCalc() {
+ var priceEl = document.getElementById('wCalcPrice');
+ var depEl = document.getElementById('wCalcDeposit');
+ var rateEl = document.getElementById('wCalcRate');
+ var termEl = document.getElementById('wCalcTerm');
+ if (!priceEl || !depEl || !rateEl || !termEl) return;
+ var price = parseInt(priceEl.value);
+ var depPct = parseInt(depEl.value);
+ var rate = parseFloat(rateEl.value);
+ var term = parseInt(termEl.value);
+ var dep = Math.round(price * depPct / 100);
+ var loan = price - dep;
+ var mr = rate / 100 / 12;
+ var n = term * 12;
+ var mp = mr > 0 ? loan * (mr * Math.pow(1+mr,n)) / (Math.pow(1+mr,n)-1) : loan / n;
+ document.getElementById('wCalcPriceLabel').textContent = '$' + price.toLocaleString();
+ document.getElementById('wCalcDepositLabel').textContent = depPct + '% ($' + dep.toLocaleString() + ')';
+ document.getElementById('wCalcResult').textContent = '$' + Math.round(mp).toLocaleString();
+ }
+
+ // ─── BUYER WIZARD ──────────────────────────────────────────────────
+
+ let wizardState = {
+ mode: null,
+ step: 1,
+ region: null,
+ project: null,
+ builder: null,
+ design: null,
+ _designFilter: 'All'
+ };
+
+ function openWizardForDesign(designName) {
+ const design = DESIGNS.find(function(d) { return d.name === designName; });
+ if (!design) return;
+ const builder = BUILDERS.find(function(b) { return b.name === design.builder; });
+ wizardState = { mode: 'builder', step: 2, region: null, project: null, builder: builder, design: design, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _inDetail: false };
+ document.getElementById('wizard').classList.add('open');
+ document.body.style.overflow = 'hidden';
+ document.getElementById('wizard').scrollTop = 0;
+ renderWizardStep();
+ }
+
+ function openWizardForBuilder(builderId) {
+ const builder = BUILDERS.find(function(b) { return b.id === builderId; });
+ if (!builder) return;
+ wizardState = { mode: 'builder', step: 1, region: null, project: null, builder: builder, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _inDetail: false };
+ document.getElementById('wizard').classList.add('open');
+ document.body.style.overflow = 'hidden';
+ document.getElementById('wizard').scrollTop = 0;
+ renderWizardStep();
+ }
+
+ function openWizardForProject(projectId) {
+ const project = PROJECTS.find(function(p) { return p.id === projectId; });
+ if (!project) return;
+ wizardState = { mode: 'land', step: 1, region: project.region, project: project, builder: null, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _inDetail: false };
+ document.getElementById('wizard').classList.add('open');
+ document.body.style.overflow = 'hidden';
+ document.getElementById('wizard').scrollTop = 0;
+ renderWizardStep();
+ }
+
+ function openWizard(mode) {
+ wizardState = { mode, step: 1, region: null, project: null, builder: null, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _inDetail: false };
+ document.getElementById('wizard').classList.add('open');
+ document.body.style.overflow = 'hidden';
+ document.getElementById('wizard').scrollTop = 0;
+ renderWizardStep();
+ }
+
+ function closeWizard() {
+ document.getElementById('wizard').classList.remove('open');
+ document.body.style.overflow = '';
+ }
+
+ function headerBack() {
+    if (wizardState._inDetail) {
+      wizardState._inDetail = false;
+      renderWizardStep();
+      return;
+    }
+    wizardBack();
+  }
+
+  function wizardBack() {
+ wizardState.step--;
+ if (wizardState.step < 1) {
+ closeWizard();
+ return;
+ }
+ document.getElementById('wizard').scrollTop = 0;
+ renderWizardStep();
+ }
+
+ function wizardNext() {
+ wizardState.step++;
+ document.getElementById('wizard').scrollTop = 0;
+ renderWizardStep();
+ }
+
+ function renderWizardStep() {
+ const totalSteps = wizardState.mode === 'land' ? 4 : 5;
+ const pct = (wizardState.step / totalSteps) * 100;
+ document.getElementById('wizardProgressFill').style.width = Math.min(pct, 100) + '%';
+ document.getElementById('wizardStepLabel').textContent = 'Step ' + wizardState.step + ' of ' + totalSteps;
+
+ const dotsEl = document.getElementById('wizardStepDots');
+ dotsEl.innerHTML = Array.from({length: totalSteps}, (_, i) => {
+ const cls = (i + 1 < wizardState.step) ? 'done' : (i + 1 === wizardState.step) ? 'active' : '';
+ return '<div class="wizard-step-dot ' + cls + '"></div>';
+ }).join('');
+
+ const body = document.getElementById('wizardBody');
+ if (wizardState.mode === 'land') {
+ switch (wizardState.step) {
+ case 1: body.innerHTML = renderLandStep3(); break;
+ case 2: body.innerHTML = renderLandStep4(); break;
+ default:
+      wizardState.step = totalSteps;
+      document.getElementById('wizardProgressFill').style.width = '100%';
+      document.getElementById('wizardStepLabel').textContent = 'Step ' + totalSteps + ' of ' + totalSteps;
+      dotsEl.innerHTML = Array.from({length: totalSteps}, function(_, i) { return '<div class="wizard-step-dot ' + (i + 1 < totalSteps ? 'done' : 'active') + '"></div>'; }).join('');
+      body.innerHTML = renderLeadCapture(); setTimeout(updateWizardCalc, 100); break;
+ }
+ } else {
+ switch (wizardState.step) {
+ case 1: body.innerHTML = renderBuilderStep2(); break;
+ case 2: body.innerHTML = renderBuilderStep3(); break;
+ default:
+      wizardState.step = totalSteps;
+      document.getElementById('wizardProgressFill').style.width = '100%';
+      document.getElementById('wizardStepLabel').textContent = 'Step ' + totalSteps + ' of ' + totalSteps;
+      dotsEl.innerHTML = Array.from({length: totalSteps}, function(_, i) { return '<div class="wizard-step-dot ' + (i + 1 < totalSteps ? 'done' : 'active') + '"></div>'; }).join('');
+      body.innerHTML = renderLeadCapture(); setTimeout(updateWizardCalc, 100); break;
+ }
+ }
+ // Keep compare pill in sync
+ setTimeout(renderComparePill, 0);
+ }
+
+ // — LAND PATH —
+
+ function renderLandStep1() {
+ const regionMap = {};
+ PROJECTS.forEach(function(p) {
+ if (!regionMap[p.region]) regionMap[p.region] = {count: 0, lots: 0};
+ regionMap[p.region].count++;
+ regionMap[p.region].lots += p.availLots;
+ });
+ const regions = Object.entries(regionMap).sort(function(a, b) { return b[1].lots - a[1].lots; });
+
+ return '<div class="wizard-step-heading"><h2>Where would you like to live?</h2><p>Select a region to explore available projects</p></div>' +
+ '<div class="wizard-card-grid">' +
+ regions.map(function(entry) {
+ const region = entry[0], data = entry[1];
+ return '<div class="wizard-region-card" onclick="wizardSelectRegion(\'' + region.replace(/'/g, "\\'") + '\')">' +
+ '<div class="wizard-region-name">' + region + '</div>' +
+ '<div class="wizard-region-meta"><strong>' + data.count + '</strong> project' + (data.count !== 1 ? 's' : '') + ' · <strong>' + data.lots.toLocaleString() + '</strong> lots available</div>' +
+ '<div class="wizard-region-arrow">→</div>' +
+ '</div>';
+ }).join('') +
+ '</div>';
+ }
+
+ function wizardSelectRegion(region) {
+ wizardState.region = region;
+ wizardNext();
+ }
+
+ function renderLandStep2() {
+ const projects = PROJECTS.filter(function(p) { return p.region === wizardState.region; });
+ return  '<div class="wizard-step-heading"><h2>Projects in ' + wizardState.region + '</h2><p>' + projects.length + ' project' + (projects.length !== 1 ? 's' : '') + ' available in this region</p></div>' +
+ '<div class="wizard-card-grid">' +
+ projects.map(function(p) {
+ const idx = PROJECTS.indexOf(p);
+ return '<div class="wizard-project-card" onclick="wizardSelectProject(\'' + p.id + '\')">' +
+ '<div class="wizard-project-img"><img src="' + getProjectImage(p) + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop&q=80\'"/></div>' +
+ '<div class="wizard-project-body">' +
+ '<div class="wizard-project-name">' + p.name + '</div>' +
+ '<div class="wizard-project-suburb"> ' + p.suburb + '</div>' +
+ '<div class="wizard-project-meta"><span class="wizard-project-lots"> ' + p.availLots + ' lots</span><span class="wizard-project-price">' + (p.minPrice > 0 ? fmtPrice(p.minPrice) + ' – ' + fmtPrice(p.maxPrice) : 'Pricing TBA') + '</span></div>' +
+ '</div></div>';
+ }).join('') +
+ '</div>';
+ }
+
+
+ function showProjectDetail(projectId) {
+    wizardState._inDetail = true;
+    var ts = wizardState.mode === 'land' ? 4 : 5;
+    var vs = wizardState.step + 1;
+    document.getElementById('wizardProgressFill').style.width = (vs / ts * 100) + '%';
+    document.getElementById('wizardStepLabel').textContent = 'Step ' + vs + ' of ' + ts;
+    var dotsEl = document.getElementById('wizardStepDots');
+    dotsEl.innerHTML = Array.from({length: ts}, function(_, i) {
+      var cls = (i + 1 < vs) ? 'done' : (i + 1 === vs) ? 'active' : '';
+      return '<div class="wizard-step-dot ' + cls + '"></div>';
+    }).join('');
+ var p = PROJECTS.find(function(pp) { return pp.id === projectId; });
+ if (!p) return;
+ var imgSrc = getProjectImage(p);
+ var status = getProjectStatus(p);
+ var suburbInfo = (typeof SUBURB_DATA !== 'undefined') ? SUBURB_DATA[p.id] : null;
+
+ var html = '<div style="max-width:800px;margin:0 auto">' +
+ '<div style="width:100%;height:240px;border-radius:14px;overflow:hidden;margin-bottom:20px;position:relative">' +
+ '<img src="' + imgSrc + '" alt="' + p.name + '" style="width:100%;height:100%;object-fit:cover"/>' +
+ '<div style="position:absolute;bottom:12px;left:12px;display:flex;gap:8px">' +
+ '<span style="background:rgba(27,36,50,0.85);color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700">' + p.region + '</span>' +
+ '<span style="background:' + (status === 'available' ? '#059669' : '#D97706') + ';color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700">' + (status === 'available' ? 'Available Now' : 'Coming Soon') + '</span>' +
+ '</div></div>' +
+ '<h2 style="font-size:clamp(22px,3vw,28px);font-weight:900;color:var(--primary);letter-spacing:-1px;margin-bottom:6px">' + p.name + '</h2>' +
+ '<div style="font-size:14px;color:var(--text-light);margin-bottom:16px">' + p.suburb + ', ' + p.region + '</div>' +
+ '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px">' +
+ '<div style="background:var(--bg-alt);border-radius:10px;padding:14px 18px;flex:1;min-width:100px"><div style="font-size:22px;font-weight:900;color:var(--primary)">' + p.totalLots + '</div><div style="font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase">Total Lots</div></div>' +
+ '<div style="background:var(--bg-alt);border-radius:10px;padding:14px 18px;flex:1;min-width:100px"><div style="font-size:22px;font-weight:900;color:var(--success)">' + p.availLots + '</div><div style="font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase">Available</div></div>' +
+ '<div style="background:var(--bg-alt);border-radius:10px;padding:14px 18px;flex:1;min-width:100px"><div style="font-size:22px;font-weight:900;color:var(--primary)">' + (p.minPrice > 0 ? 'From ' + fmtPrice(p.minPrice) : 'TBA') + '</div><div style="font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase">Land Price</div></div>' +
+ '</div>';
+
+ if (suburbInfo) {
+ html += '<div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px">' +
+ '<div style="padding:14px 18px;background:var(--bg-alt);font-size:14px;font-weight:700;color:var(--primary);border-bottom:1px solid var(--border)">About ' + p.suburb + '</div>' +
+ '<div style="padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px">' +
+ '<div><div style="font-weight:700;color:var(--primary);margin-bottom:4px">Commute</div><div style="color:var(--text-light)">' + suburbInfo.commute + '</div></div>' +
+ '<div><div style="font-weight:700;color:var(--primary);margin-bottom:4px">Median Price</div><div style="color:var(--text-light)">' + suburbInfo.medianPrice + ' (' + suburbInfo.growth + ')</div></div>' +
+ '<div><div style="font-weight:700;color:var(--primary);margin-bottom:4px">Schools</div><div style="color:var(--text-light)">' + suburbInfo.schools.slice(0,2).join(', ') + '</div></div>' +
+ '<div><div style="font-weight:700;color:var(--primary);margin-bottom:4px">Amenities</div><div style="color:var(--text-light)">' + suburbInfo.amenities.slice(0,2).join(', ') + '</div></div>' +
+ '</div></div>';
+ }
+
+ html += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">' +
+ '</div>' +
+ '<button class="wizard-submit-btn" onclick="wizardSelectProject(\'' + p.id + '\')" style="max-width:360px">Select ' + p.name + ' \u2192</button>' +
+ '</div>';
+
+ document.getElementById('wizardBody').innerHTML = html;
+ document.getElementById('wizard').scrollTop = 0;
+ }
+
+ function wizardSelectProject(id) {
+    wizardState._inDetail = false;
+ wizardState.project = PROJECTS.find(function(p) { return p.id === id; });
+ wizardNext();
+ }
+
+ // Sample lot data for available projects (demo — will be replaced with Monday.com live data)
+ const SAMPLE_LOTS = {
+ 'oaklandestate': [
+ {id:'OAK-101',name:'Lot 101',size:450,frontage:14,price:425000,status:'Available'},
+ {id:'OAK-102',name:'Lot 102',size:375,frontage:12.5,price:395000,status:'Available'},
+ {id:'OAK-103',name:'Lot 103',size:520,frontage:16,price:475000,status:'Available'},
+ {id:'OAK-104',name:'Lot 104',size:400,frontage:14,price:440000,status:'Available'},
+ {id:'OAK-105',name:'Lot 105',size:350,frontage:12.5,price:410000,status:'Available'},
+ {id:'OAK-106',name:'Lot 106',size:600,frontage:18,price:520000,status:'Available'},
+ ],
+ 'woodchester': [
+ {id:'WOOD-030',name:'Lot 30',size:350,frontage:12.5,price:347500,status:'Available'},
+ {id:'WOOD-031',name:'Lot 31',size:400,frontage:14,price:365000,status:'Available'},
+ {id:'WOOD-032',name:'Lot 32',size:375,frontage:12.5,price:355000,status:'Available'},
+ {id:'WOOD-096',name:'Lot 96',size:420,frontage:14,price:357500,status:'Unreleased'},
+ {id:'WOOD-097',name:'Lot 97',size:380,frontage:12.5,price:357500,status:'Unreleased'},
+ {id:'WOOD-098',name:'Lot 98',size:450,frontage:16,price:397500,status:'Available'},
+ ],
+ 'lakeviewestate': [
+ {id:'LAKE-201',name:'Lot 201',size:400,frontage:14,price:345000,status:'Available'},
+ {id:'LAKE-202',name:'Lot 202',size:350,frontage:12.5,price:330000,status:'Available'},
+ {id:'LAKE-203',name:'Lot 203',size:500,frontage:16,price:420000,status:'Available'},
+ {id:'LAKE-204',name:'Lot 204',size:375,frontage:12.5,price:355000,status:'Available'},
+ {id:'LAKE-205',name:'Lot 205',size:450,frontage:14,price:385000,status:'Available'},
+ ],
+ 'sorensenrise': [
+ {id:'SOR-010',name:'Lot 10',size:600,frontage:18,price:375000,status:'Available'},
+ {id:'SOR-011',name:'Lot 11',size:500,frontage:16,price:350000,status:'Available'},
+ {id:'SOR-012',name:'Lot 12',size:450,frontage:14,price:395000,status:'Available'},
+ {id:'SOR-013',name:'Lot 13',size:400,frontage:12.5,price:415000,status:'Available'},
+ {id:'SOR-014',name:'Lot 14',size:700,frontage:20,price:475000,status:'Available'},
+ ],
+ 'riverina': [
+ {id:'RIV-122',name:'Lot 122',size:350,frontage:12.5,price:540000,status:'Available'},
+ {id:'RIV-123',name:'Lot 123',size:400,frontage:14,price:580000,status:'Available'},
+ {id:'RIV-124',name:'Lot 124',size:450,frontage:14,price:620000,status:'Available'},
+ {id:'RIV-125',name:'Lot 125',size:500,frontage:16,price:710000,status:'Available'},
+ {id:'RIV-126',name:'Lot 126',size:375,frontage:12.5,price:560000,status:'Available'},
+ ]
+ };
+
+ function renderLandStep3() {
+ var p = wizardState.project;
+ if (!p) return "<div>Loading...</div>";
+ var lots = SAMPLE_LOTS[p.id] || [];
+ var selectedFrontage = wizardState.selectedFrontage || null;
+ var suburbInfo = (typeof SUBURB_DATA !== 'undefined') ? SUBURB_DATA[p.id] : null;
+ var imgSrc = getProjectImage(p);
+ var status = getProjectStatus(p);
+
+ // Project details section (always shown)
+ var projectDetails = '<div style="margin-bottom:32px">' +
+ // Hero image
+ '<div style="width:100%;height:240px;border-radius:14px;overflow:hidden;margin-bottom:20px;position:relative">' +
+ '<img src="' + imgSrc + '" alt="' + p.name + '" style="width:100%;height:100%;object-fit:cover"/>' +
+ '<div style="position:absolute;bottom:12px;left:12px;display:flex;gap:8px">' +
+ '<span style="background:rgba(27,36,50,0.85);color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700">' + p.region + '</span>' +
+ '<span style="background:' + (status === 'available' ? 'rgba(5,150,105,0.9)' : 'rgba(217,119,6,0.9)') + ';color:#fff;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:700">' + (status === 'available' ? 'Available Now' : 'Coming Soon') + '</span>' +
+ '</div></div>' +
+
+ // Project name + key info
+ '<h2 style="font-size:clamp(22px,3vw,28px);font-weight:900;color:var(--primary);letter-spacing:-1px;margin-bottom:6px">' + p.name + '</h2>' +
+ '<div style="font-size:14px;color:var(--text-light);margin-bottom:16px">' + p.suburb + ', ' + p.region + '</div>' +
+
+ // Stats row
+ '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px">' +
+ '<div style="background:var(--bg-alt);border-radius:10px;padding:14px 18px;flex:1;min-width:120px"><div style="font-size:22px;font-weight:900;color:var(--primary)">' + p.totalLots + '</div><div style="font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px">Total Lots</div></div>' +
+ '<div style="background:var(--bg-alt);border-radius:10px;padding:14px 18px;flex:1;min-width:120px"><div style="font-size:22px;font-weight:900;color:var(--success)">' + p.availLots + '</div><div style="font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px">Available</div></div>' +
+ '<div style="background:var(--bg-alt);border-radius:10px;padding:14px 18px;flex:1;min-width:120px"><div style="font-size:22px;font-weight:900;color:var(--primary)">' + (p.minPrice > 0 ? 'From $' + (p.minPrice + 245000).toLocaleString() : 'TBA') + '</div><div style="font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:0.5px">Land Price</div></div>' +
+ '</div>';
+
+ // Suburb info (if available)
+ if (suburbInfo) {
+ projectDetails += '<div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:24px">' +
+ '<div style="padding:14px 18px;background:var(--bg-alt);font-size:14px;font-weight:700;color:var(--primary);">About ' + p.suburb + '</div>' +
+ '<div style="padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px">' +
+ '<div><div style="font-weight:700;color:var(--primary);margin-bottom:4px">Commute</div><div style="color:var(--text-light)">' + suburbInfo.commute + '</div></div>' +
+ '<div><div style="font-weight:700;color:var(--primary);margin-bottom:4px">Median Price</div><div style="color:var(--text-light)">' + suburbInfo.medianPrice + ' (' + suburbInfo.growth + ')</div></div>' +
+ '<div><div style="font-weight:700;color:var(--primary);margin-bottom:4px">Schools</div><div style="color:var(--text-light)">' + suburbInfo.schools.slice(0,2).join(', ') + '</div></div>' +
+ '<div><div style="font-weight:700;color:var(--primary);margin-bottom:4px">Amenities</div><div style="color:var(--text-light)">' + suburbInfo.amenities.slice(0,2).join(', ') + '</div></div>' +
+ '</div></div>';
+ }
+
+ projectDetails += '</div>';
+
+ // Coming soon projects - show details + register interest
+ if (lots.length === 0) {
+ return projectDetails +
+ '<div style="background:rgba(217,119,6,0.06);border:1px solid rgba(217,119,6,0.2);border-radius:12px;padding:32px;text-align:center">' +
+ '<div style="font-size:28px;margin-bottom:10px"></div>' +
+ '<div style="font-size:16px;font-weight:800;color:var(--primary);margin-bottom:6px">Lots Coming Soon</div>' +
+ '<div style="font-size:13px;color:var(--text-light);margin-bottom:20px">Lot details and pricing for ' + p.name + ' are being finalised. Register your interest to be first notified.</div>' +
+ '<button class="wizard-submit-btn" onclick="wizardState.selectedFrontage=null;wizardState.step=3;renderWizardStep()" style="max-width:300px;margin:0 auto">Register Interest \u2192</button>' +
+ '</div>';
+ }
+
+ // Available projects - show details + frontage selection
+ var frontageGroups = {};
+ lots.forEach(function(lot) {
+ var key = lot.frontage + 'm';
+ if (!frontageGroups[key]) frontageGroups[key] = {frontage: lot.frontage, label: key, lots: [], minPrice: Infinity};
+ frontageGroups[key].lots.push(lot);
+ if (lot.price < frontageGroups[key].minPrice) frontageGroups[key].minPrice = lot.price;
+ });
+ var groups = Object.values(frontageGroups).sort(function(a,b) { return a.frontage - b.frontage; });
+
+ var cards = groups.map(function(g) {
+ var isSel = selectedFrontage === g.frontage;
+ var availCount = g.lots.filter(function(l) { return l.status === 'Available'; }).length;
+ return '<div style="background:var(--bg);border:2px solid ' + (isSel ? 'var(--accent)' : 'var(--border)') + ';border-radius:14px;padding:24px;cursor:pointer;transition:all 0.2s;text-align:center;position:relative" onclick="selectFrontageGroup(' + g.frontage + ')">' +
+ (isSel ? '<div style="position:absolute;top:10px;right:10px;background:var(--accent);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800">\u2713</div>' : '') +
+ '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-xlight);margin-bottom:10px">Lot Width</div>' +
+ '<div style="font-size:38px;font-weight:900;color:' + (isSel ? 'var(--accent)' : 'var(--primary)') + ';letter-spacing:-2px;line-height:1;margin-bottom:6px">' + g.label + '</div>' +
+ '<div style="font-size:11px;color:var(--text-xlight);margin-bottom:14px">wide</div>' +
+ '<div style="background:' + (isSel ? 'rgba(59,125,221,0.08)' : 'var(--bg-alt)') + ';border-radius:8px;padding:8px;margin-bottom:12px">' +
+ '<span style="font-size:11px;color:var(--text-light)">From </span><span style="font-size:16px;font-weight:800;color:var(--primary)">$' + Math.round(g.minPrice/1000) + 'k</span>' +
+ '</div>' +
+ '<div style="font-size:11px;color:var(--success);font-weight:700">' + availCount + ' lot' + (availCount !== 1 ? 's' : '') + ' available</div>' +
+ '</div>';
+ }).join('');
+
+ return projectDetails +
+ '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px">' +
+ '</div>' +
+ '<h3 style="font-size:18px;font-weight:800;color:var(--primary);margin-bottom:6px">Select Your Lot Size</h3>' +
+ '<p style="font-size:13px;color:var(--text-light);margin-bottom:20px">Choose a lot width to see compatible home designs</p>' +
+ '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:24px">' + cards + '</div>' +
+ (selectedFrontage ? '<div style="text-align:center"><button class="wizard-submit-btn" onclick="wizardNext()" style="max-width:360px">See Compatible Builds for ' + selectedFrontage + 'm Lots \u2192</button></div>' : '');
+ }
+
+ function selectFrontageGroup(frontage) {
+ wizardState.selectedFrontage = frontage;
+ renderWizardStep();
+ }
+
+ function renderLandStep4() {
+ // Filter designs by selected frontage width
+ const maxFrontage = wizardState.selectedFrontage || 99;
+ const frontageLabel = maxFrontage < 99 ? maxFrontage + 'm' : '';
+ // Get "from" land price for this frontage
+ const lots = SAMPLE_LOTS[wizardState.project ? wizardState.project.id : ''] || [];
+ const matchingLots = lots.filter(function(l) { return l.frontage === maxFrontage; });
+ const landFromPrice = matchingLots.length > 0 ? Math.min.apply(null, matchingLots.map(function(l) { return l.price; })) : 0;
+
+ // Filter designs compatible with the selected lot frontage
+ function designFits(d) {
+ var req = parseFloat(d.frontage);
+ return isNaN(req) || req <= maxFrontage;
+ }
+
+ const allBuilders = [];
+ DESIGNS.forEach(function(d) { if (allBuilders.indexOf(d.builder) === -1) allBuilders.push(d.builder); });
+ const activeFilter = wizardState._designFilter || 'All';
+ var filtered = (activeFilter === 'All') ? DESIGNS : DESIGNS.filter(function(d) { return d.builder === activeFilter; });
+ if (maxFrontage < 99) filtered = filtered.filter(designFits);
+
+ const tabs = ['All'].concat(allBuilders).map(function(b) {
+ return '<button class="wizard-filter-tab ' + (b === activeFilter ? 'active' : '') + '" onclick="wizardFilterDesigns(\'' + b.replace(/'/g, "\\'") + '\')">' + (b === 'All' ? 'All Designs' : b) + '</button>';
+ }).join('');
+
+ const cards = filtered.map(function(d) {
+ const imgSrc = DESIGN_IMAGES[d.name] || Object.values(DESIGN_IMAGES)[0];
+ const isSaved = wizardState.savedDesigns && wizardState.savedDesigns.some(function(s) { return s.designName === d.name; });
+ const saveBtn = '<button onclick="toggleSaveDesign(\'' + d.name.replace(/'/g, "\\'") + '\',\'' + d.builder.replace(/'/g, "\\'") + '\')" title="' + (isSaved ? 'Remove from compare' : 'Save to compare') + '" style="font-family:Montserrat,sans-serif;font-size:14px;background:' + (isSaved ? 'rgba(59,125,221,0.08)' : 'transparent') + ';color:' + (isSaved ? 'var(--accent)' : 'var(--text-xlight)') + ';border:1.5px solid ' + (isSaved ? 'var(--accent)' : 'var(--border)') + ';padding:5px 10px;border-radius:6px;cursor:pointer;transition:all 0.2s;min-height:32px">' + (isSaved ? '\u2665' : '\u2661') + '</button>';
+ return '<div class="wizard-design-card">' +
+ '<div class="wizard-design-img"><img src="' + imgSrc + '" alt="' + d.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop&q=80\'"/></div>' +
+ '<div class="wizard-design-body">' +
+ '<div class="wizard-design-name">' + d.name + '</div>' +
+ '<div class="wizard-design-builder-tag">' + d.builder + '</div>' +
+ '<div class="wizard-design-specs"><span>\uD83D\uDECF ' + d.beds + '</span><span>\uD83D\uDEBF ' + d.baths + '</span><span>\uD83D\uDE97 ' + d.garage + '</span><span>\uD83D\uDCCF ' + d.frontage + '</span></div>' +
+ (landFromPrice > 0 ? '<div style="font-size:11px;color:var(--text-xlight);margin-bottom:6px">Land from $' + Math.round(landFromPrice/1000) + 'k + Build ' + d.price + '</div>' : '') +
+ '<div class="wizard-design-price-row">' +
+ '<span class="wizard-design-price">' + (landFromPrice > 0 ? 'Package from $' + (landFromPrice + (parseInt(d.price.replace(/[^0-9]/g,''))||0)).toLocaleString() : d.price) + '</span>' +
+ '<div style="display:flex;gap:5px;align-items:center">' + saveBtn + '<button class="wizard-select-btn" onclick="showDesignDetail(\'' + d.name.replace(/'/g, "\\'") + '\')">' + d.sqm + 'm\u00B2 \u2022 View Details</button></div>' +
+ '</div>' +
+
+ '</div></div>';
+ }).join('');
+
+ return  '<div class="wizard-step-heading"><h2>Compatible designs for ' + wizardState.project.name + '</h2><p>' + (maxFrontage < 99 ? 'Showing designs that fit your ' + frontageLabel + ' wide lot — ' + filtered.length + ' designs available' : 'Select a design to continue') + '</p></div>' +
+ '<div class="wizard-filter-tabs">' + tabs + '</div>' +
+ '<div class="wizard-design-grid">' + cards + '</div>';
+ }
+
+ function wizardFilterDesigns(filter) {
+ wizardState._designFilter = filter;
+ renderWizardStep();
+ }
+
+ function wizardSelectDesign(name) {
+    wizardState._inDetail = false;
+ wizardState.design = DESIGNS.find(function(d) { return d.name === name; });
+ wizardState.savedDesigns = [];
+ wizardNext();
+ }
+
+ // — BUILDER PATH —
+
+ function renderBuilderStep1() {
+ const builderHeaderImages = [
+ DESIGN_IMAGES['FRD Hampton 230'],
+ DESIGN_IMAGES['Fernbrook 28'],
+ DESIGN_IMAGES['Almada 210'],
+ DESIGN_IMAGES['Fintona']
+ ];
+ const cards = BUILDERS.map(function(b, i) {
+ const initials = b.name.split(' ').map(function(w) { return w[0]; }).join('').slice(0, 2);
+ return '<div class="wizard-builder-card">' +
+ '<div class="wizard-builder-img"><img src="' + builderHeaderImages[i] + '" alt="' + b.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop&q=80\'"/></div>' +
+ '<div class="wizard-builder-body">' +
+ '<div class="wizard-builder-logo-row">' +
+ '<div class="wizard-builder-logo" style="background:' + b.color + '">' + initials + '</div>' +
+ '<div class="wizard-builder-name-wrap"><div class="wizard-builder-card-name">' + b.name + '</div><div class="wizard-builder-card-tier">' + b.tier + '</div></div>' +
+ '</div>' +
+ '<div class="wizard-builder-tagline">' + b.tagline + '</div>' +
+ '<div class="wizard-builder-meta-row">' +
+ '<div class="wizard-builder-meta-item"><strong>' + b.designs + '</strong> Designs</div>' +
+ '</div>' +
+ '<div class="wizard-builder-price-tag">' + b.priceRange + '</div>' +
+ '<button class="wizard-browse-btn" onclick="wizardSelectBuilder(\'' + b.id + '\')">Browse Designs →</button>' +
+ '</div></div>';
+ }).join('');
+
+ return '<div class="wizard-step-heading"><h2>Who would you like to build with?</h2><p>Select a builder to browse their home designs</p></div>' +
+ '<div class="wizard-builder-grid">' + cards + '</div>';
+ }
+
+ function wizardSelectBuilder(id) {
+ wizardState.builder = BUILDERS.find(function(b) { return b.id === id; });
+ wizardNext();
+ }
+
+ function renderBuilderStep2() {
+ const builderDesigns = DESIGNS.filter(function(d) { return d.builder === wizardState.builder.name; });
+ const cards = builderDesigns.map(function(d) {
+ const imgSrc = DESIGN_IMAGES[d.name] || Object.values(DESIGN_IMAGES)[0];
+ const isSaved = wizardState.savedDesigns && wizardState.savedDesigns.some(function(s) { return s.designName === d.name; });
+ const saveBtn = '<button onclick="toggleSaveDesign(\'' + d.name.replace(/'/g, "\\'") + '\',\'' + d.builder.replace(/'/g, "\\'") + '\')" title="' + (isSaved ? 'Remove from compare' : 'Save to compare') + '" style="font-family:Montserrat,sans-serif;font-size:14px;background:' + (isSaved ? 'rgba(59,125,221,0.08)' : 'transparent') + ';color:' + (isSaved ? 'var(--accent)' : 'var(--text-xlight)') + ';border:1.5px solid ' + (isSaved ? 'var(--accent)' : 'var(--border)') + ';padding:5px 10px;border-radius:6px;cursor:pointer;transition:all 0.2s;min-height:32px">' + (isSaved ? '\u2665' : '\u2661') + '</button>';
+ return '<div class="wizard-design-card">' +
+ '<div class="wizard-design-img"><img src="' + imgSrc + '" alt="' + d.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop&q=80\'"/></div>' +
+ '<div class="wizard-design-body">' +
+ '<div class="wizard-design-name">' + d.name + '</div>' +
+ '<div class="wizard-design-builder-tag">' + d.builder + '</div>' +
+ '<div class="wizard-design-specs"><span> ' + d.beds + '</span><span> ' + d.baths + '</span><span> ' + d.garage + '</span><span> ' + d.frontage + '</span></div>' +
+ '<div class="wizard-design-price-row">' +
+ '<span class="wizard-design-price">' + d.price + '</span>' +
+ '<div style="display:flex;gap:5px;align-items:center">' + saveBtn + '<button class="wizard-select-btn" onclick="showDesignDetail(\'' + d.name.replace(/'/g, "\\'") + '\')">' + d.sqm + 'm\u00B2 \u2022 View Details</button></div>' +
+ '</div>' +
+
+ '</div></div>';
+ }).join('');
+
+ return  '<div class="wizard-step-heading"><h2>' + wizardState.builder.name + ' — Home Designs</h2><p>' + builderDesigns.length + ' designs available</p></div>' +
+ '<div class="wizard-design-grid">' + cards + '</div>';
+ }
+
+ function renderBuilderStep3() {
+ const designName = wizardState.design ? wizardState.design.name : 'home';
+ const viewMode = wizardState._builderProjectView || 'list';
+
+ var cards = PROJECTS.map(function(p, i) {
+ var status = getProjectStatus(p);
+ var statusLabel = status === 'available' ? 'Available Now' : 'Coming Soon';
+ var statusColor = status === 'available' ? '#059669' : '#D97706';
+ return '<div class="wizard-project-card" onclick="showProjectDetail(\'' + p.id + '\')">' +
+ '<div class="wizard-project-img"><img src="' + getProjectImage(p) + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop&q=80\'"/>' +
+ '<div style="position:absolute;top:8px;left:8px;background:' + statusColor + '18;color:' + statusColor + ';font-size:9px;font-weight:700;padding:3px 8px;border-radius:10px;border:1px solid ' + statusColor + '30">' + statusLabel + '</div></div>' +
+ '<div class="wizard-project-body">' +
+ '<div class="wizard-project-name">' + p.name + '</div>' +
+ '<div class="wizard-project-suburb">' + p.suburb + ' \u00b7 ' + p.region + '</div>' +
+ '<div class="wizard-project-meta"><span class="wizard-project-lots">\u2705 ' + p.availLots + ' lots</span><span class="wizard-project-price">' + (p.minPrice > 0 ? 'From ' + fmtPrice(p.minPrice + 245000) : 'Pricing TBA') + '</span></div>' +
+ '</div></div>';
+ }).join('');
+
+ var toggle = '<div style="display:flex;gap:4px;background:var(--bg-alt);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:24px;width:fit-content">' +
+ '<button style="display:flex;align-items:center;gap:6px;padding:8px 16px;border:none;border-radius:8px;font-family:Montserrat,sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;background:' + (viewMode === 'list' ? 'var(--bg)' : 'transparent') + ';color:' + (viewMode === 'list' ? 'var(--primary)' : 'var(--text-light)') + ';box-shadow:' + (viewMode === 'list' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none') + '" onclick="wizardState._builderProjectView=\'list\';renderWizardStep()">\u2630 List</button>' +
+ '<button style="display:flex;align-items:center;gap:6px;padding:8px 16px;border:none;border-radius:8px;font-family:Montserrat,sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;background:' + (viewMode === 'map' ? 'var(--bg)' : 'transparent') + ';color:' + (viewMode === 'map' ? 'var(--primary)' : 'var(--text-light)') + ';box-shadow:' + (viewMode === 'map' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none') + '" onclick="wizardState._builderProjectView=\'map\';renderWizardStep();setTimeout(initWizardMap,200)">Map</button>' +
+ '</div>';
+
+ var mapHTML = '<div id="wizardMap" style="height:450px;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden"></div>';
+
+
+ // Apply wizard filters
+ var wStatus = wizardState._wStatus || 'all';
+ var wBudget = wizardState._wBudget || 'all';
+ var filteredCards = PROJECTS;
+ if (wStatus !== 'all') filteredCards = filteredCards.filter(function(p) { return getProjectStatus(p) === wStatus; });
+ if (wBudget !== 'all') {
+   var mxB = parseInt(wBudget) * 1000; var mnB = parseInt(wBudget) === 400 ? 0 : parseInt(wBudget) === 600 ? 400000 : parseInt(wBudget) === 800 ? 600000 : 800000;
+   filteredCards = filteredCards.filter(function(p) { if (p.minPrice === 0) return true; return parseInt(wBudget) > 1000 ? p.minPrice >= 1000000 : (p.minPrice < mxB && (mnB === 0 || p.minPrice >= mnB)); });
+ }
+ cards = filteredCards.map(function(p, i) {
+   var st = getProjectStatus(p); var stL = st === 'available' ? 'Available Now' : 'Coming Soon'; var stC = st === 'available' ? '#059669' : '#D97706';
+   return '<div class="wizard-project-card" onclick="showProjectDetail(\'' + p.id + '\')">' +
+     '<div class="wizard-project-img"><img src="' + getProjectImage(p) + '" alt="' + p.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop&q=80\'"/>' +
+     '<div style="position:absolute;top:10px;right:10px;background:' + stC + ';color:#fff;font-size:10px;font-weight:700;padding:5px 12px;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.25)">' + stL + '</div></div>' +
+     '<div class="wizard-project-body"><div style="font-size:11px;font-weight:600;color:var(--text-light);margin-bottom:8px">' + p.region + '</div>' +
+     '<div class="wizard-project-name">' + p.name + '</div><div class="wizard-project-suburb">' + p.suburb + '</div>' +
+     '<div class="wizard-project-meta"><span class="wizard-project-lots">' + p.availLots + ' lots</span><span class="wizard-project-price">' + (p.minPrice > 0 ? 'Packages from ' + fmtPrice(p.minPrice + 245000) : 'Pricing TBA') + '</span></div></div></div>';
+ }).join('');
+ var statusF = '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">' +
+   '<button class="filter-chip' + (wStatus==='all'?' active':'') + '" onclick="wizardState._wStatus=\'all\';renderWizardStep()">All Estates</button>' +
+   '<button class="filter-chip' + (wStatus==='available'?' active':'') + '" onclick="wizardState._wStatus=\'available\';renderWizardStep()">Available Now</button>' +
+   '<button class="filter-chip' + (wStatus==='coming-soon'?' active':'') + '" onclick="wizardState._wStatus=\'coming-soon\';renderWizardStep()">Coming Soon</button></div>';
+ var budgetF = '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;align-items:center">' +
+   '<span style="font-size:12px;font-weight:600;color:var(--text-light)">Land Budget:</span>' +
+   '<button class="filter-chip' + (wBudget==='400'?' active':'') + '" onclick="wizardState._wBudget=\'400\';renderWizardStep()">Under $400,000</button>' +
+   '<button class="filter-chip' + (wBudget==='600'?' active':'') + '" onclick="wizardState._wBudget=\'600\';renderWizardStep()">$400,000 - $600,000</button>' +
+   '<button class="filter-chip' + (wBudget==='all'?' active':'') + '" onclick="wizardState._wBudget=\'all\';renderWizardStep()">All Budgets</button></div>';
+
+ return '<div class="wizard-step-heading"><h2>Where would you like to build your ' + designName + '?</h2><p>Choose the location that suits you</p></div>' +
+ statusF + budgetF +
+ toggle +
+ (viewMode === 'list' ? '<div class="wizard-card-grid-lg">' + cards + '</div>' : mapHTML);
+ }
+
+ var wizardMapInited = false;
+ function initWizardMap() {
+ var mapEl = document.getElementById('wizardMap');
+ if (!mapEl || mapEl._leaflet_id) return;
+ var wMap = L.map('wizardMap', {zoomControl:true, scrollWheelZoom:false}).setView([-27.5, 153.0], 7);
+ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+ attribution: '\u00a9 OpenStreetMap \u00a9 CARTO', subdomains: 'abcd', maxZoom: 20
+ }).addTo(wMap);
+ PROJECTS.forEach(function(p) {
+ var status = getProjectStatus(p);
+ var dotColor = status === 'available' ? '#059669' : '#D97706';
+ // circleMarker used instead
+ var marker = L.circleMarker([p.lat, p.lng], {radius: 6, fillColor: dotColor, color: '#fff', weight: 2, fillOpacity: 1}).addTo(wMap);
+ marker.bindTooltip(p.name, {permanent: true, direction: 'bottom', offset: [0, 6], className: 'pin-tooltip'});
+ marker.on('click', function() { showProjectDetail(p.id); });
+ });
+ setTimeout(function() { wMap.invalidateSize(); }, 300);
+ }
+
+ // — LEAD CAPTURE (shared final step) —
+
+ // ─── BUYER PROFILE STEP ─────────────────────────────────────────
+ function renderBuyerProfile() {
+ return '<div class="wizard-step-heading"><h2>Let\'s personalise your experience</h2><p>Tell us a bit about yourself so we can show you the best options.</p></div>' +
+ '<div class="wizard-card-grid" style="max-width:600px;margin:0 auto;grid-template-columns:1fr 1fr;gap:20px">' +
+ '<div class="wizard-region-card" style="text-align:center;padding:36px 24px;cursor:pointer" onclick="selectBuyerType(\'owner\')"><div style="font-size:40px;margin-bottom:14px"></div><div style="font-size:18px;font-weight:800;color:var(--primary);margin-bottom:6px">Owner Occupier</div><div style="font-size:13px;color:var(--text-light)">I\'m looking for my next home to live in</div></div>' +
+ '<div class="wizard-region-card" style="text-align:center;padding:36px 24px;cursor:pointer" onclick="selectBuyerType(\'investor\')"><div style="font-size:40px;margin-bottom:14px"></div><div style="font-size:18px;font-weight:800;color:var(--primary);margin-bottom:6px">Investor</div><div style="font-size:13px;color:var(--text-light)">I\'m building for rental income or capital growth</div></div>' +
+ '</div>';
+ }
+
+ function selectBuyerType(type) {
+ wizardState.buyerType = type;
+ wizardNext();
+ }
+
+ // ─── UPGRADES STEP ──────────────────────────────────────────────
+ const UPGRADE_OPTIONS = [
+ {id:'ducted-ac', name:'Ducted Air Conditioning', desc:'Whole-home climate control with zoned ducted system', price:'$8,500 – $14,000', icon:''},
+ {id:'ceiling-height', name:'Increased Ceiling Heights', desc:'2.7m ceilings throughout (standard 2.4m)', price:'$4,000 – $7,500', icon:''},
+ {id:'facade', name:'Premium Facade Upgrade', desc:'Rendered finish, feature brick, modern facade options', price:'$5,000 – $15,000', icon:''},
+ {id:'kitchen', name:'Premium Kitchen Package', desc:'Stone benchtops, 900mm appliances, soft-close cabinetry', price:'$6,000 – $12,000', icon:''},
+ {id:'solar', name:'Solar Panel System', desc:'6.6kW solar + 10kW battery for energy independence', price:'$8,000 – $16,000', icon:''},
+ {id:'flooring', name:'Premium Flooring', desc:'Hybrid timber flooring throughout living areas', price:'$3,500 – $8,000', icon:''},
+ {id:'ensuite', name:'Ensuite Upgrade', desc:'Double vanity, frameless shower, floor-to-ceiling tiles', price:'$4,000 – $9,000', icon:''},
+ {id:'alfresco', name:'Alfresco Extension', desc:'Extended outdoor living area with ceiling fan', price:'$6,000 – $14,000', icon:''},
+ {id:'smart-home', name:'Smart Home Package', desc:'Smart locks, lighting, security cameras, video doorbell', price:'$3,000 – $6,000', icon:''},
+ {id:'landscaping', name:'Landscaping Package', desc:'Turf, garden beds, irrigation, letterbox, clothesline', price:'$5,000 – $10,000', icon:''},
+ {id:'driveway', name:'Driveway Upgrade', desc:'Exposed aggregate or decorative concrete driveway', price:'$3,000 – $6,000', icon:''},
+ {id:'blinds', name:'Window Furnishings', desc:'Roller blinds or curtains throughout the home', price:'$2,500 – $5,000', icon:''}
+ ];
+
+ function renderUpgradesStep() {
+ const selected = wizardState.upgrades || [];
+ const cards = UPGRADE_OPTIONS.map(function(u) {
+ const isSelected = selected.indexOf(u.id) !== -1;
+ return '<div class="wizard-upgrade-card' + (isSelected ? ' selected' : '') + '" onclick="toggleUpgrade(\'' + u.id + '\')" style="background:var(--bg);border:2px solid ' + (isSelected ? 'var(--accent)' : 'var(--border)') + ';border-radius:var(--radius);padding:20px;cursor:pointer;transition:all 0.2s ease;position:relative">' +
+ (isSelected ? '<div style="position:absolute;top:10px;right:10px;background:var(--accent);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800">✓</div>' : '') +
+ '<div style="font-size:28px;margin-bottom:10px">' + u.icon + '</div>' +
+ '<div style="font-size:14px;font-weight:800;color:var(--primary);margin-bottom:4px">' + u.name + '</div>' +
+ '<div style="font-size:12px;color:var(--text-light);margin-bottom:8px;line-height:1.5">' + u.desc + '</div>' +
+ '<div style="font-size:13px;font-weight:700;color:var(--accent)">' + u.price + '</div>' +
+ '</div>';
+ }).join('');
+
+ return  '<div class="wizard-step-heading"><h2>Customise Your Package</h2><p>Select any upgrades you\'re interested in — these will be included in your consultation.</p></div>' +
+ '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-bottom:32px">' + cards + '</div>' +
+ '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">' +
+ '<span style="font-size:13px;color:var(--text-light);align-self:center">' + selected.length + ' upgrade' + (selected.length !== 1 ? 's' : '') + ' selected</span>' +
+ '<button class="wizard-submit-btn" onclick="wizardNext()" style="max-width:320px">Continue to Contact Details →</button>' +
+ '</div>';
+ }
+
+ function toggleUpgrade(id) {
+ if (!wizardState.upgrades) wizardState.upgrades = [];
+ const idx = wizardState.upgrades.indexOf(id);
+ if (idx === -1) { wizardState.upgrades.push(id); } else { wizardState.upgrades.splice(idx, 1); }
+ renderWizardStep();
+ }
+
+
+ function showDesignDetail(designName, keepScroll) {
+    wizardState._inDetail = true;
+    // Update step display
+    var ts = wizardState.mode === 'land' ? 4 : 5;
+    var vs = wizardState.step + 1;
+    document.getElementById('wizardProgressFill').style.width = (vs / ts * 100) + '%';
+    document.getElementById('wizardStepLabel').textContent = 'Step ' + vs + ' of ' + ts;
+    var dotsEl = document.getElementById('wizardStepDots');
+    dotsEl.innerHTML = Array.from({length: ts}, function(_, i) {
+      var cls = (i + 1 < vs) ? 'done' : (i + 1 === vs) ? 'active' : '';
+      return '<div class="wizard-step-dot ' + cls + '"></div>';
+    }).join('');
+ var d = DESIGNS.find(function(dd) { return dd.name === designName; });
+ if (!d) return;
+ var imgSrc = DESIGN_IMAGES[d.name] || Object.values(DESIGN_IMAGES)[0];
+ var desc = DESIGN_DESCRIPTIONS[d.name] || 'A quality home design built to the highest standards.';
+ var builderLink = BUILDER_TOUR_LINKS[d.builder] || '#';
+ 
+ var frontage = wizardState.selectedFrontage;
+ var projLots = SAMPLE_LOTS[wizardState.project ? wizardState.project.id : ''] || [];
+ var matchLots = frontage ? projLots.filter(function(l) { return l.frontage === frontage; }) : [];
+ var landFrom = matchLots.length > 0 ? Math.min.apply(null, matchLots.map(function(l) { return l.price; })) : 0;
+ var buildPrice = parseInt(d.price.replace(/[^0-9]/g, '')) || 0;
+ var totalPkg = landFrom > 0 && buildPrice > 0 ? landFrom + buildPrice : 0;
+ var selected = wizardState.upgrades || [];
+ 
+ // Build upgrade cards
+ var upgradeCards = UPGRADE_OPTIONS.map(function(u) {
+ var isSel = selected.indexOf(u.id) !== -1;
+ return '<div style="background:var(--bg);border:2px solid ' + (isSel ? 'var(--accent)' : 'var(--border)') + ';border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s;position:relative" onclick="toggleUpgradeInDetail(\x27' + u.id + '\x27,\x27' + d.name.replace(/'/g, "\\'") + '\x27)">' +
+ (isSel ? '<div style="position:absolute;top:8px;right:8px;background:var(--accent);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800">\u2713</div>' : '') +
+ '<div style="font-size:24px;margin-bottom:8px">' + u.icon + '</div>' +
+ '<div style="font-size:13px;font-weight:800;color:var(--primary);margin-bottom:3px">' + u.name + '</div>' +
+ '<div style="font-size:11px;color:var(--text-light);margin-bottom:6px;line-height:1.5">' + u.desc + '</div>' +
+ '<div style="font-size:12px;font-weight:700;color:var(--accent)">' + u.price + '</div>' +
+ '</div>';
+ }).join('');
+ 
+ var html = '<div style="max-width:900px;margin:0 auto;padding-bottom:40px">' +
+ 
+ // Back button
+ 
+ // === HERO IMAGE (full width, large like AVIA) ===
+ '<div style="width:100%;height:420px;border-radius:16px;overflow:hidden;margin-bottom:32px;position:relative">' +
+ '<img src="' + imgSrc + '" alt="' + d.name + '" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null"/>' +
+ '<div style="position:absolute;bottom:16px;left:16px;display:flex;gap:8px">' +
+ '<span style="background:rgba(27,36,50,0.85);color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700">' + d.builder + '</span>' +
+ '<span style="background:rgba(5,150,105,0.9);color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700">' + d.sqm + 'm\u00b2</span>' +
+ '</div></div>' +
+ 
+ // === DESIGN NAME + KEY SPECS (AVIA style) ===
+ '<div style="margin-bottom:32px">' +
+ '<h1 style="font-size:clamp(28px,4vw,38px);font-weight:900;color:var(--primary);letter-spacing:-1.5px;margin-bottom:8px">' + d.name.toUpperCase() + '</h1>' +
+ '<div style="display:flex;gap:24px;flex-wrap:wrap;font-size:13px;color:var(--text-light)">' +
+ '<span>House Area: <strong style="color:var(--primary)">' + d.sqm + 'm\u00b2</strong></span>' +
+ '<span>Min Lot Width: <strong style="color:var(--primary)">' + d.frontage + '</strong></span>' +
+ '<span>Builder: <strong style="color:var(--primary)">' + d.builder + '</strong></span>' +
+ '</div></div>' +
+ 
+ // === DESCRIPTION ===
+ '<div style="margin-bottom:40px;max-width:700px">' +
+ '<p style="font-size:16px;color:var(--text);line-height:1.85">' + desc + '</p>' +
+ '</div>' +
+ 
+ // === SPECS GRID (AVIA style - big numbers) ===
+ '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:1px;background:var(--border);border-radius:14px;overflow:hidden;margin-bottom:40px">' +
+ '<div style="background:var(--bg-alt);padding:24px 16px;text-align:center"><div style="font-size:28px;font-weight:900;color:var(--primary)">' + d.beds + '</div><div style="font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;margin-top:4px">Bedrooms</div></div>' +
+ '<div style="background:var(--bg-alt);padding:24px 16px;text-align:center"><div style="font-size:28px;font-weight:900;color:var(--primary)">' + d.baths + '</div><div style="font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;margin-top:4px">Bathrooms</div></div>' +
+ '<div style="background:var(--bg-alt);padding:24px 16px;text-align:center"><div style="font-size:28px;font-weight:900;color:var(--primary)">' + d.garage + '</div><div style="font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;margin-top:4px">Garage</div></div>' +
+ '<div style="background:var(--bg-alt);padding:24px 16px;text-align:center"><div style="font-size:28px;font-weight:900;color:var(--primary)">' + d.sqm + '</div><div style="font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;margin-top:4px">House m\u00b2</div></div>' +
+ '<div style="background:var(--bg-alt);padding:24px 16px;text-align:center"><div style="font-size:28px;font-weight:900;color:var(--primary)">' + d.frontage.replace('+','') + '</div><div style="font-size:10px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;margin-top:4px">Min Width</div></div>' +
+ '</div>' +
+ 
+ // === BUILDER LINK + BROCHURE ===
+ '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px">' +
+ '<button onclick="void(0)" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:var(--bg-alt);border:1px solid var(--border);border-radius:10px;font-size:13px;font-weight:700;color:var(--primary);cursor:pointer;font-family:Montserrat,sans-serif">Request Floorplan</button>' +
+ '</div>' +
+ 
+ // === FLOOR PLAN SECTION ===
+ '<div style="margin-bottom:48px">' +
+ '<h2 style="font-size:22px;font-weight:900;color:var(--primary);letter-spacing:-0.5px;margin-bottom:16px">Floor Plan</h2>' +
+ '<div style="background:var(--bg-alt);border:1px solid var(--border);border-radius:14px;padding:48px;text-align:center">' +
+ '<div style="font-size:48px;margin-bottom:12px;opacity:0.3"></div>' +
+ '<div style="font-size:15px;font-weight:700;color:var(--primary);margin-bottom:6px">Floorplan Available on Request</div>' +
+ '<div style="font-size:13px;color:var(--text-light);margin-bottom:16px">Our consultant will send you the detailed floorplan for the ' + d.name + ' as part of your package.</div>' +
+ '</div></div>' +
+ 
+ // === PRICING SECTION ===
+ '<div style="background:var(--primary);border-radius:14px;padding:32px;margin-bottom:48px;color:#fff">' +
+ '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">' +
+ '<div>' +
+ '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.5);margin-bottom:6px">Build Price</div>' +
+ '<div style="font-size:32px;font-weight:900;letter-spacing:-1px">' + d.price + '</div>' +
+ '</div>' +
+ (totalPkg > 0 ? '<div style="text-align:right"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.5);margin-bottom:6px">Total Package From</div><div style="font-size:32px;font-weight:900;letter-spacing:-1px">$' + Math.round(totalPkg).toLocaleString() + '</div><div style="font-size:12px;color:rgba(255,255,255,0.6)">Land from $' + Math.round(landFrom).toLocaleString() + ' + Build</div></div>' : '') +
+ '</div></div>' +
+ 
+ // === UPGRADES SECTION (integrated, not separate step) ===
+ '<div style="margin-bottom:48px">' +
+ '<h2 style="font-size:22px;font-weight:900;color:var(--primary);letter-spacing:-0.5px;margin-bottom:6px">Customise Your Home</h2>' +
+ '<p style="font-size:14px;color:var(--text-light);margin-bottom:24px">Select any upgrades you\u2019re interested in \u2014 these will be included in your consultation.</p>' +
+ '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px">' + upgradeCards + '</div>' +
+ '<div style="margin-top:16px;font-size:13px;color:var(--text-light)">' + selected.length + ' upgrade' + (selected.length !== 1 ? 's' : '') + ' selected</div>' +
+ '</div>' +
+ 
+ // === CTA SECTION ===
+ '<div style="background:var(--bg-alt);border-radius:14px;padding:32px;text-align:center">' +
+ '<h3 style="font-size:18px;font-weight:800;color:var(--primary);margin-bottom:8px">Ready to proceed with the ' + d.name + '?</h3>' +
+ '<p style="font-size:13px;color:var(--text-light);margin-bottom:20px">Select this design to continue to finance and contact details.</p>' +
+ '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">' +
+ '<button class="wizard-submit-btn" onclick="wizardSelectDesign(\x27' + d.name.replace("'", "\\'") + '\x27)" style="max-width:320px">Select ' + d.name + ' \u2192</button>' +
+ '<button onclick="toggleSaveDesign(\x27' + d.name.replace("'", "\\'") + '\x27)" style="padding:14px 24px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);font-family:Montserrat,sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s">' + ((wizardState.savedDesigns||[]).indexOf(d.name) !== -1 ? '\u2764\ufe0f Saved' : '\u2661 Save to Compare') + '</button>' +
+ '</div></div>' +
+ 
+ '</div>';
+ 
+ document.getElementById('wizardBody').innerHTML = html;
+ if (!keepScroll) document.getElementById('wizard').scrollTop = 0;
+ }
+ 
+ function toggleUpgradeInDetail(upgradeId, designName) {
+ if (!wizardState.upgrades) wizardState.upgrades = [];
+ var idx = wizardState.upgrades.indexOf(upgradeId);
+ if (idx === -1) { wizardState.upgrades.push(upgradeId); } else { wizardState.upgrades.splice(idx, 1); }
+ var scrollPos = document.getElementById('wizard').scrollTop;
+ showDesignDetail(designName, true);
+ document.getElementById('wizard').scrollTop = scrollPos;
+ }
+ 
+ function closeDesignDetail() {
+ renderWizardStep();
+ }
+
+ // ─── FINANCE QUALIFICATION STEP ───────────────────────────────────
+ function renderFinanceStep() {
+ const showCalc = wizardState.financeStatus === 'no' || wizardState.financeStatus === 'help';
+ const answered = !!wizardState.financeStatus;
+
+ let calcHTML = '';
+ if (showCalc) {
+ const d = wizardState.design;
+ // Calculate package price for calculator default
+ const buildPriceRaw = d ? (parseInt(d.price.replace(/[^0-9]/g, '')) || 0) : 0;
+ const frontageVal = wizardState.selectedFrontage;
+ const projLotsCalc = SAMPLE_LOTS[wizardState.project ? wizardState.project.id : ''] || [];
+ const matchLotsCalc = frontageVal ? projLotsCalc.filter(function(l) { return l.frontage === frontageVal; }) : [];
+ const landPriceCalc = matchLotsCalc.length > 0 ? Math.min.apply(null, matchLotsCalc.map(function(l) { return l.price; })) : 0;
+ const totalEst = landPriceCalc + buildPriceRaw > 0 ? landPriceCalc + buildPriceRaw : 650000;
+
+ calcHTML = '<div style="margin-top:20px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:24px">' +
+ '<div style="font-size:15px;font-weight:800;color:var(--primary);margin-bottom:4px">Mortgage Choice Repayment Calculator</div>' +
+ '<div style="font-size:12px;color:var(--text-light);margin-bottom:16px">Powered by <strong>Mortgage Choice</strong> \u2014 Australia\'s largest mortgage broking franchise</div>' +
+ '<div style="margin-bottom:14px">' +
+ '<label style="font-size:12px;font-weight:600;color:var(--text-light);display:block;margin-bottom:6px">Estimated Package Price</label>' +
+ '<input type="range" min="300000" max="2000000" value="' + totalEst + '" step="10000" id="fCalcPrice" oninput="updateFinanceCalc()" style="width:100%;accent-color:var(--accent)"/>' +
+ '<div style="font-size:16px;font-weight:800;color:var(--primary)" id="fCalcPriceLabel">$' + totalEst.toLocaleString() + '</div>' +
+ '</div>' +
+ '<div style="margin-bottom:14px">' +
+ '<label style="font-size:12px;font-weight:600;color:var(--text-light);display:block;margin-bottom:6px">Deposit</label>' +
+ '<input type="range" min="5" max="30" value="10" step="1" id="fCalcDeposit" oninput="updateFinanceCalc()" style="width:100%;accent-color:var(--accent)"/>' +
+ '<div style="font-size:14px;font-weight:700;color:var(--primary)" id="fCalcDepositLabel">10%</div>' +
+ '</div>' +
+ '<div style="display:flex;gap:12px;margin-bottom:16px">' +
+ '<div style="flex:1"><label style="font-size:12px;font-weight:600;color:var(--text-light);display:block;margin-bottom:6px">Rate (%)</label>' +
+ '<input type="number" value="6.29" step="0.01" id="fCalcRate" oninput="updateFinanceCalc()" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:Montserrat,sans-serif"/></div>' +
+ '<div style="flex:1"><label style="font-size:12px;font-weight:600;color:var(--text-light);display:block;margin-bottom:6px">Term</label>' +
+ '<select id="fCalcTerm" onchange="updateFinanceCalc()" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:Montserrat,sans-serif">' +
+ '<option value="30">30 years</option><option value="25">25 years</option></select></div>' +
+ '</div>' +
+ '<div style="background:var(--bg-alt);border-radius:10px;padding:20px;text-align:center">' +
+ '<div style="font-size:12px;color:var(--text-light);margin-bottom:6px">Estimated Monthly Repayment</div>' +
+ '<div style="font-size:32px;font-weight:900;color:var(--primary)" id="fCalcResult">$0</div>' +
+ '<div style="font-size:11px;color:var(--text-xlight);margin-top:6px">Indicative only. Speak to our finance partner for an accurate quote.</div>' +
+ '</div>' +
+ '</div>';
+ }
+
+ let helpHTML = '';
+ if (wizardState.financeStatus === 'no' || wizardState.financeStatus === 'help') {
+ helpHTML = '<div style="margin-top:20px;background:rgba(5,150,105,0.06);border:1px solid rgba(5,150,105,0.2);border-radius:var(--radius);padding:24px">' +
+ '<div style="font-size:15px;font-weight:800;color:#059669;margin-bottom:8px">We can help with that</div>' +
+ '<div style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:16px">Our finance partners at <strong>Mortgage Choice</strong> can help you understand your borrowing capacity and get pre-approved — at no cost to you. We\'ll connect you with them as part of your consultation.</div>' +
+ '</div>';
+ }
+
+ return '<div class="wizard-step-heading"><h2>Finance</h2><p>Let us know where you\'re at so we can tailor your consultation.</p></div>' +
+ '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;max-width:700px;margin:0 auto 24px">' +
+ '<div style="background:var(--bg);border:2px solid ' + (wizardState.financeStatus === 'yes' ? 'var(--accent)' : 'var(--border)') + ';border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;transition:all 0.2s" onclick="selectFinance(\'yes\')">' +
+ '<div style="font-size:28px;margin-bottom:8px">\u2705</div>' +
+ '<div style="font-size:14px;font-weight:700;color:var(--primary)">Pre-approved</div>' +
+ '<div style="font-size:12px;color:var(--text-light);margin-top:4px">I\'ve got finance sorted</div></div>' +
+ '<div style="background:var(--bg);border:2px solid ' + (wizardState.financeStatus === 'no' ? 'var(--accent)' : 'var(--border)') + ';border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;transition:all 0.2s" onclick="selectFinance(\'no\')">' +
+ '<div style="font-size:28px;margin-bottom:8px">\uD83D\uDD04</div>' +
+ '<div style="font-size:14px;font-weight:700;color:var(--primary)">Not yet</div>' +
+ '<div style="font-size:12px;color:var(--text-light);margin-top:4px">Still exploring my options</div></div>' +
+ '<div style="background:var(--bg);border:2px solid ' + (wizardState.financeStatus === 'help' ? 'var(--accent)' : 'var(--border)') + ';border-radius:var(--radius);padding:24px;text-align:center;cursor:pointer;transition:all 0.2s" onclick="selectFinance(\'help\')">' +
+ '<div style="font-size:28px;margin-bottom:8px">\uD83E\uDD1D</div>' +
+ '<div style="font-size:14px;font-weight:700;color:var(--primary)">Help me</div>' +
+ '<div style="font-size:12px;color:var(--text-light);margin-top:4px">I\'d like a finance referral</div></div>' +
+ '</div>' +
+ helpHTML + calcHTML +
+ (answered ? '<div style="text-align:center;margin-top:24px"><button class="wizard-submit-btn" onclick="wizardNext()" style="max-width:320px">Continue \u2192</button></div>' : '');
+ }
+
+ function selectFinance(status) {
+ wizardState.financeStatus = status;
+ renderWizardStep();
+ if (status === 'no' || status === 'help') setTimeout(updateFinanceCalc, 100);
+ }
+
+ function updateFinanceCalc() {
+ var priceEl = document.getElementById('fCalcPrice');
+ if (!priceEl) return;
+ var price = parseInt(priceEl.value);
+ var depPct = parseInt(document.getElementById('fCalcDeposit').value);
+ var rate = parseFloat(document.getElementById('fCalcRate').value);
+ var term = parseInt(document.getElementById('fCalcTerm').value);
+ var dep = Math.round(price * depPct / 100);
+ var loan = price - dep;
+ var mr = rate / 100 / 12;
+ var n = term * 12;
+ var mp = mr > 0 ? loan * (mr * Math.pow(1+mr,n)) / (Math.pow(1+mr,n)-1) : loan / n;
+ document.getElementById('fCalcPriceLabel').textContent = '$' + price.toLocaleString();
+ document.getElementById('fCalcDepositLabel').textContent = depPct + '% ($' + dep.toLocaleString() + ')';
+ document.getElementById('fCalcResult').textContent = '$' + Math.round(mp).toLocaleString();
+ }
+
+ function renderLeadCapture() {
+ const d = wizardState.design;
+ const p = wizardState.project;
+ const b = wizardState.builder || (d ? BUILDERS.find(function(bl) { return bl.name === d.builder; }) : null);
+ const isLand = wizardState.mode === 'land';
+
+ let summaryRows;
+ if (isLand) {
+ summaryRows = [
+ {label: 'Project', value: p ? p.name : '—', sub: p ? ' ' + p.suburb + ', ' + p.region : ''},
+ {label: 'Design', value: d ? d.name : '—', sub: d ? d.builder : ''},
+ {label: 'Specs', value: d ? (d.beds + ' ' + d.baths + ' ' + d.garage + '') : '—', sub: d ? (d.sqm + 'm² · Frontage ' + d.frontage) : ''}
+ ];
+ } else {
+ summaryRows = [
+ {label: 'Builder', value: b ? b.name : '—', sub: b ? b.tier : ''},
+ {label: 'Design', value: d ? d.name : '—', sub: d ? (d.sqm + 'm² · ' + d.beds + ' bed') : ''},
+ {label: 'Project', value: p ? p.name : '—', sub: p ? ' ' + p.suburb + ', ' + p.region : ''}
+ ];
+ }
+
+ // Calculate total package price (land + build)
+ const buildPrice = d ? (parseInt(d.price.replace(/[^0-9]/g, '')) || 0) : 0;
+ const frontage = wizardState.selectedFrontage;
+ const projLots = SAMPLE_LOTS[p ? p.id : ''] || [];
+ const matchLots = frontage ? projLots.filter(function(l) { return l.frontage === frontage; }) : [];
+ var landFrom = matchLots.length > 0 ? Math.min.apply(null, matchLots.map(function(l) { return l.price; })) : 0;
+    if (landFrom === 0 && p && p.minPrice > 0) landFrom = p.minPrice;
+ const totalPkg = landFrom > 0 && buildPrice > 0 ? landFrom + buildPrice : 0;
+ const priceVal = totalPkg > 0 ? 'From $' + Math.round(totalPkg).toLocaleString() : (d ? d.price : 'Contact for pricing');
+ const priceBreakdown = totalPkg > 0 ? 'Land from $' + Math.round(landFrom).toLocaleString() + ' + Build ' + d.price : '';
+ const buyerLabel = wizardState.buyerType === 'owner' ? ' Owner Occupier' : wizardState.buyerType === 'investor' ? ' Investor' : '—';
+ const selectedUpgrades = (wizardState.upgrades || []).map(function(uid) { var u = UPGRADE_OPTIONS.find(function(x){return x.id===uid}); return u ? u.name : ''; }).filter(Boolean);
+
+ const financeLabel = wizardState.financeStatus === 'yes' ? ' Pre-approved' : wizardState.financeStatus === 'no' ? ' Not yet' : wizardState.financeStatus === 'help' ? ' Needs referral' : '—';
+ // buyer type shown in form only
+ // finance shown in form only
+ if (selectedUpgrades.length > 0) {
+ summaryRows.push({label: 'Upgrades (' + selectedUpgrades.length + ')', value: selectedUpgrades.join(', '), sub: ''});
+ }
+
+ const summaryHTML = summaryRows.map(function(row) {
+ return '<div class="wizard-summary-item">' +
+ '<span class="wizard-summary-item-label">' + row.label + '</span>' +
+ '<span class="wizard-summary-item-value">' + row.value + '</span>' +
+ (row.sub ? '<span class="wizard-summary-item-sub">' + row.sub + '</span>' : '') +
+ '</div>';
+ }).join('');
+
+ return '<div class="wizard-step-heading"><h2>Almost there! Let’s put your package together.</h2><p>Review your selections and submit — our team will be in touch within 24 hours.</p></div>' +
+ '<div class="wizard-package-layout">' +
+ '<div class="wizard-summary-panel">' +
+ '<div class="wizard-summary-title">Your Package Summary</div>' +
+ summaryHTML +
+ '<div class="wizard-summary-price">' +
+ '<div class="wizard-summary-price-label">Indicative Package Price</div>' +
+ '<div class="wizard-summary-price-value">' + priceVal + '</div>' +
+ (priceBreakdown ? '<div style="font-size:11px;color:var(--text-light);margin-top:4px">' + priceBreakdown + '</div>' : '') +
+ '</div>' +
+ '</div>' +
+ '<div class="wizard-form-panel">' +
+ '<form id="wizardLeadForm" onsubmit="submitWizardLead(event)">' +
+ '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">' +
+ '<div class="wizard-form-group"><label class="wizard-form-label">I am a...</label><select class="wizard-form-select" id="wLeadBuyerType"><option value="owner">Owner Occupier</option><option value="investor">Investor</option></select></div>' +
+ '<div class="wizard-form-group"><label class="wizard-form-label">Finance Status</label><select class="wizard-form-select" id="wLeadFinance"><option value="pre-approved">Pre-approved</option><option value="not-yet">Not yet started</option><option value="need-help">Need finance help</option></select></div>' +
+ '</div>' +
+ '<details class="wizard-calc-details" style="margin-bottom:20px;border:1px solid var(--border);border-radius:10px;overflow:hidden">' +
+ '<summary style="padding:14px 18px;font-size:14px;font-weight:700;color:var(--primary);cursor:pointer;background:var(--bg-alt)">Mortgage Choice Repayment Calculator</summary>' +
+ '<div style="padding:18px">' +
+ '<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--text-light);display:block;margin-bottom:4px">Property Price</label><input type="range" min="300000" max="2000000" value="650000" step="10000" id="wCalcPrice" oninput="updateWizardCalc()" style="width:100%"/><div style="font-size:14px;font-weight:700;color:var(--primary)" id="wCalcPriceLabel">$650,000</div></div>' +
+ '<div style="margin-bottom:12px"><label style="font-size:12px;font-weight:600;color:var(--text-light);display:block;margin-bottom:4px">Deposit</label><input type="range" min="5" max="30" value="10" step="1" id="wCalcDeposit" oninput="updateWizardCalc()" style="width:100%"/><div style="font-size:14px;font-weight:700;color:var(--primary)" id="wCalcDepositLabel">10% ($65,000)</div></div>' +
+ '<div style="display:flex;gap:12px;margin-bottom:12px"><div style="flex:1"><label style="font-size:12px;font-weight:600;color:var(--text-light);display:block;margin-bottom:4px">Rate (%)</label><input type="number" value="6.29" step="0.01" id="wCalcRate" oninput="updateWizardCalc()" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:8px;font-size:14px"/></div><div style="flex:1"><label style="font-size:12px;font-weight:600;color:var(--text-light);display:block;margin-bottom:4px">Term</label><select id="wCalcTerm" onchange="updateWizardCalc()" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:8px;font-size:14px"><option value="30">30 years</option><option value="25">25 years</option></select></div></div>' +
+ '<div style="background:var(--bg-alt);border-radius:8px;padding:14px;text-align:center"><div style="font-size:12px;color:var(--text-light);margin-bottom:4px">Estimated Monthly Repayment</div><div style="font-size:28px;font-weight:900;color:var(--primary)" id="wCalcResult">$3,610</div></div>' +
+ '</div></details>' +
+ '<div class="wizard-form-group"><label class="wizard-form-label">Full Name *</label><input type="text" class="wizard-form-input" id="wLeadName" placeholder="John Smith" required /></div>' +
+ '<div class="wizard-form-group"><label class="wizard-form-label">Email *</label><input type="email" class="wizard-form-input" id="wLeadEmail" placeholder="john@email.com" required /></div>' +
+ '<div class="wizard-form-group"><label class="wizard-form-label">Phone *</label><input type="tel" class="wizard-form-input" id="wLeadPhone" placeholder="04XX XXX XXX" required /></div>' +
+ '<div class="wizard-form-group"><label class="wizard-form-label">Preferred Contact Time</label><select class="wizard-form-select"><option value="anytime">Anytime</option><option value="morning">Morning</option><option value="afternoon">Afternoon</option><option value="evening">Evening</option></select></div>' +
+ '<div class="wizard-form-group"><label class="wizard-form-label">Message (optional)</label><textarea class="wizard-form-textarea" placeholder="Any questions or notes for our team..."></textarea></div>' +
+ '<button type="submit" class="wizard-submit-btn">Request My Package →</button>' +
+ '</form></div>' +
+ '</div>';
+ }
+
+ function submitWizardLead(e) {
+ e.preventDefault();
+ const nameEl = document.getElementById('wLeadName');
+ const name = nameEl ? nameEl.value : 'there';
+ const firstName = name.split(' ')[0];
+ const ref = 'PX-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+ const d = wizardState.design;
+ const p = wizardState.project;
+ const b = wizardState.builder || (d ? BUILDERS.find(function(bl) { return bl.name === d.builder; }) : null);
+
+ let summaryRows;
+ if (wizardState.mode === 'land') {
+ summaryRows = [
+ {label: 'Project', value: p ? p.name + (p.suburb ? ' — ' + p.suburb : '') : '—'},
+ {label: 'Design', value: d ? d.name : '—'},
+ {label: 'Builder', value: d ? d.builder : '—'}
+ ];
+ } else {
+ summaryRows = [
+ {label: 'Builder', value: b ? b.name : '—'},
+ {label: 'Design', value: d ? d.name : '—'},
+ {label: 'Project', value: p ? p.name + (p.suburb ? ' — ' + p.suburb : '') : '—'}
+ ];
+ }
+
+ const summaryRowsHTML = summaryRows.map(function(r) {
+ return '<div class="wizard-success-summary-row"><span>' + r.label + '</span><span>' + r.value + '</span></div>';
+ }).join('');
+
+ document.getElementById('wizardProgressFill').style.width = '100%';
+ document.getElementById('wizardStepLabel').textContent = ' Submitted!';
+ document.getElementById('wizardStepDots').innerHTML = '';
+
+ document.getElementById('wizardBody').innerHTML =
+ '<div class="wizard-success">' +
+ '<div class="wizard-success-icon"></div>' +
+ '<h2>Thank you, ' + firstName + '!</h2>' +
+ '<p>Your ProjX consultant will be in touch within 24 hours.</p>' +
+ '<div class="wizard-success-ref">Reference: ' + ref + '</div>' +
+ '<div class="wizard-success-summary">' + summaryRowsHTML + '</div>' +
+ '<div class="wizard-success-btns">' +
+ '<button class="wizard-restart-btn" onclick="openWizard(\'' + wizardState.mode + '\'"> Browse More Packages</button>' +
+ '<button class="wizard-portal-btn" onclick="closeWizard()">← Back to Portal</button>' +
+ '</div></div>';
+
+ document.getElementById('wizard').scrollTop = 0;
+ }
+
+ // Close wizard on Escape key
+ document.addEventListener('keydown', function(e) {
+ if (e.key === 'Escape' && document.getElementById('wizard').classList.contains('open')) {
+ // If compare modal open, close it first
+ var cm = document.getElementById('compareModal');
+ if (cm && cm.style.display !== 'none') { closeCompareModal(); return; }
+ closeWizard();
+ }
+ });
+
+ // ─── COMPARE PACKAGES ───────────────────────────────────────────────────
+
+ function toggleSaveDesign(designName, builderName) {
+ if (!wizardState.savedDesigns) wizardState.savedDesigns = [];
+ var idx = wizardState.savedDesigns.findIndex(function(s) { return s.designName === designName; });
+ if (idx === -1) {
+ if (wizardState.savedDesigns.length >= 3) {
+ // Flash a quick notice inside wizard
+ var notice = document.createElement('div');
+ notice.textContent = '\u26A0\uFE0F Max 3 designs to compare. Remove one first.';
+ notice.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#1B2432;color:#fff;padding:12px 24px;border-radius:10px;font-family:Montserrat,sans-serif;font-size:13px;font-weight:700;z-index:3000;box-shadow:0 4px 20px rgba(0,0,0,0.2);pointer-events:none';
+ document.body.appendChild(notice);
+ setTimeout(function() { if (notice.parentNode) notice.parentNode.removeChild(notice); }, 2500);
+ return;
+ }
+ wizardState.savedDesigns.push({designName: designName, builderName: builderName});
+ } else {
+ wizardState.savedDesigns.splice(idx, 1);
+ }
+ renderWizardStep();
+ renderComparePill();
+ }
+
+ function renderComparePill() {
+ var pill = document.getElementById('comparePill');
+ if (!pill) return;
+ var count = (wizardState.savedDesigns || []).length;
+ if (count > 0) {
+ pill.style.display = 'flex';
+ var el = document.getElementById('compareCount');
+ if (el) el.textContent = count;
+ } else {
+ pill.style.display = 'none';
+ }
+ }
+
+ function openCompareModal() {
+ var modal = document.getElementById('compareModal');
+ if (!modal) return;
+ var saved = wizardState.savedDesigns || [];
+ if (saved.length === 0) return;
+
+ var cols = saved.map(function(s) {
+ var d = DESIGNS.find(function(x) { return x.name === s.designName; });
+ if (!d) return '';
+ var imgSrc = DESIGN_IMAGES[d.name] || Object.values(DESIGN_IMAGES)[0];
+ var desc = (typeof DESIGN_DESCRIPTIONS !== 'undefined' && DESIGN_DESCRIPTIONS[d.name]) ? DESIGN_DESCRIPTIONS[d.name] : '';
+
+ var landFrom = 0, totalPkg = 0, buildPrice = parseInt(d.price.replace(/[^0-9]/g, '')) || 0;
+ var p = wizardState.project;
+ var frontage = wizardState.selectedFrontage;
+ if (p && frontage) {
+ var projLots = SAMPLE_LOTS[p.id] || [];
+ var matchLots = projLots.filter(function(l) { return l.frontage === frontage; });
+ landFrom = matchLots.length > 0 ? Math.min.apply(null, matchLots.map(function(l) { return l.price; })) : 0;
+ totalPkg = landFrom > 0 ? landFrom + buildPrice : 0;
+ }
+
+ return '<div style="flex:1;min-width:280px;max-width:380px;background:var(--bg);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column">' +
+ '<div style="height:220px;overflow:hidden;position:relative"><img src="' + imgSrc + '" alt="' + d.name + '" style="width:100%;height:100%;object-fit:cover"/><div style="position:absolute;bottom:10px;left:10px;background:rgba(27,36,50,0.85);color:#fff;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700">' + d.builder + '</div></div>' +
+ '<div style="padding:20px;flex:1;display:flex;flex-direction:column">' +
+ '<div style="font-size:18px;font-weight:900;color:var(--primary);margin-bottom:12px">' + d.name + '</div>' +
+ '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px">' +
+ '<div style="background:var(--bg-alt);padding:12px 8px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--primary)">' + d.beds + '</div><div style="font-size:9px;font-weight:700;color:var(--text-light);text-transform:uppercase">Beds</div></div>' +
+ '<div style="background:var(--bg-alt);padding:12px 8px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--primary)">' + d.baths + '</div><div style="font-size:9px;font-weight:700;color:var(--text-light);text-transform:uppercase">Baths</div></div>' +
+ '<div style="background:var(--bg-alt);padding:12px 8px;text-align:center"><div style="font-size:20px;font-weight:900;color:var(--primary)">' + d.garage + '</div><div style="font-size:9px;font-weight:700;color:var(--text-light);text-transform:uppercase">Cars</div></div>' +
+ '</div>' +
+ '<div style="display:flex;justify-content:space-between;padding:10px 14px;background:var(--bg-alt);border-radius:8px;margin-bottom:12px">' +
+ '<div><div style="font-size:22px;font-weight:900;color:var(--primary)">' + d.sqm + '<span style="font-size:12px">m\u00b2</span></div><div style="font-size:9px;font-weight:700;color:var(--text-light);text-transform:uppercase">House Size</div></div>' +
+ '<div style="text-align:right"><div style="font-size:22px;font-weight:900;color:var(--primary)">' + d.frontage + '</div><div style="font-size:9px;font-weight:700;color:var(--text-light);text-transform:uppercase">Min Lot</div></div>' +
+ '</div>' +
+ (desc ? '<div style="font-size:12px;color:var(--text-light);line-height:1.6;margin-bottom:12px">' + desc.substring(0, 140) + (desc.length > 140 ? '...' : '') + '</div>' : '') +
+ '<div style="margin-bottom:12px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--text-xlight);margin-bottom:4px">Build Price</div><div style="font-size:20px;font-weight:900;color:var(--primary)">' + d.price + '</div></div>' +
+ (totalPkg > 0 ? '<div style="padding:10px;background:rgba(59,125,221,0.06);border:1px solid rgba(59,125,221,0.15);border-radius:8px;margin-bottom:12px"><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--accent);margin-bottom:2px">Package From</div><div style="font-size:20px;font-weight:900;color:var(--accent)">$' + Math.round(totalPkg).toLocaleString() + '</div></div>' : '') +
+ '<div style="margin-top:auto;display:flex;flex-direction:column;gap:8px">' +
+ '<button onclick="selectFromCompare(\'' + d.name.replace(/'/g, "\\'") + '\')" style="padding:12px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-family:Montserrat,sans-serif;font-size:13px;font-weight:700;cursor:pointer;width:100%">Select \u2192</button>' +
+ '<button onclick="removeFromCompare(\'' + d.name.replace(/'/g, "\\'") + '\')" style="padding:10px;background:transparent;color:var(--text-light);border:1.5px solid var(--border);border-radius:10px;font-family:Montserrat,sans-serif;font-size:12px;font-weight:600;cursor:pointer;width:100%">Remove</button>' +
+ '</div></div></div>';
+ }).join('');
+
+ modal.innerHTML =
+ '<div style="max-width:1200px;margin:0 auto;padding:24px">' +
+ '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;position:sticky;top:0;background:#fff;padding:16px 0;z-index:1;">' +
+ '<div><h2 style="font-size:22px;font-weight:900;color:var(--primary);margin-bottom:4px">Compare Designs</h2><p style="font-size:13px;color:var(--text-light)">' + saved.length + ' design' + (saved.length !== 1 ? 's' : '') + ' saved</p></div>' +
+ '<button onclick="closeCompareModal()" style="width:40px;height:40px;border-radius:50%;border:1.5px solid var(--border);background:var(--bg);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">\u2715</button>' +
+ '</div>' +
+ '<div style="display:flex;gap:20px;overflow-x:auto;padding-bottom:16px">' + cols + '</div>' +
+ '</div>';
+ modal.style.display = 'block';
+ }
+
+ function closeCompareModal() {
+ var modal = document.getElementById('compareModal');
+ if (modal) modal.style.display = 'none';
+ }
+
+ function removeFromCompare(designName) {
+ if (!wizardState.savedDesigns) return;
+ wizardState.savedDesigns = wizardState.savedDesigns.filter(function(s) { return s.designName !== designName; });
+ renderComparePill();
+ if (wizardState.savedDesigns.length === 0) {
+ closeCompareModal();
+ } else {
+ openCompareModal();
+ }
+ }
+
+ function selectFromCompare(designName) {
+ closeCompareModal();
+ showDesignDetail(designName);
+ }
+</script>
+</body>
+</html>

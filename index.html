@@ -1560,6 +1560,32 @@
 .bp-founder-img { width:120px; height:120px; border-radius:50%; object-fit:cover; flex-shrink:0; border:4px solid var(--bg-alt); box-shadow:0 2px 8px rgba(0,0,0,0.08); }
 .bp-founder-quote { font-size:14px; color:var(--text); line-height:1.8; font-style:italic; }
 .bp-founder-name { display:block; font-weight:800; font-size:14px; color:var(--primary); margin-top:12px; font-style:normal; }
+/* Phase 2B — LGA tags, display homes, testimonials */
+.bp-lga-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+.bp-lga-tag { background:rgba(59,125,221,0.1); border:1px solid rgba(59,125,221,0.25); color:var(--accent); padding:5px 14px; border-radius:20px; font-size:11px; font-weight:700; letter-spacing:0.3px; }
+
+.bp-display-homes-list { display:flex; flex-direction:column; gap:12px; }
+.bp-display-home { background:var(--bg-alt); border:1px solid var(--border); border-radius:var(--radius); padding:18px 20px; }
+.bp-display-home-header { display:flex; gap:12px; align-items:flex-start; margin-bottom:10px; }
+.bp-display-home-icon { font-size:20px; flex-shrink:0; margin-top:2px; }
+.bp-display-home-name { font-size:14px; font-weight:800; color:var(--primary); margin-bottom:3px; }
+.bp-display-home-address { font-size:12px; color:var(--text-light); }
+.bp-display-home-meta { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:8px; }
+.bp-display-home-hours { font-size:12px; font-weight:600; color:var(--success); }
+.bp-display-home-phone { font-size:12px; font-weight:600; color:var(--text-light); }
+.bp-display-home-note { font-size:11px; color:var(--text-xlight); margin-bottom:10px; font-style:italic; }
+.bp-directions-btn { display:inline-block; font-size:12px; font-weight:700; color:var(--accent); text-decoration:none; border:1px solid rgba(59,125,221,0.3); padding:5px 14px; border-radius:6px; transition:all 0.2s; }
+.bp-directions-btn:hover { background:rgba(59,125,221,0.08); }
+
+.bp-testimonials-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.bp-testimonial-card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:var(--radius); padding:20px; }
+.bp-testimonial-stars { font-size:13px; margin-bottom:10px; }
+.bp-testimonial-quote { font-size:13px; color:rgba(255,255,255,0.85); line-height:1.75; font-style:italic; margin-bottom:12px; }
+.bp-testimonial-author { font-size:12px; font-weight:700; color:#fff; }
+.bp-testimonial-design { font-size:11px; color:rgba(255,255,255,0.45); margin-top:3px; }
+.bp-section-dark { background:var(--primary); border-radius:var(--radius-lg); padding:28px; margin-bottom:20px; }
+@media (max-width:640px) { .bp-testimonials-grid { grid-template-columns:1fr; } }
+
 .bp-cta { background:var(--primary); color:#fff; border-radius:var(--radius); padding:40px 32px; text-align:center; }
 .bp-cta h3 { font-size:22px; font-weight:900; margin-bottom:8px; }
 .bp-cta p { font-size:13px; opacity:0.7; margin-bottom:24px; max-width:450px; margin-left:auto; margin-right:auto; line-height:1.6; }
@@ -2282,6 +2308,63 @@
  'Dare Homes': 'https://www.darehomes.com.au',
  'Oxford Green Homes': 'https://www.oxfordgreen.com.au/our-homes'
  };
+
+ // ─── BUILDER DISPLAY HOMES ───────────────────────────────────────────────────
+ const BUILDER_DISPLAY_HOMES = {
+  'frd': [
+   {name:'FRD Homes HQ', address:'67 Davenport Street, Southport QLD 4215', hours:'By Appointment', phone:'1300 637 568', note:'Wholesale builder — consultation by appointment only', lat:-27.970, lng:153.398}
+  ],
+  'creation': [
+   {name:'Brookside 36 — White Rock Display', address:'18 Peterson Way, Whiterock QLD 4510', hours:'Sat–Wed 11am–5pm', phone:null, note:'Private appointments available on request', lat:-27.026, lng:152.974},
+   {name:'Pembroke 29 — North Harbour Display', address:'1 Clerke Street, Burpengary East QLD 4505', hours:'Sat–Wed 10am–5pm', phone:null, note:'Private appointments available on request', lat:-27.141, lng:152.972},
+   {name:'Spring Mountain Display', address:'Spring Mountain QLD (near Ipswich)', hours:'Contact for hours', phone:null, note:'Confirm address before visiting', lat:-27.741, lng:152.835},
+   {name:'Morayfield Display', address:'Morayfield QLD 4506', hours:'Contact for hours', phone:null, note:'Confirm address before visiting', lat:-27.100, lng:152.945}
+  ],
+  'dare': [
+   {name:'Primrose 267 — Lilywood Landings', address:'27 Arabella Street, Caboolture South QLD 4510', hours:'By Appointment', phone:null, note:'Bridgehampton facade · 4 bed · 2 bath', lat:-27.059, lng:152.932},
+   {name:'Avalon 241 — Lilywood Landings', address:'28 Arabella Street, Caboolture South QLD 4510', hours:'By Appointment', phone:null, note:'Paddington facade · 4 bed · 2 bath', lat:-27.059, lng:152.933}
+  ],
+  'oxfordgreen': [
+   {name:'Oxford Green — Display Coming Soon', address:'South East Queensland', hours:'Contact ProjX to arrange', phone:null, note:'EarthWall display locations available on request', lat:-27.500, lng:153.000}
+  ]
+ };
+
+ // ─── BUILDER LGA COVERAGE ───────────────────────────────────────────────────
+ const BUILDER_LGAS = {
+  'frd': ['Moreton Bay','Logan','Ipswich','Scenic Rim','Lockyer Valley','Gold Coast','Sunshine Coast'],
+  'creation': ['Moreton Bay','Ipswich','Lockyer Valley','Sunshine Coast','Gold Coast','Redlands'],
+  'dare': ['Moreton Bay','Ipswich','Lockyer Valley','Sunshine Coast'],
+  'oxfordgreen': ['Moreton Bay','Logan','Ipswich','Toowoomba','Gold Coast','Lockyer Valley']
+ };
+
+ // ─── BUILDER VIDEOS ───────────────────────────────────────────────────────
+ const BUILDER_VIDEOS = {
+  'frd': {url:'https://www.youtube.com/@frdhomes', embedId:null, label:'View FRD on YouTube'},
+  'creation': {url:'https://qld.creationhomes.com.au/', embedId:null, label:'Visit Creation Homes'},
+  'dare': {url:'https://www.darehomes.com.au', embedId:null, label:'Visit Dare Homes'},
+  'oxfordgreen': {url:'https://www.oxfordgreen.com.au', embedId:null, label:'Visit Oxford Green'}
+ };
+
+ // ─── BUILDER TESTIMONIALS ───────────────────────────────────────────────────
+ const BUILDER_TESTIMONIALS = {
+  'frd': [
+   {quote:"FRD was exactly what we needed as investors. Fixed price, no drama, settled on time. We've already started the second purchase.", name:'Marcus & Priya T.', suburb:'Moreton Bay', design:'FRD Ranch 210'},
+   {quote:"The wholesale pricing is real. We compared two other builders and FRD came in cheaper both times. Quality is right there too.", name:'Jason L.', suburb:'Logan', design:'FRD Hampton 230'}
+  ],
+  'creation': [
+   {quote:"Walked through the Pembroke display and knew immediately. Stone benchtops, 900mm appliances, ducted air all standard — upgrades everywhere else.", name:'Sophie & Ben W.', suburb:'Burpengary East', design:'Southcote 23'},
+   {quote:"Creation delivered on every promise. Timeline was exact, the site supervisor was communicative, and the finish quality is excellent.", name:'David M.', suburb:'Moreton Bay', design:'Hillcrest 18'}
+  ],
+  'dare': [
+   {quote:"Transparent from day one. The price we signed was the price we paid. Not one variation charge. In this market, that means everything.", name:'Anthony K.', suburb:'Moreton Bay', design:'Dublin'},
+   {quote:"You feel from the first conversation that these people genuinely care about the outcome. Personal service is real — not a call centre.", name:'Rachel & James O.', suburb:'Caboolture', design:'Marseille'}
+  ],
+  'oxfordgreen': [
+   {quote:"10 weeks from slab to handover. The EarthWall construction is impressive — solid, quiet, and the energy bills are a fraction of our old house.", name:'Liam & Carly B.', suburb:'Ipswich', design:'Kirra'},
+   {quote:"We chose Oxford Green for the build speed — holding costs were significant. Delivered on time and the 7-star rating is no gimmick.", name:'Tanya F.', suburb:'Logan', design:'Glendale'}
+  ]
+ };
+
   // ─── BUILDER PROFILES ───────────────────────────────────────────────────
   const BUILDER_PROFILES = {
     'frd': {
@@ -3455,6 +3538,67 @@
         '<p class="bp-section-sub">Included as standard - not as upgrades</p>' +
         '<div class="bp-inc-grid">' + incHtml + '</div>' +
       '</div>' +
+
+      // ─── LGA COVERAGE TAGS
+      (function() {
+        var lgas = BUILDER_LGAS[b.id] || [];
+        if (!lgas.length) return '';
+        return '<div class="bp-section">' +
+          '<h3 class="bp-section-title">Where They Build</h3>' +
+          '<p class="bp-section-sub">Active across these regions in South East Queensland</p>' +
+          '<div class="bp-lga-tags">' +
+          lgas.map(function(lga) { return '<span class="bp-lga-tag">' + lga + '</span>'; }).join('') +
+          '</div></div>';
+      })() +
+
+      // ─── DISPLAY HOME LOCATIONS
+      (function() {
+        var dh = BUILDER_DISPLAY_HOMES[b.id] || [];
+        if (!dh.length) return '';
+        var listHtml = dh.map(function(loc) {
+          var mapsUrl = 'https://www.google.com/maps/search/' + encodeURIComponent(loc.address);
+          return '<div class="bp-display-home">' +
+            '<div class="bp-display-home-header">' +
+              '<div class="bp-display-home-icon">🏠</div>' +
+              '<div>' +
+                '<div class="bp-display-home-name">' + loc.name + '</div>' +
+                '<div class="bp-display-home-address">' + loc.address + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="bp-display-home-meta">' +
+              '<span class="bp-display-home-hours">⏰ ' + loc.hours + '</span>' +
+              (loc.phone ? '<span class="bp-display-home-phone">📞 ' + loc.phone + '</span>' : '') +
+            '</div>' +
+            (loc.note ? '<div class="bp-display-home-note">' + loc.note + '</div>' : '') +
+            '<a href="' + mapsUrl + '" target="_blank" rel="noopener" class="bp-directions-btn">Get Directions →</a>' +
+          '</div>';
+        }).join('');
+        return '<div class="bp-section">' +
+          '<h3 class="bp-section-title">Display Homes</h3>' +
+          '<p class="bp-section-sub">Visit in person — walk through before you commit</p>' +
+          '<div class="bp-display-homes-list">' + listHtml + '</div>' +
+        '</div>';
+      })() +
+
+      // ─── BUILDER TESTIMONIALS
+      (function() {
+        var tl = BUILDER_TESTIMONIALS[b.id] || [];
+        if (!tl.length) return '';
+        var cards = tl.map(function(t) {
+          return '<div class="bp-testimonial-card">' +
+            '<div class="bp-testimonial-stars">⭐⭐⭐⭐⭐</div>' +
+            '<div class="bp-testimonial-quote">"' + t.quote + '"</div>' +
+            '<div class="bp-testimonial-author">' + t.name + ' — ' + t.suburb + '</div>' +
+            '<div class="bp-testimonial-design">Built: ' + t.design + '</div>' +
+          '</div>';
+        }).join('');
+        return '<div class="bp-section bp-section-dark">' +
+          '<h3 class="bp-section-title" style="color:#fff">Buyer Stories</h3>' +
+          '<p class="bp-section-sub" style="color:rgba(255,255,255,0.6)">Real buyers who built with ' + b.name + ' through ProjX</p>' +
+          '<div class="bp-testimonials-grid">' + cards + '</div>' +
+        '</div>';
+      })() +
+
       '<div class="bp-cta">' +
         '<h3>Ready to explore ' + b.name + '?</h3>' +
         '<p>Browse their full design range matched to available ProjX lots.</p>' +

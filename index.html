@@ -576,20 +576,18 @@
 
  
  /* ─── PHASE 3: LGA FILTER & SEARCH ────────────────────────────── */
- .lga-filter-row {
-   display: flex; gap: 8px; flex-wrap: nowrap; overflow-x: auto;
-   padding-bottom: 4px; margin-bottom: 12px; scrollbar-width: none;
+ .lga-dropdown {
+   font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 600;
+   color: var(--text); background: var(--bg);
+   border: 1.5px solid var(--border); border-radius: 10px;
+   padding: 9px 36px 9px 14px; cursor: pointer;
+   appearance: none; -webkit-appearance: none;
+   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+   background-repeat: no-repeat; background-position: right 12px center;
+   transition: border-color 0.2s; min-width: 180px;
  }
- .lga-filter-row::-webkit-scrollbar { display: none; }
- .lga-chip {
-   flex-shrink: 0; font-family: 'Montserrat', sans-serif;
-   font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
-   padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--border);
-   background: var(--bg); color: var(--text-light); cursor: pointer;
-   transition: all 0.18s; white-space: nowrap;
- }
- .lga-chip:hover { border-color: var(--accent); color: var(--accent); background: rgba(59,125,221,0.06); }
- .lga-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+ .lga-dropdown:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,125,221,0.1); }
+ .lga-dropdown:hover { border-color: var(--accent); }
 
  .estate-search-wrap {
    display: flex; align-items: center; gap: 8px;
@@ -1998,9 +1996,9 @@
  <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;margin-bottom:4px">
   <div style="flex:1;min-width:0">
    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-xlight);margin-bottom:6px">Filter by Region</div>
-   <div class="lga-filter-row" id="lgaFilterRow">
-    <button class="lga-chip active" data-lga="all" onclick="filterByLGA('all')">All Regions</button>
-   </div>
+   <select id="lgaFilterRow" class="lga-dropdown" onchange="filterByLGA(this.value)">
+    <option value="all">All Regions</option>
+   </select>
   </div>
   <div style="flex-shrink:0">
    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-xlight);margin-bottom:6px">Search</div>
@@ -2463,20 +2461,17 @@
    SEQ_LGAS.forEach(function(lga) {
      var region = LGA_TO_REGION[lga] || lga;
      if (!activeRegions.has(region)) return; // skip LGAs with no projects
-     var btn = document.createElement('button');
-     btn.className = 'lga-chip';
-     btn.setAttribute('data-lga', lga);
-     btn.textContent = lga;
-     btn.onclick = function() { filterByLGA(lga); };
-     row.appendChild(btn);
+     var opt = document.createElement('option');
+     opt.value = lga;
+     opt.textContent = lga;
+     row.appendChild(opt);
    });
  }
 
  function filterByLGA(lga) {
    currentLGAFilter = lga;
-   document.querySelectorAll('.lga-chip').forEach(function(btn) {
-     btn.classList.toggle('active', btn.getAttribute('data-lga') === lga);
-   });
+   var sel = document.getElementById('lgaFilterRow');
+   if (sel) sel.value = lga;
    renderProjects(null);
    updateBuildersByLGA(lga);
    renderFilterPills();
@@ -2495,9 +2490,8 @@
    currentBudgetFilter = 'all';
    var searchInput = document.getElementById('estateSearchInput');
    if (searchInput) searchInput.value = '';
-   document.querySelectorAll('.lga-chip').forEach(function(btn) {
-     btn.classList.toggle('active', btn.getAttribute('data-lga') === 'all');
-   });
+   var lgaSel = document.getElementById('lgaFilterRow');
+   if (lgaSel) lgaSel.value = 'all';
    document.querySelectorAll('.estate-filter').forEach(function(btn) {
      btn.classList.toggle('active', btn.dataset.filter === 'all');
    });

@@ -9,7 +9,7 @@
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+ <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
  <style>
  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1073,6 +1073,23 @@
  .leaflet-popup-tip { background: var(--bg); }
 
  /* ─── RESPONSIVE ─────────────────────────────────────────── */
+ 
+ /* DEF-009: Text overflow on card names */
+ .project-name, .builder-name, .standard-builder-name {
+   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+ }
+ .project-region { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+
+ /* DEF-010: 768px tablet breakpoint */
+ @media (max-width: 768px) {
+   .builders-grid { grid-template-columns: repeat(2, 1fr); }
+   .standard-builders-grid { grid-template-columns: repeat(2, 1fr); }
+   .services-grid { grid-template-columns: repeat(2, 1fr); }
+   .value-props { grid-template-columns: 1fr 1fr; }
+   .testimonials-grid { grid-template-columns: 1fr; }
+   .past-grid { grid-template-columns: repeat(2, 1fr); }
+ }
+
  @media (max-width: 1100px) {
  .builders-grid { grid-template-columns: repeat(2, 1fr); }
  .standard-builders-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1799,7 +1816,7 @@
 <div id="gate">
  <div class="gate-inner">
  <div class="gate-logo">
- <img src="projx-logo-dark.png" alt="ProjX" style="height:40px" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+ <img src="projx-logo-dark.png" loading="lazy" alt="ProjX" style="height:40px" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
  <span style="display:none;font-size:28px;font-weight:900;letter-spacing:-1px;color:var(--primary)">ProjX</span>
  </div>
  <div class="gate-tagline">House &amp; Land Design Portal</div>
@@ -1820,7 +1837,7 @@
 <nav id="navbar" style="display:none">
  <div class="nav-inner">
  <a href="#hero" class="nav-logo">
- <img src="projx-logo-dark.png" alt="ProjX" style="height:36px" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+ <img src="projx-logo-dark.png" loading="lazy" alt="ProjX" style="height:36px" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
  <span style="display:none;font-size:22px;font-weight:900;letter-spacing:-0.5px;color:var(--primary)">ProjX</span>
  </a>
  <ul class="nav-links" id="navLinks">
@@ -1851,7 +1868,7 @@
   </div>
   <div style="display:flex;align-items:center;justify-content:center;gap:8px;opacity:0.3">
    <span style="font-size:11px;color:rgba(255,255,255,0.7);font-weight:500">Powered by</span>
-   <img src="projx-logo-light.png" alt="ProjX" style="height:16px" onerror="this.parentElement.innerHTML='<span style=font-size:11px;font-weight:700;color:rgba(255,255,255,0.5)>ProjX Australia</span>'"/>
+   <img src="projx-logo-light.png" loading="lazy" alt="ProjX" style="height:16px" onerror="this.parentElement.innerHTML='<span style=font-size:11px;font-weight:700;color:rgba(255,255,255,0.5)>ProjX Australia</span>'"/>
   </div>
  </div>
 </section>
@@ -1918,11 +1935,11 @@
  <p class="section-subtitle">18 active projects - 4,500+ lots available</p>
  </div>
  <div class="view-toggle">
- <button class="toggle-btn active" onclick="switchView('list')" id="toggleList">
+ <button class="toggle-btn active" onclick="switchView('list')" id="toggleList" aria-label="List view">
  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="0" y="1" width="16" height="2.5" rx="1"/><rect x="0" y="6.75" width="16" height="2.5" rx="1"/><rect x="0" y="12.5" width="16" height="2.5" rx="1"/></svg>
  List
  </button>
- <button class="toggle-btn" onclick="switchView('map')" id="toggleMap">
+ <button class="toggle-btn" onclick="switchView('map')" id="toggleMap" aria-label="Map view">
  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M5 1L0 3v12l5-2 6 2 5-2V1l-5 2-6-2zm0 1.5v10l-3.5 1.4V3.5L5 2.5zm1 10V2.5L11 4.3v10.2l-5-1.7zm6 .1V2.6l3.5-1.4v10.4L12 12.6z"/></svg>
  Map
  </button>
@@ -2148,7 +2165,7 @@
  <div style="margin-bottom:32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
  <div>
  <div class="footer-brand-logo">
- <img src="projx-logo-light.png" alt="ProjX" style="height:36px" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+ <img src="projx-logo-light.png" loading="lazy" alt="ProjX" style="height:36px" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
  <span style="display:none;font-size:24px;font-weight:900;letter-spacing:-0.5px;color:#fff">ProjX</span>
  </div>
  </div>
@@ -2165,7 +2182,7 @@
 </footer>
 
 <!-- ─── BUYER WIZARD ─── -->
-<div id="wizard">
+<div id="wizard" role="dialog" aria-modal="true" aria-label="Home & Land Design Wizard">
  <div class="wizard-progress-bar"><div class="wizard-progress-fill" id="wizardProgressFill"></div></div>
  <div class="wizard-header">
  <button onclick="headerBack()" style="display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;font-family:Montserrat,sans-serif;font-size:13px;font-weight:600;color:var(--text-light);padding:8px 12px;border-radius:8px;transition:all 0.2s;flex-shrink:0" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--text-light)'">← Back</button>
@@ -2720,28 +2737,44 @@
    renderFilterPills();
  }
 
+ // DEF-002: HTML escaper to prevent XSS
+ function escapeHtml(str) {
+   if (!str) return '';
+   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+ }
+
  function renderFilterPills() {
    var row = document.getElementById('filterPillsRow');
    if (!row) return;
    var pills = [];
    if (currentLGAFilter !== 'all') {
-     pills.push({label: '📍 ' + currentLGAFilter, clear: "filterByLGA('all')"});
+     // DEF-012: use data attributes instead of string interpolation in onclick
+     pills.push({label: '📍 ' + escapeHtml(currentLGAFilter), clearAction: 'lga-clear'});
    }
    if (currentSearchQuery) {
-     pills.push({label: '🔍 "' + currentSearchQuery + '"', clear: "searchEstates(''); document.getElementById('estateSearchInput').value=''"});
+     // DEF-002: escape search query before embedding in HTML
+     pills.push({label: '🔍 &ldquo;' + escapeHtml(currentSearchQuery) + '&rdquo;', clearAction: 'search-clear'});
    }
    if (currentStatusFilter !== 'all') {
      var statusLabel = currentStatusFilter === 'available' ? 'Available Now' : 'Coming Soon';
-     pills.push({label: statusLabel, clear: "renderProjects('all')"});
+     pills.push({label: escapeHtml(statusLabel), clearAction: 'status-clear'});
    }
    var pillsHtml = pills.map(function(p) {
-     return '<span class="filter-pill">' + p.label + '<span class="filter-pill-x" onclick="' + p.clear + ';renderFilterPills()">×</span></span>';
+     return '<span class="filter-pill">' + p.label + '<span class="filter-pill-x" data-clear="' + p.clearAction + '" onclick="handlePillClear(this)">×</span></span>';
    }).join('');
    if (pills.length > 0) {
      pillsHtml += '<button class="filter-clear-all" onclick="clearAllFilters()">Clear all</button>';
    }
    row.innerHTML = pillsHtml;
    row.style.display = pills.length > 0 ? 'flex' : 'none';
+ }
+
+ // DEF-012: Safe pill clear handler using data attributes
+ function handlePillClear(el) {
+   var action = el.getAttribute('data-clear');
+   if (action === 'lga-clear') filterByLGA('all');
+   else if (action === 'search-clear') { searchEstates(''); var inp = document.getElementById('estateSearchInput'); if(inp) inp.value=''; }
+   else if (action === 'status-clear') renderProjects('all');
  }
 
  function updateBuildersByLGA(lga) {
@@ -2948,7 +2981,7 @@
  window._mapMarkers[p.id] = marker;
  marker.bindPopup(
  '<div style="font-family:Montserrat,sans-serif">' +
- '<div style="height:140px;overflow:hidden"><img src="' + getProjectImage(p) + '" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null"/></div>' +
+ '<div style="height:140px;overflow:hidden"><img src="' + getProjectImage(p) + '" alt="' + p.name + '" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null"/></div>' +
  '<div style="padding:16px 18px 18px">' +
  '<div style="font-size:16px;font-weight:800;color:#1B2432;letter-spacing:-0.3px;margin-bottom:3px">' + p.name + '</div>' +
  '<div style="font-size:12px;color:#9CA3AF;margin-bottom:14px">' + p.suburb + ' \u00b7 ' + p.region + '</div>' +
@@ -3730,16 +3763,16 @@
         '<h3 class="bp-section-title">The Story</h3>' +
         '<p class="bp-section-sub">Built on vision. Backed by legacy.</p>' +
         '<div class="bp-founder">' +
-        (p.founderImg ? '<img class="bp-founder-img" src="' + p.founderImg + '" onerror="this.style.display=\'none\'">' : '') +
+        (p.founderImg ? '<img class="bp-founder-img" src="' + p.founderImg + '" alt="' + b.name + ' Founder" onerror="this.style.display=\'none\'">' : '') +
         '<div style="flex:1;min-width:200px"><div class="bp-founder-quote">"' + p.founderQuote + '"</div>' +
         '<span class="bp-founder-name">' + p.founderName + '</span>' +
         '</div></div></div>';
     }
     return '<div style="max-width:800px;margin:0 auto">' +
       '<div class="bp-hero">' +
-        '<img src="' + (p.heroImg || '') + '" onerror="this.style.display=\'none\'">' +
+        '<img src="' + (p.heroImg || '') + '" alt="' + b.name + ' display home" onerror="this.style.display=\'none\'">' +
         '<div class="bp-hero-overlay">' +
-          (logoSrc ? '<img class="bp-hero-logo" src="' + logoSrc + '" onerror="this.style.display=\'none\'">' : '') +
+          (logoSrc ? '<img class="bp-hero-logo" src="' + logoSrc + '" alt="' + b.name + ' logo" onerror="this.style.display=\'none\'">' : '') +
           '<h2>' + b.name + '</h2>' +
           '<div class="bp-hero-sub">' + b.tier + ' Builder  |  ' + b.priceRange + '</div>' +
         '</div></div>' +
@@ -4318,15 +4351,26 @@
 
  function submitWizardLead(e) {
  e.preventDefault();
- const nameEl = document.getElementById('wLeadName');
- const name = nameEl ? nameEl.value : 'there';
- const firstName = name.split(' ')[0];
- const ref = 'PX-' + Math.random().toString(36).substring(2, 7).toUpperCase();
- const d = wizardState.design;
- const p = wizardState.project;
- const b = wizardState.builder || (d ? BUILDERS.find(function(bl) { return bl.name === d.builder; }) : null);
 
- let summaryRows;
+ // DEF-003: JS-side validation (belt-and-suspenders)
+ var nameEl = document.getElementById('wLeadName');
+ var emailEl = document.getElementById('wLeadEmail');
+ var phoneEl = document.getElementById('wLeadPhone');
+ var name = nameEl ? nameEl.value.trim() : '';
+ var email = emailEl ? emailEl.value.trim() : '';
+ var phone = phoneEl ? phoneEl.value.trim() : '';
+
+ if (!name) { if(nameEl){nameEl.style.borderColor='#ef4444';nameEl.focus();} return; }
+ if (!email || email.indexOf('@') < 1 || email.indexOf('.') < 0) { if(emailEl){emailEl.style.borderColor='#ef4444';emailEl.focus();} return; }
+ if (!phone || phone.replace(/[\s\-+()]/g,'').length < 8) { if(phoneEl){phoneEl.style.borderColor='#ef4444';phoneEl.focus();} return; }
+
+ var firstName = name.split(' ')[0];
+ var ref = 'PX-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+ var d = wizardState.design;
+ var p = wizardState.project;
+ var b = wizardState.builder || (d ? BUILDERS.find(function(bl) { return bl.name === d.builder; }) : null);
+
+ var summaryRows;
  if (wizardState.mode === 'land') {
  summaryRows = [
  {label: 'Project', value: p ? p.name + (p.suburb ? ' - ' + p.suburb : '') : '-'},
@@ -4341,27 +4385,50 @@
  ];
  }
 
- const summaryRowsHTML = summaryRows.map(function(r) {
+ var summaryRowsHTML = summaryRows.map(function(r) {
  return '<div class="wizard-success-summary-row"><span>' + r.label + '</span><span>' + r.value + '</span></div>';
  }).join('');
 
+ // Show success screen immediately (good UX)
  document.getElementById('wizardProgressFill').style.width = '100%';
- document.getElementById('wizardStepLabel').textContent = ' Submitted!';
+ document.getElementById('wizardStepLabel').textContent = 'Submitted!';
  document.getElementById('wizardStepDots').innerHTML = '';
-
  document.getElementById('wizardBody').innerHTML =
  '<div class="wizard-success">' +
  '<div class="wizard-success-icon"></div>' +
- '<h2>Thank you, ' + firstName + '!</h2>' +
+ '<h2>Thank you, ' + escapeHtml(firstName) + '!</h2>' +
  '<p>Your ProjX consultant will be in touch within 24 hours.</p>' +
  '<div class="wizard-success-ref">Reference: ' + ref + '</div>' +
  '<div class="wizard-success-summary">' + summaryRowsHTML + '</div>' +
  '<div class="wizard-success-btns">' +
- '<button class="wizard-restart-btn" onclick="openWizard(\'' + wizardState.mode + '\');"> Browse More Packages</button>' +
- '<button class="wizard-portal-btn" onclick="closeWizard()">← Back to Portal</button>' +
+ '<button class="wizard-restart-btn" onclick="openWizard(\'' + wizardState.mode + '\');">Browse More Packages</button>' +
+ '<button class="wizard-portal-btn" onclick="closeWizard()">\u2190 Back to Portal</button>' +
  '</div></div>';
-
  document.getElementById('wizard').scrollTop = 0;
+
+ // DEF-001: Submit lead data to email via FormSubmit AJAX
+ var leadData = {
+ _subject: 'New Portal Lead: ' + name + ' [' + ref + ']',
+ _captcha: 'false',
+ _template: 'table',
+ Reference: ref,
+ Name: name,
+ Email: email,
+ Phone: phone,
+ Project: p ? p.name + (p.suburb ? ' (' + p.suburb + ')' : '') : 'Not selected',
+ Design: d ? d.name : 'Not selected',
+ Builder: b ? b.name : 'Not selected',
+ Mode: wizardState.mode === 'land' ? 'Land First' : 'Build First',
+ Source: 'H&L Design Portal'
+ };
+ fetch('https://formsubmit.co/ajax/cortana@projxaustralia.com.au', {
+ method: 'POST',
+ headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+ body: JSON.stringify(leadData)
+ }).catch(function() {
+ // Fail silently - success screen already shown, lead data loss logged in console
+ console.warn('Portal lead submission failed for ref ' + ref + '. Name: ' + name + ', Email: ' + email);
+ });
  }
 
  // Close wizard on Escape key

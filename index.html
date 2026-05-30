@@ -2814,7 +2814,7 @@
  const pSel = document.getElementById('projectSelect');
  pSel.innerHTML = '<option value="">Select a project...</option>' + PROJECTS.map(p => `<option>${p.name} - ${p.suburb}</option>`).join('');
  const bSel = document.getElementById('builderSelect');
- bSel.innerHTML = '<option value="none">No Preference</option>' + BUILDERS.map(b => `<option>${b.name}</option>`).join('');
+ bSel.innerHTML = '<option value="none">No Preference</option>' + BUILDERS.filter(function(b){return b.tierGroup==='premium';}).map(b => `<option>${b.name}</option>`).join('');
  }
 
  function submitEOI(e) {
@@ -3361,10 +3361,13 @@
  DESIGN_IMAGES['Almada 210'],
  DESIGN_IMAGES['Fintona']
  ];
- const cards = BUILDERS.map(function(b, i) {
+ // Only show premium builders in wizard (standard builders have no designs)
+ const premiumBuildersForWizard = BUILDERS.filter(function(b) { return b.tierGroup === 'premium'; });
+ const cards = premiumBuildersForWizard.map(function(b, i) {
  const initials = b.name.split(' ').map(function(w) { return w[0]; }).join('').slice(0, 2);
+ const headerImg = builderHeaderImages[i] || builderHeaderImages[0];
  return '<div class="wizard-builder-card">' +
- '<div class="wizard-builder-img"><img src="' + builderHeaderImages[i] + '" alt="' + b.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop&q=80\'"/></div>' +
+ '<div class="wizard-builder-img"><img src="' + headerImg + '" alt="' + b.name + '" loading="lazy" onerror="this.src=\'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop&q=80\'"/></div>' +
  '<div class="wizard-builder-body">' +
  '<div class="wizard-builder-logo-row">' +
  '<div class="wizard-builder-logo" style="background:' + b.color + '">' + initials + '</div>' +

@@ -2874,6 +2874,13 @@
  filtered = filtered.filter(function(p) { return (p.minPrice + offset) >= 1000000 || p.minPrice === 0; });
  }
  }
+ // Always update filter chip active states and map (even for empty results)
+ document.querySelectorAll('.estate-filter').forEach(function(btn) {
+   btn.classList.toggle('active', btn.dataset.filter === filter);
+ });
+ updateMapMarkers();
+ renderFilterPills();
+
  if (filtered.length === 0) {
    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px 24px;color:var(--text-light)">' +
      '<div style="font-size:32px;margin-bottom:12px">🔍</div>' +
@@ -2907,15 +2914,10 @@
  </div>
  </div>`;
  }).join('');
- // Update filter chip active states
- document.querySelectorAll('.estate-filter').forEach(function(btn) {
- btn.classList.toggle('active', btn.dataset.filter === filter);
- });
  // Re-trigger fade-in for newly rendered cards
  requestAnimationFrame(function() {
  grid.querySelectorAll('.fade-in').forEach(function(el) { el.classList.add('visible'); });
  });
- updateMapMarkers();
  }
 
  // ─── MAP ──────────────────────────────────────────────────────────

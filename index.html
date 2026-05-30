@@ -3080,7 +3080,7 @@
  const design = DESIGNS.find(function(d) { return d.name === designName; });
  if (!design) return;
  const builder = BUILDERS.find(function(b) { return b.name === design.builder; });
- wizardState = { mode: 'builder', step: 2, region: null, project: null, builder: builder, design: design, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _inDetail: false };
+ wizardState = { mode: 'builder', step: 2, region: null, project: null, builder: builder, design: design, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _bedsFilter: 'All', _priceFilter: 'All', _inDetail: false };
  wizardHistory = [];
     document.getElementById('wizard').classList.add('open');
  document.body.style.overflow = 'hidden';
@@ -3091,7 +3091,7 @@
  function openWizardForBuilder(builderId) {
  const builder = BUILDERS.find(function(b) { return b.id === builderId; });
  if (!builder) return;
- wizardState = { mode: 'builder', step: 1, region: null, project: null, builder: builder, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _inDetail: false };
+ wizardState = { mode: 'builder', step: 1, region: null, project: null, builder: builder, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _bedsFilter: 'All', _priceFilter: 'All', _inDetail: false };
  wizardHistory = [];
     document.getElementById('wizard').classList.add('open');
  document.body.style.overflow = 'hidden';
@@ -3102,7 +3102,7 @@
  function openWizardForProject(projectId) {
  const project = PROJECTS.find(function(p) { return p.id === projectId; });
  if (!project) return;
- wizardState = { mode: 'land', step: 1, region: project.region, project: project, builder: null, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _inDetail: false };
+ wizardState = { mode: 'land', step: 1, region: project.region, project: project, builder: null, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _bedsFilter: 'All', _priceFilter: 'All', _inDetail: false };
  wizardHistory = [];
     document.getElementById('wizard').classList.add('open');
  document.body.style.overflow = 'hidden';
@@ -3111,7 +3111,7 @@
  }
 
  function openWizard(mode) {
- wizardState = { mode, step: 1, region: null, project: null, builder: null, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _inDetail: false };
+ wizardState = { mode, step: 1, region: null, project: null, builder: null, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _bedsFilter: 'All', _priceFilter: 'All', _inDetail: false };
  wizardHistory = [];
     document.getElementById('wizard').classList.add('open');
  document.body.style.overflow = 'hidden';
@@ -3444,13 +3444,54 @@
 
  const allBuilders = [];
  DESIGNS.forEach(function(d) { if (allBuilders.indexOf(d.builder) === -1) allBuilders.push(d.builder); });
- const activeFilter = wizardState._designFilter || 'All';
- var filtered = (activeFilter === 'All') ? DESIGNS : DESIGNS.filter(function(d) { return d.builder === activeFilter; });
+ const activeBuilderFilter = wizardState._designFilter || 'All';
+ const activeBedsFilter = wizardState._bedsFilter || 'All';
+ const activePriceFilter = wizardState._priceFilter || 'All';
+
+ var filtered = DESIGNS.slice();
+ if (activeBuilderFilter !== 'All') filtered = filtered.filter(function(d) { return d.builder === activeBuilderFilter; });
+ if (activeBedsFilter !== 'All') filtered = filtered.filter(function(d) { return String(d.beds) === activeBedsFilter; });
+ if (activePriceFilter !== 'All') {
+   filtered = filtered.filter(function(d) {
+     var p = parseInt((d.price||'0').replace(/[^0-9]/g,''));
+     if (activePriceFilter === 'u300') return p < 300000;
+     if (activePriceFilter === '300-400') return p >= 300000 && p < 400000;
+     if (activePriceFilter === '400-500') return p >= 400000 && p < 500000;
+     if (activePriceFilter === '500plus') return p >= 500000;
+     return true;
+   });
+ }
  if (maxFrontage < 99) filtered = filtered.filter(designFits);
 
- const tabs = ['All'].concat(allBuilders).map(function(b) {
- return '<button class="wizard-filter-tab ' + (b === activeFilter ? 'active' : '') + '" onclick="wizardFilterDesigns(\'' + b.replace(/'/g, "\\'") + '\')">' + (b === 'All' ? 'All Designs' : b) + '</button>';
+ // Build filter bar
+ var builderOptions = '<option value="All">All Builders</option>' + allBuilders.map(function(b) {
+   return '<option value="' + b.replace(/"/g,'&quot;') + '"' + (activeBuilderFilter === b ? ' selected' : '') + '>' + b + '</option>';
  }).join('');
+
+ var filterBar = '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:flex-end">' +
+   '<div>' +
+   '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-xlight);margin-bottom:5px">Builder</div>' +
+   '<select class="lga-dropdown" style="min-width:160px;font-size:12px;padding:8px 32px 8px 12px" onchange="wizardFilterDesigns(this.value)">' + builderOptions + '</select></div>' +
+   '<div>' +
+   '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-xlight);margin-bottom:5px">Bedrooms</div>' +
+   '<select class="lga-dropdown" style="min-width:120px;font-size:12px;padding:8px 32px 8px 12px" onchange="wizardFilterBeds(this.value)">' +
+   '<option value="All"' + (activeBedsFilter==='All'?' selected':'') + '>Any</option>' +
+   '<option value="3"' + (activeBedsFilter==='3'?' selected':'') + '>3 bed</option>' +
+   '<option value="4"' + (activeBedsFilter==='4'?' selected':'') + '>4 bed</option>' +
+   '<option value="5"' + (activeBedsFilter==='5'?' selected':'') + '>5 bed</option>' +
+   '</select></div>' +
+   '<div>' +
+   '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-xlight);margin-bottom:5px">Build Price</div>' +
+   '<select class="lga-dropdown" style="min-width:150px;font-size:12px;padding:8px 32px 8px 12px" onchange="wizardFilterPrice(this.value)">' +
+   '<option value="All"' + (activePriceFilter==='All'?' selected':'') + '>Any budget</option>' +
+   '<option value="u300"' + (activePriceFilter==='u300'?' selected':'') + '>Under $300k</option>' +
+   '<option value="300-400"' + (activePriceFilter==='300-400'?' selected':'') + '>$300k – $400k</option>' +
+   '<option value="400-500"' + (activePriceFilter==='400-500'?' selected':'') + '>$400k – $500k</option>' +
+   '<option value="500plus"' + (activePriceFilter==='500plus'?' selected':'') + '>$500k+</option>' +
+   '</select></div>' +
+   (activeBuilderFilter!=='All'||activeBedsFilter!=='All'||activePriceFilter!=='All' ? '<button onclick="wizardClearDesignFilters()" style="font-family:Montserrat,sans-serif;font-size:11px;font-weight:700;background:none;border:1px solid var(--border);border-radius:8px;padding:8px 14px;cursor:pointer;color:var(--text-light);align-self:flex-end">Clear filters</button>' : '') +
+   '<div style="margin-left:auto;align-self:flex-end;font-size:12px;font-weight:700;color:var(--text-light)">' + filtered.length + ' design' + (filtered.length!==1?'s':'') + ' found</div>' +
+   '</div>';
 
  const cards = filtered.map(function(d) {
  const imgSrc = DESIGN_IMAGES[d.name] || Object.values(DESIGN_IMAGES)[0];
@@ -3471,13 +3512,33 @@
  '</div></div>';
  }).join('');
 
- return  '<div class="wizard-step-heading"><h2>Compatible designs for ' + wizardState.project.name + '</h2><p>' + (maxFrontage < 99 ? 'Showing designs that fit your ' + frontageLabel + ' wide lot - ' + filtered.length + ' designs available' : 'Select a design to continue') + '</p></div>' +
- '<div class="wizard-filter-tabs">' + tabs + '</div>' +
- '<div class="wizard-design-grid">' + cards + '</div>';
+ var emptyState = filtered.length === 0 ?
+   '<div style="text-align:center;padding:40px 20px;color:var(--text-light)"><div style="font-size:28px;margin-bottom:12px">🔍</div><div style="font-weight:700;margin-bottom:8px">No designs match your filters</div><button onclick="wizardClearDesignFilters()" class="btn-sm">Clear filters</button></div>' : '';
+
+ return '<div class="wizard-step-heading"><h2>Choose a home design</h2><p>' + (maxFrontage < 99 ? 'Showing designs for ' + frontageLabel + ' wide lots at ' + (wizardState.project ? wizardState.project.name : '') : 'Filter and select a design to continue') + '</p></div>' +
+ filterBar +
+ '<div class="wizard-design-grid">' + (emptyState || cards) + '</div>';
  }
 
- function wizardFilterDesigns(filter) {
- wizardState._designFilter = filter;
+ function wizardFilterDesigns(builder) {
+ wizardState._designFilter = builder;
+ renderWizardStep();
+ }
+
+ function wizardFilterBeds(beds) {
+ wizardState._bedsFilter = beds;
+ renderWizardStep();
+ }
+
+ function wizardFilterPrice(price) {
+ wizardState._priceFilter = price;
+ renderWizardStep();
+ }
+
+ function wizardClearDesignFilters() {
+ wizardState._designFilter = 'All';
+ wizardState._bedsFilter = 'All';
+ wizardState._priceFilter = 'All';
  renderWizardStep();
  }
 

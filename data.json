@@ -1,0 +1,1295 @@
+{
+  "PROJECT_IMAGE_MAP": {
+    "oaklandestate": "img/oakland.jpg",
+    "woodchester": "img/woodchester.jpg",
+    "riverina": "img/riverina.jpg",
+    "harvestestate": "img/harvest.jpg",
+    "lakeviewestate": "img/lakeview.jpg",
+    "sorensenrise": "img/gympie.jpg",
+    "ormistonpoint": "img/ormiston.jpg",
+    "cranley": "img/toowoomba.jpg",
+    "markwellroad": "img/caboolture.jpg",
+    "fernvale": "img/fernvale.jpg",
+    "hoya": "img/hoya.jpg",
+    "sevenhills": "img/warwick.jpg",
+    "peregian": "img/lakeview.jpg",
+    "bellmere": "img/caboolture.jpg",
+    "hellidon": "img/hellidon.jpg",
+    "oakey": "img/toowoomba.jpg",
+    "barrensroad": "img/brookdale.jpg",
+    "banorapoint": "img/eade.jpg"
+  },
+  "BUILDER_DISPLAY_HOMES": {
+    "frd": [
+      {
+        "name": "FRD Homes HQ",
+        "address": "67 Davenport Street, Southport QLD 4215",
+        "hours": "By Appointment",
+        "phone": "1300 637 568",
+        "note": "Wholesale builder — consultation by appointment only",
+        "lat": -27.97,
+        "lng": 153.398
+      }
+    ],
+    "creation": [
+      {
+        "name": "Brookside 36 — White Rock Display",
+        "address": "18 Peterson Way, Whiterock QLD 4510",
+        "hours": "Sat–Wed 11am–5pm",
+        "phone": null,
+        "note": "Private appointments available on request",
+        "lat": -27.026,
+        "lng": 152.974
+      },
+      {
+        "name": "Pembroke 29 — North Harbour Display",
+        "address": "1 Clerke Street, Burpengary East QLD 4505",
+        "hours": "Sat–Wed 10am–5pm",
+        "phone": null,
+        "note": "Private appointments available on request",
+        "lat": -27.141,
+        "lng": 152.972
+      },
+      {
+        "name": "Spring Mountain Display",
+        "address": "Spring Mountain QLD (near Ipswich)",
+        "hours": "Contact for hours",
+        "phone": null,
+        "note": "Confirm address before visiting",
+        "lat": -27.741,
+        "lng": 152.835
+      },
+      {
+        "name": "Morayfield Display",
+        "address": "Morayfield QLD 4506",
+        "hours": "Contact for hours",
+        "phone": null,
+        "note": "Confirm address before visiting",
+        "lat": -27.1,
+        "lng": 152.945
+      }
+    ],
+    "dare": [
+      {
+        "name": "Primrose 267 — Lilywood Landings",
+        "address": "27 Arabella Street, Caboolture South QLD 4510",
+        "hours": "By Appointment",
+        "phone": null,
+        "note": "Bridgehampton facade · 4 bed · 2 bath",
+        "lat": -27.059,
+        "lng": 152.932
+      },
+      {
+        "name": "Avalon 241 — Lilywood Landings",
+        "address": "28 Arabella Street, Caboolture South QLD 4510",
+        "hours": "By Appointment",
+        "phone": null,
+        "note": "Paddington facade · 4 bed · 2 bath",
+        "lat": -27.059,
+        "lng": 152.933
+      }
+    ],
+    "oxfordgreen": [
+      {
+        "name": "Oxford Green — Display Coming Soon",
+        "address": "South East Queensland",
+        "hours": "Contact ProjX to arrange",
+        "phone": null,
+        "note": "EarthWall display locations available on request",
+        "lat": -27.5,
+        "lng": 153
+      }
+    ]
+  },
+  "BUILDER_LGAS": {
+    "frd": [
+      "Moreton Bay",
+      "Logan",
+      "Ipswich",
+      "Scenic Rim",
+      "Lockyer Valley",
+      "Gold Coast",
+      "Sunshine Coast"
+    ],
+    "creation": [
+      "Moreton Bay",
+      "Ipswich",
+      "Lockyer Valley",
+      "Sunshine Coast",
+      "Gold Coast",
+      "Redlands"
+    ],
+    "dare": [
+      "Moreton Bay",
+      "Ipswich",
+      "Lockyer Valley",
+      "Sunshine Coast"
+    ],
+    "oxfordgreen": [
+      "Moreton Bay",
+      "Logan",
+      "Ipswich",
+      "Toowoomba",
+      "Gold Coast",
+      "Lockyer Valley"
+    ]
+  },
+  "BUILDER_VIDEOS": {
+    "frd": {
+      "url": "https://www.youtube.com/@frdhomes",
+      "embedId": null,
+      "label": "View FRD on YouTube"
+    },
+    "creation": {
+      "url": "https://qld.creationhomes.com.au/",
+      "embedId": null,
+      "label": "Visit Creation Homes"
+    },
+    "dare": {
+      "url": "https://www.darehomes.com.au",
+      "embedId": null,
+      "label": "Visit Dare Homes"
+    },
+    "oxfordgreen": {
+      "url": "https://www.oxfordgreen.com.au",
+      "embedId": null,
+      "label": "Visit Oxford Green"
+    }
+  },
+  "BUILDER_TESTIMONIALS": {
+    "frd": [
+      {
+        "quote": "FRD was exactly what we needed as investors. Fixed price, no drama, settled on time. We've already started the second purchase.",
+        "name": "Marcus & Priya T.",
+        "suburb": "Moreton Bay",
+        "design": "FRD Ranch 210"
+      },
+      {
+        "quote": "The wholesale pricing is real. We compared two other builders and FRD came in cheaper both times. Quality is right there too.",
+        "name": "Jason L.",
+        "suburb": "Logan",
+        "design": "FRD Hampton 230"
+      }
+    ],
+    "creation": [
+      {
+        "quote": "Walked through the Pembroke display and knew immediately. Stone benchtops, 900mm appliances, ducted air all standard — upgrades everywhere else.",
+        "name": "Sophie & Ben W.",
+        "suburb": "Burpengary East",
+        "design": "Southcote 23"
+      },
+      {
+        "quote": "Creation delivered on every promise. Timeline was exact, the site supervisor was communicative, and the finish quality is excellent.",
+        "name": "David M.",
+        "suburb": "Moreton Bay",
+        "design": "Hillcrest 18"
+      }
+    ],
+    "dare": [
+      {
+        "quote": "Transparent from day one. The price we signed was the price we paid. Not one variation charge. In this market, that means everything.",
+        "name": "Anthony K.",
+        "suburb": "Moreton Bay",
+        "design": "Dublin"
+      },
+      {
+        "quote": "You feel from the first conversation that these people genuinely care about the outcome. Personal service is real — not a call centre.",
+        "name": "Rachel & James O.",
+        "suburb": "Caboolture",
+        "design": "Marseille"
+      }
+    ],
+    "oxfordgreen": [
+      {
+        "quote": "10 weeks from slab to handover. The EarthWall construction is impressive — solid, quiet, and the energy bills are a fraction of our old house.",
+        "name": "Liam & Carly B.",
+        "suburb": "Ipswich",
+        "design": "Kirra"
+      },
+      {
+        "quote": "We chose Oxford Green for the build speed — holding costs were significant. Delivered on time and the 7-star rating is no gimmick.",
+        "name": "Tanya F.",
+        "suburb": "Logan",
+        "design": "Glendale"
+      }
+    ]
+  },
+  "BUILDER_LOGOS": {
+    "frd": "img/builders/frd-dark.png",
+    "creation": "img/builders/creation.png",
+    "dare": "img/builders/dare.svg",
+    "oxfordgreen": "img/builders/oxfordgreen.png"
+  },
+  "BUILDER_TOUR_LINKS": {
+    "FRD Homes": "https://frdhomes.com.au/",
+    "Creation Homes": "https://qld.creationhomes.com.au/designs/",
+    "Dare Homes": "https://www.darehomes.com.au",
+    "Oxford Green Homes": "https://www.oxfordgreen.com.au/our-homes"
+  },
+  "PROJECTS": [
+    {
+      "id": "peregian",
+      "name": "Peregian Springs",
+      "suburb": "Peregian Springs",
+      "region": "Sunshine Coast",
+      "lat": -26.49,
+      "lng": 153.09,
+      "totalLots": 1500,
+      "availLots": 1500,
+      "minPrice": 0,
+      "maxPrice": 0
+    },
+    {
+      "id": "bellmere",
+      "name": "Bellmere",
+      "suburb": "Bellmere",
+      "region": "Moreton Bay",
+      "lat": -27.08,
+      "lng": 152.88,
+      "totalLots": 1200,
+      "availLots": 1200,
+      "minPrice": 0,
+      "maxPrice": 0
+    },
+    {
+      "id": "woodchester",
+      "name": "Woodchester Estate",
+      "suburb": "Gatton",
+      "region": "Lockyer Valley",
+      "lat": -27.55,
+      "lng": 152.28,
+      "totalLots": 450,
+      "availLots": 450,
+      "minPrice": 322000,
+      "maxPrice": 402000
+    },
+    {
+      "id": "lakeviewestate",
+      "name": "Lakeview Estate",
+      "suburb": "Gatton",
+      "region": "Lockyer Valley",
+      "lat": -27.56,
+      "lng": 152.27,
+      "totalLots": 392,
+      "availLots": 392,
+      "minPrice": 330000,
+      "maxPrice": 455000
+    },
+    {
+      "id": "hoya",
+      "name": "Hoya",
+      "suburb": "Boonah",
+      "region": "Scenic Rim",
+      "lat": -27.97,
+      "lng": 152.68,
+      "totalLots": 190,
+      "availLots": 190,
+      "minPrice": 0,
+      "maxPrice": 0
+    },
+    {
+      "id": "hellidon",
+      "name": "Hellidon",
+      "suburb": "Hellidon",
+      "region": "Lockyer Valley",
+      "lat": -27.55,
+      "lng": 152.12,
+      "totalLots": 110,
+      "availLots": 110,
+      "minPrice": 0,
+      "maxPrice": 0
+    },
+    {
+      "id": "harvestestate",
+      "name": "Harvest Estate",
+      "suburb": "Harvest Estate",
+      "region": "Regional QLD",
+      "lat": -28.65,
+      "lng": 153.61,
+      "totalLots": 100,
+      "availLots": 100,
+      "minPrice": 0,
+      "maxPrice": 0
+    },
+    {
+      "id": "fernvale",
+      "name": "Fernvale",
+      "suburb": "Fernvale",
+      "region": "Somerset",
+      "lat": -27.46,
+      "lng": 152.65,
+      "totalLots": 92,
+      "availLots": 92,
+      "minPrice": 0,
+      "maxPrice": 0
+    },
+    {
+      "id": "oakey",
+      "name": "Oakey",
+      "suburb": "Oakey",
+      "region": "Toowoomba",
+      "lat": -27.43,
+      "lng": 151.72,
+      "totalLots": 90,
+      "availLots": 90,
+      "minPrice": 0,
+      "maxPrice": 0
+    },
+    {
+      "id": "barrensroad",
+      "name": "Barrens Road",
+      "suburb": "South Ripley",
+      "region": "Ipswich",
+      "lat": -27.7,
+      "lng": 152.83,
+      "totalLots": 82,
+      "availLots": 82,
+      "minPrice": 0,
+      "maxPrice": 0
+    },
+    {
+      "id": "sorensenrise",
+      "name": "Sorensen Rise",
+      "suburb": "Southside",
+      "region": "Gympie",
+      "lat": -26.2,
+      "lng": 152.65,
+      "totalLots": 65,
+      "availLots": 65,
+      "minPrice": 350000,
+      "maxPrice": 475000
+    },
+    {
+      "id": "banorapoint",
+      "name": "Banora Point",
+      "suburb": "Banora Point",
+      "region": "Northern NSW",
+      "lat": -28.22,
+      "lng": 153.54,
+      "totalLots": 60,
+      "availLots": 60,
+      "minPrice": 0,
+      "maxPrice": 0
+    },
+    {
+      "id": "oaklandestate",
+      "name": "Oakland Estate",
+      "suburb": "Beaudesert",
+      "region": "Scenic Rim",
+      "lat": -27.99,
+      "lng": 152.97,
+      "totalLots": 48,
+      "availLots": 48,
+      "minPrice": 395000,
+      "maxPrice": 520000
+    },
+    {
+      "id": "sevenhills",
+      "name": "Seven Hills",
+      "suburb": "Warwick",
+      "region": "Southern Downs",
+      "lat": -28.22,
+      "lng": 152.03,
+      "totalLots": 40,
+      "availLots": 40,
+      "minPrice": 0,
+      "maxPrice": 0
+    },
+    {
+      "id": "cranley",
+      "name": "Cranley",
+      "suburb": "Toowoomba",
+      "region": "Toowoomba",
+      "lat": -27.58,
+      "lng": 151.93,
+      "totalLots": 25,
+      "availLots": 25,
+      "minPrice": 0,
+      "maxPrice": 0
+    },
+    {
+      "id": "markwellroad",
+      "name": "Markwell Road",
+      "suburb": "Caboolture",
+      "region": "Moreton Bay",
+      "lat": -27.08,
+      "lng": 152.95,
+      "totalLots": 25,
+      "availLots": 25,
+      "minPrice": 0,
+      "maxPrice": 0
+    },
+    {
+      "id": "riverina",
+      "name": "Riverina",
+      "suburb": "Carrara",
+      "region": "Gold Coast",
+      "lat": -28.02,
+      "lng": 153.37,
+      "totalLots": 20,
+      "availLots": 20,
+      "minPrice": 510000,
+      "maxPrice": 780000
+    },
+    {
+      "id": "ormistonpoint",
+      "name": "Ormiston Point",
+      "suburb": "Ormiston",
+      "region": "Redlands",
+      "lat": -27.52,
+      "lng": 153.26,
+      "totalLots": 12,
+      "availLots": 12,
+      "minPrice": 0,
+      "maxPrice": 0
+    }
+  ],
+  "BUILDERS": [
+    {
+      "id": "frd",
+      "name": "FRD Homes",
+      "color": "#059669",
+      "tier": "Wholesale",
+      "tierGroup": "premium",
+      "tagline": "Queensland's #1 wholesale builder - proven, consistent, trusted",
+      "designs": 4,
+      "priceRange": "$245k - $380k"
+    },
+    {
+      "id": "creation",
+      "name": "Creation Homes",
+      "color": "#3B7DDD",
+      "tier": "Entry-Mid",
+      "tierGroup": "premium",
+      "tagline": "Award-winning QLD builder - fixed-price, premium inclusions",
+      "designs": 4,
+      "priceRange": "$285k - $460k"
+    },
+    {
+      "id": "dare",
+      "name": "Dare Homes",
+      "color": "#1a1a2e",
+      "tier": "Mid-Range Retail",
+      "tierGroup": "premium",
+      "tagline": "1,800+ homes built - upfront designs, no hidden costs, personal service",
+      "designs": 4,
+      "priceRange": "$320k - $480k"
+    },
+    {
+      "id": "oxfordgreen",
+      "name": "Oxford Green Homes",
+      "color": "#2d6a4f",
+      "tier": "Budget / Speed",
+      "tierGroup": "premium",
+      "tagline": "10-week builds - EarthWallTM construction, 7+ star energy, unmatched speed",
+      "designs": 4,
+      "priceRange": "$220k - $340k"
+    },
+    {
+      "id": "metricon",
+      "name": "Metricon",
+      "color": "#E63946",
+      "tier": "Volume Builder",
+      "tierGroup": "standard",
+      "tagline": "Australia's largest new home builder. Hundreds of designs across SEQ.",
+      "designs": 0,
+      "priceRange": "$300k - $550k"
+    },
+    {
+      "id": "avia",
+      "name": "Avia Homes",
+      "color": "#F4A261",
+      "tier": "Mid-Range",
+      "tierGroup": "standard",
+      "tagline": "Quality homes across SEQ growth corridors. Fixed-price contracts.",
+      "designs": 0,
+      "priceRange": "$280k - $450k"
+    },
+    {
+      "id": "gallery",
+      "name": "Gallery Homes",
+      "color": "#2A9D8F",
+      "tier": "Design-Led",
+      "tierGroup": "standard",
+      "tagline": "Architectural design meets everyday living. Award-winning facades.",
+      "designs": 0,
+      "priceRange": "$320k - $520k"
+    },
+    {
+      "id": "tribeca",
+      "name": "Tribeca Homes",
+      "color": "#6D6875",
+      "tier": "Boutique",
+      "tierGroup": "standard",
+      "tagline": "Boutique builder with a focus on quality finishes and personal service.",
+      "designs": 0,
+      "priceRange": "$290k - $480k"
+    },
+    {
+      "id": "bold",
+      "name": "Bold Living",
+      "color": "#264653",
+      "tier": "Contemporary",
+      "tierGroup": "standard",
+      "tagline": "Contemporary homes built bold. Modern facades, smart floorplans.",
+      "designs": 0,
+      "priceRange": "$310k - $500k"
+    },
+    {
+      "id": "pilgrim",
+      "name": "Pilgrim Homes",
+      "color": "#E9C46A",
+      "tier": "Entry-Level",
+      "tierGroup": "standard",
+      "tagline": "Accessible home ownership without compromise on quality or inclusions.",
+      "designs": 0,
+      "priceRange": "$250k - $400k"
+    },
+    {
+      "id": "gdev",
+      "name": "G Developments",
+      "color": "#457B9D",
+      "tier": "Developer-Builder",
+      "tierGroup": "standard",
+      "tagline": "Local developer-builder operating across SEQ estates. Strong regional presence.",
+      "designs": 0,
+      "priceRange": "$270k - $430k"
+    },
+    {
+      "id": "neptune",
+      "name": "Neptune Homes",
+      "color": "#1D3557",
+      "tier": "Local SEQ",
+      "tierGroup": "standard",
+      "tagline": "Proud local SEQ builder. Fixed-price H&L packages from Brisbane to the Gold Coast.",
+      "designs": 0,
+      "priceRange": "$280k - $460k"
+    }
+  ],
+  "DESIGNS": [
+    {
+      "name": "FRD Classic 170",
+      "builder": "FRD Homes",
+      "beds": 3,
+      "baths": 2,
+      "garage": 1,
+      "sqm": 170,
+      "price": "$245,000",
+      "frontage": "10m+",
+      "tier": "entry"
+    },
+    {
+      "name": "FRD Ranch 210",
+      "builder": "FRD Homes",
+      "beds": 4,
+      "baths": 2,
+      "garage": 2,
+      "sqm": 210,
+      "price": "$295,000",
+      "frontage": "12.5m+",
+      "tier": "entry"
+    },
+    {
+      "name": "FRD Hampton 230",
+      "builder": "FRD Homes",
+      "beds": 4,
+      "baths": 2,
+      "garage": 2,
+      "sqm": 230,
+      "price": "$335,000",
+      "frontage": "10m+",
+      "tier": "mid"
+    },
+    {
+      "name": "FRD Estate 280",
+      "builder": "FRD Homes",
+      "beds": 5,
+      "baths": 3,
+      "garage": 2,
+      "sqm": 280,
+      "price": "$380,000",
+      "frontage": "12.5m+",
+      "tier": "mid"
+    },
+    {
+      "name": "Hillcrest 18",
+      "builder": "Creation Homes",
+      "beds": 4,
+      "baths": 2,
+      "garage": 1,
+      "sqm": 165,
+      "price": "$285,000",
+      "frontage": "10m+",
+      "tier": "entry"
+    },
+    {
+      "name": "Southcote 23",
+      "builder": "Creation Homes",
+      "beds": 4,
+      "baths": 2,
+      "garage": 2,
+      "sqm": 215,
+      "price": "$365,000",
+      "frontage": "12.5m+",
+      "tier": "mid"
+    },
+    {
+      "name": "Willow 26",
+      "builder": "Creation Homes",
+      "beds": 4,
+      "baths": 2,
+      "garage": 2,
+      "sqm": 243,
+      "price": "$395,000",
+      "frontage": "10m+",
+      "tier": "mid"
+    },
+    {
+      "name": "Fernbrook 28",
+      "builder": "Creation Homes",
+      "beds": 5,
+      "baths": 3,
+      "garage": 2,
+      "sqm": 265,
+      "price": "$440,000",
+      "frontage": "12.5m+",
+      "tier": "mid"
+    },
+    {
+      "name": "Marseille",
+      "builder": "Dare Homes",
+      "beds": 4,
+      "baths": 2,
+      "garage": 1,
+      "sqm": 161,
+      "price": "$340,000",
+      "frontage": "10m+",
+      "tier": "mid"
+    },
+    {
+      "name": "Dublin",
+      "builder": "Dare Homes",
+      "beds": 4,
+      "baths": 2,
+      "garage": 2,
+      "sqm": 180,
+      "price": "$395,000",
+      "frontage": "12.5m+",
+      "tier": "mid"
+    },
+    {
+      "name": "Almada 210",
+      "builder": "Dare Homes",
+      "beds": 4,
+      "baths": 2,
+      "garage": 2,
+      "sqm": 211,
+      "price": "$450,000",
+      "frontage": "12.5m+",
+      "tier": "mid"
+    },
+    {
+      "name": "Catalina",
+      "builder": "Dare Homes",
+      "beds": 4,
+      "baths": 2,
+      "garage": 2,
+      "sqm": 210,
+      "price": "$490,000",
+      "frontage": "14m+",
+      "tier": "premium"
+    },
+    {
+      "name": "Kirra",
+      "builder": "Oxford Green Homes",
+      "beds": 3,
+      "baths": 2,
+      "garage": 2,
+      "sqm": 168,
+      "price": "$380,000",
+      "frontage": "12.5m+",
+      "tier": "mid"
+    },
+    {
+      "name": "Ella",
+      "builder": "Oxford Green Homes",
+      "beds": 4,
+      "baths": 2,
+      "garage": 2,
+      "sqm": 195,
+      "price": "$435,000",
+      "frontage": "12.5m+",
+      "tier": "mid"
+    },
+    {
+      "name": "Glendale",
+      "builder": "Oxford Green Homes",
+      "beds": 4,
+      "baths": 2,
+      "garage": 2,
+      "sqm": 235,
+      "price": "$510,000",
+      "frontage": "14m+",
+      "tier": "premium"
+    },
+    {
+      "name": "Fintona",
+      "builder": "Oxford Green Homes",
+      "beds": 5,
+      "baths": 3,
+      "garage": 2,
+      "sqm": 280,
+      "price": "$580,000",
+      "frontage": "14m+",
+      "tier": "premium"
+    }
+  ],
+  "SUBURB_DATA": {
+    "oaklandestate": {
+      "schools": [
+        "Beaudesert State School (1.2km)",
+        "St Mary's Catholic Primary (2km)",
+        "Beaudesert SHS (1.5km)"
+      ],
+      "commute": "65 min to Brisbane CBD",
+      "amenities": [
+        "Beaudesert Town Centre (1km)",
+        "Beaudesert Hospital (2km)",
+        "Scenic Rim Regional Library"
+      ],
+      "medianPrice": "$485,000",
+      "growth": "+8.2% annual"
+    },
+    "woodchester": {
+      "schools": [
+        "Gatton State School (3km)",
+        "Faith Lutheran College (5km)",
+        "Lockyer District SHS (4km)"
+      ],
+      "commute": "70 min to Brisbane CBD",
+      "amenities": [
+        "Gatton Town Centre (3km)",
+        "Lake Apex (2km)",
+        "University of Qld Gatton Campus (5km)"
+      ],
+      "medianPrice": "$420,000",
+      "growth": "+12.5% annual"
+    },
+    "lakeviewestate": {
+      "schools": [
+        "Gatton State School (2km)",
+        "Faith Lutheran College (4km)"
+      ],
+      "commute": "70 min to Brisbane CBD",
+      "amenities": [
+        "Gatton Town Centre (2km)",
+        "Lake Apex Park",
+        "Lockyer Valley Cultural Centre"
+      ],
+      "medianPrice": "$420,000",
+      "growth": "+12.5% annual"
+    },
+    "sorensenrise": {
+      "schools": [
+        "Southside State School (2km)",
+        "Victory College (5km)",
+        "Gympie SHS (5km)"
+      ],
+      "commute": "90 min to Sunshine Coast",
+      "amenities": [
+        "Gympie Town Centre (4km)",
+        "Mary Valley Rail Trail",
+        "Gympie Aquatic Centre"
+      ],
+      "medianPrice": "$385,000",
+      "growth": "+9.8% annual"
+    },
+    "riverina": {
+      "schools": [
+        "Emmanuel College (3km)",
+        "All Saints Anglican (2km)",
+        "Nerang SHS (4km)"
+      ],
+      "commute": "15 min to Surfers Paradise",
+      "amenities": [
+        "Cbus Super Stadium (2km)",
+        "Pacific Fair (10km)",
+        "Carrara Markets"
+      ],
+      "medianPrice": "$820,000",
+      "growth": "+6.1% annual"
+    },
+    "peregian": {
+      "schools": [
+        "Coolum State School (5km)",
+        "St Andrew's Anglican (8km)"
+      ],
+      "commute": "90 min to Brisbane CBD, 20 min to Noosa",
+      "amenities": [
+        "Peregian Beach (3km)",
+        "Noosa National Park (15km)",
+        "Peregian Village"
+      ],
+      "medianPrice": "$950,000",
+      "growth": "+7.3% annual"
+    },
+    "bellmere": {
+      "schools": [
+        "Caboolture East State School (3km)",
+        "Grace Lutheran College (5km)"
+      ],
+      "commute": "50 min to Brisbane CBD",
+      "amenities": [
+        "Morayfield Shopping Centre (5km)",
+        "Caboolture Hospital (6km)",
+        "Abbey Museum"
+      ],
+      "medianPrice": "$580,000",
+      "growth": "+11.2% annual"
+    },
+    "hoya": {
+      "schools": [
+        "Boonah State School (5km)",
+        "Boonah SHS (5km)"
+      ],
+      "commute": "75 min to Brisbane CBD",
+      "amenities": [
+        "Boonah Town Centre (5km)",
+        "Lake Moogerah (15km)",
+        "Mt French Lookout"
+      ],
+      "medianPrice": "$520,000",
+      "growth": "+10.5% annual"
+    },
+    "barrensroad": {
+      "schools": [
+        "Ripley Valley State School (2km)",
+        "Faith Lutheran College Plainland (15km)"
+      ],
+      "commute": "45 min to Brisbane CBD",
+      "amenities": [
+        "Orion Springfield Central (10km)",
+        "Ripley Town Centre (planned)",
+        "Flinders-Goolman Conservation"
+      ],
+      "medianPrice": "$620,000",
+      "growth": "+14.1% annual"
+    }
+  },
+  "DESIGN_IMAGES": {
+    "FRD Classic 170": "https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R1_10_Gable-Hampton_Fairview-20_230523-1.jpg",
+    "FRD Ranch 210": "https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R1_10_Gable_Hillcrest-16_DS_230530-1-scaled.jpg",
+    "FRD Hampton 230": "https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R2_12.5_Hamptons_Silverwood-45_LS_240321.jpg",
+    "FRD Estate 280": "https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R2_12.5_Hip_Silverwood-45_LS_240321.jpg",
+    "Hillcrest 18": "https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R1_10_Hip_Hillcrest-16_DS_230530-scaled.jpg",
+    "Southcote 23": "https://qld.creationhomes.com.au/wp-content/uploads/2024/07/R1_12.5_Flat_Southcote-23_LS_230524-scaled.jpg",
+    "Willow 26": "https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R2_12.5_Hamptons_Brookside-33_LS3_230428.jpg",
+    "Fernbrook 28": "https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R2_12.5_Gable_Silverwood-45_LS_240321.jpg",
+    "Marseille": "https://framerusercontent.com/images/4SYNhhT0LE7A7F9ibPpaMypqCVU.jpg?scale-down-to=1024",
+    "Dublin": "https://framerusercontent.com/images/8jJn3N4PRgDX1wwiJWy3Iy251vY.jpg?scale-down-to=1024",
+    "Almada 210": "https://framerusercontent.com/images/MR5sh6ih0HrjUC2Gu5VL5LriU0.jpg?scale-down-to=1024",
+    "Catalina": "https://framerusercontent.com/images/PWYwpjw5FfGTUDtL5wUQ2nt941Q.jpg?scale-down-to=1024",
+    "Kirra": "https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R1_10_Skillion_Hillcrest-16_LS_230530-scaled.jpg",
+    "Ella": "https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R1_10_Flat_Hillcrest-16_LS_230524-scaled.jpg",
+    "Glendale": "https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R2_12.5_Flat_Brookside-33_LS_230524.jpg",
+    "Fintona": "https://qld.creationhomes.com.au/wp-content/uploads/2023/02/R2_12.5_Gable_Brookside-33_LS_230523.jpg"
+  },
+  "DESIGN_DESCRIPTIONS": {
+    "FRD Classic 170": "A compact single-storey home perfect for first buyers or investors. Three bedrooms, open-plan living flowing to the alfresco, and a functional kitchen. Proven FRD quality at an entry price point.",
+    "FRD Ranch 210": "A generous single-storey with four bedrooms, two bathrooms, and double garage. The open-plan living hub connects kitchen, dining and lounge with seamless flow to outdoor entertaining.",
+    "FRD Hampton 230": "A smart double-storey with living downstairs and sleeping upstairs. Four bedrooms, double garage, and the signature FRD Hamptons facade. Perfect for families on standard lots.",
+    "FRD Estate 280": "FRD's premium double-storey - five bedrooms, three bathrooms, and expansive living across two levels. Multiple living zones, butler's pantry option, and architectural facade.",
+    "Hillcrest 18": "A thoughtful single-storey designed for 10m lots. Four bedrooms, two bathrooms, and a seamless flow from kitchen to living to alfresco. Proves you don't need a wide lot to live well.",
+    "Southcote 23": "Generous proportions and a smart floorplan. The open-plan hub connects kitchen, dining and living, while four bedrooms are zoned for privacy. Practical everyday living.",
+    "Willow 26": "A clever double-storey that delivers space on a narrow lot. Four bedrooms upstairs with the master suite enjoying walk-in robe and ensuite. Open-plan living downstairs flows to alfresco.",
+    "Fernbrook 28": "A striking double-storey with five bedrooms and three bathrooms. Downstairs is designed for entertaining - open kitchen, living and dining flowing to the alfresco. Upstairs is a private family retreat.",
+    "Marseille": "Everyday moments feel elevated in the Marseille. Soft light, stylish finishes and a thoughtful layout create a warm, welcoming home with open-plan spaces alongside restful corners.",
+    "Dublin": "The Dublin delivers generous living with a practical footprint. An expansive open-plan zone anchors the home, with the master suite privately positioned for a true retreat.",
+    "Almada 210": "Centred around a light-filled open-plan kitchen, dining and living space that flows effortlessly to the rear alfresco. The master suite is thoughtfully positioned for privacy.",
+    "Catalina": "Architecturally considered with a focus on natural light and connection. The Catalina's open-plan living is complemented by distinct zones for rest and retreat. Feels larger than its footprint.",
+    "Kirra": "Purpose-built for Queensland's climate and lifestyle. Open-plan living with seamless indoor-outdoor flow, three bedrooms, and a compact yet functional kitchen. Ideal for first buyers.",
+    "Ella": "A single-storey family home with four bedrooms, open-plan living, and flexible spaces. The Ella adapts to your lifestyle - from home office to kids' play area.",
+    "Glendale": "A family favourite with multiple living zones, four bedrooms, and a gourmet kitchen. The Glendale's flexible floorplan adapts to your lifestyle with room to grow.",
+    "Fintona": "A premium double-storey with five bedrooms, three bathrooms, and statement living spaces. Ground floor features a grand open-plan area, while upstairs provides a private family wing."
+  },
+  "PAST_PROJECTS": [
+    {
+      "name": "Brookdale Estate",
+      "suburb": "Morayfield",
+      "region": "Moreton Bay",
+      "lots": 320,
+      "year": "2024",
+      "img": "img/brookdale.jpg"
+    },
+    {
+      "name": "At Nineteen",
+      "suburb": "Caloundra West",
+      "region": "Sunshine Coast",
+      "lots": 180,
+      "year": "2023",
+      "img": "img/atnineteen.jpg"
+    },
+    {
+      "name": "Eade Street",
+      "suburb": "Ormiston",
+      "region": "Redlands",
+      "lots": 24,
+      "year": "2024",
+      "img": "img/eade.jpg"
+    },
+    {
+      "name": "Northpine Rise",
+      "suburb": "Brendale",
+      "region": "Moreton Bay",
+      "lots": 96,
+      "year": "2023",
+      "img": "img/northpine.jpg"
+    },
+    {
+      "name": "Hellidon Views",
+      "suburb": "Hellidon",
+      "region": "Lockyer Valley",
+      "lots": 55,
+      "year": "2022",
+      "img": "img/hellidon.jpg"
+    }
+  ],
+  "BUILDER_PROFILES": {
+    "frd": {
+      "heroImg": "https://frdhomes.com.au/wp-content/uploads/2026/05/FRD-Homes-Contemporary-Greenbank.png",
+      "tagline": "We don't just build homes. We deliver repeatable, scalable results that perform in southeast Queensland's growth corridors.",
+      "founderName": "Director & Founder",
+      "founderQuote": "As Director and Founder of FRD Homes, I'm proud to lead a business that exists to do more than just build houses - we build futures. Our mission is simple: deliver quality homes, built right, for a fair price so more hard-working Australians can step into the property market with confidence.",
+      "founderImg": "",
+      "stats": [
+        {
+          "val": "75+",
+          "label": "Home Designs"
+        },
+        {
+          "val": "2017",
+          "label": "Est."
+        },
+        {
+          "val": "SEQ",
+          "label": "Coverage"
+        },
+        {
+          "val": "QBCC",
+          "label": "Licensed"
+        }
+      ],
+      "trust": [
+        "QBCC Licensed",
+        "Fixed Price",
+        "Wholesale Pricing",
+        "Developer Trusted"
+      ],
+      "diffs": [
+        {
+          "icon": "✔",
+          "title": "Proven Product",
+          "desc": "Built before. Sold before. Leased before. You're buying a proven product, not a prototype."
+        },
+        {
+          "icon": "✔",
+          "title": "Consistent Quality",
+          "desc": "The same quality, delivery window and beautiful finish - whether it's one home or 100."
+        },
+        {
+          "icon": "✔",
+          "title": "Wholesale Pricing",
+          "desc": "No retail markup. FRD delivers directly to buyers through trusted project partners at wholesale rates."
+        },
+        {
+          "icon": "✔",
+          "title": "Trusted by Developers",
+          "desc": "The project partner developers and investors come back to. We do what we say we will."
+        },
+        {
+          "icon": "✔",
+          "title": "Master Design Range",
+          "desc": "Tried and tested designs paired with curated facades and colour schemes to create 75+ home options."
+        },
+        {
+          "icon": "✔",
+          "title": "SEQ Growth Corridors",
+          "desc": "Focused on southeast Queensland where new homes are needed most."
+        }
+      ],
+      "inclusions": [
+        "Colorbond Roof",
+        "Stone Benchtops",
+        "900mm Cooktop",
+        "Tiled Wet Areas",
+        "LED Downlights",
+        "Double Garage",
+        "Termite Protection",
+        "NBN Ready",
+        "Ceiling Fans",
+        "Rendered Facade",
+        "Security Screens",
+        "Clothesline + Letterbox"
+      ],
+      "gallery": [
+        "https://frdhomes.com.au/wp-content/uploads/2026/05/FRD-Homes-Contemporary-Greenbank.png",
+        "https://frdhomes.com.au/wp-content/uploads/2026/05/FRD-Homes-Hamptons-galley-Kitchen.jpg",
+        "https://frdhomes.com.au/wp-content/uploads/2026/05/FRD-Homes-contemporary-kitchen.jpg",
+        "https://frdhomes.com.au/wp-content/uploads/2026/05/FRD-Homes-Park-Ridge.png",
+        "https://frdhomes.com.au/wp-content/uploads/2026/05/FRD-Homes-Modern-kitchen.jpg"
+      ]
+    },
+    "creation": {
+      "heroImg": "https://qld.creationhomes.com.au/wp-content/uploads/2024/07/R1_12.5_Skillion_Southcote-23_LS_230530-scaled.jpg",
+      "tagline": "HIA Award-winning Queensland home builder - 2,000+ homes each year, from detached homes to large-scale townhome projects. Creative by nature. Functional by design.",
+      "founderName": "",
+      "founderQuote": "",
+      "founderImg": "",
+      "stats": [
+        {
+          "val": "2,000+",
+          "label": "Homes/Year"
+        },
+        {
+          "val": "#1",
+          "label": "Semi-Detached"
+        },
+        {
+          "val": "20+",
+          "label": "Display Homes"
+        },
+        {
+          "val": "HIA",
+          "label": "Award Winner"
+        }
+      ],
+      "trust": [
+        "HIA Top 20 Builder",
+        "Master Builders Winner",
+        "Fixed Price Contracts",
+        "National Builder"
+      ],
+      "diffs": [
+        {
+          "icon": "✔",
+          "title": "Award-Winning Designs",
+          "desc": "HIA QLD Project Home of the Year, Master Builders Winner - industry-recognised quality."
+        },
+        {
+          "icon": "✔",
+          "title": "National Scale, Local Service",
+          "desc": "Australia's #1 semi-detached builder five years running, with dedicated QLD operations."
+        },
+        {
+          "icon": "✔",
+          "title": "Premium Inclusions Standard",
+          "desc": "Stone benchtops, 2590mm ceilings, 900mm appliances come standard - not as upgrades."
+        },
+        {
+          "icon": "✔",
+          "title": "Display Home Network",
+          "desc": "20+ display homes across Queensland - walk through before you commit."
+        },
+        {
+          "icon": "✔",
+          "title": "Resolve Finance Partnership",
+          "desc": "Expert mortgage guidance and support from day one."
+        },
+        {
+          "icon": "✔",
+          "title": "Steel Frame Construction",
+          "desc": "Award-winning steel frame builds - built to last."
+        }
+      ],
+      "inclusions": [
+        "2590mm Ceiling Height",
+        "Stone Benchtops",
+        "900mm Appliances",
+        "Ducted Air Con",
+        "Tiled Wet Areas",
+        "LED Downlights",
+        "Double Lock-Up Garage",
+        "Steel Frame",
+        "Premium Tapware",
+        "Timber-Look Flooring",
+        "Rendered Facade",
+        "Structural Warranty"
+      ],
+      "gallery": [
+        "https://qld.creationhomes.com.au/wp-content/uploads/2024/07/R1_12.5_Skillion_Southcote-23_LS_230530-scaled.jpg",
+        "https://qld.creationhomes.com.au/wp-content/uploads/2026/03/read-land-promo.jpg",
+        "https://qld.creationhomes.com.au/wp-content/uploads/2025/07/11-1024x1024.png",
+        "https://qld.creationhomes.com.au/wp-content/uploads/2025/07/2-1024x1024.png",
+        "https://qld.creationhomes.com.au/wp-content/uploads/2024/07/R1_12.5_Skillion_Southcote-23_LS_230530-scaled.jpg"
+      ]
+    },
+    "dare": {
+      "heroImg": "https://framerusercontent.com/images/HGdxHW56Y6bjSsLKxYLhp3le99I.jpg?scale-down-to=1024&width=2000&height=1333",
+      "tagline": "We've spent our lives building homes for Queenslanders. 1,800+ homes delivered with upfront designs, transparent pricing, and personal service from start to finish.",
+      "founderName": "Tom Egan - Managing Director",
+      "founderQuote": "At 18, I set out to build my first home. Halfway through, my builder folded. All I had was an unfinished frame and a choice: give up, or finish it myself. I rallied my mates, rolled up my sleeves, and saw it through. That experience gave me the resolve to change how this industry works.",
+      "founderImg": "https://framerusercontent.com/images/AprgxoyOs46Jf793JD3wczMxUtQ.jpg?width=400&height=400",
+      "stats": [
+        {
+          "val": "1,800+",
+          "label": "Homes Built"
+        },
+        {
+          "val": "30+",
+          "label": "Years"
+        },
+        {
+          "val": "20+",
+          "label": "Designs"
+        },
+        {
+          "val": "QBCC",
+          "label": "Licensed"
+        }
+      ],
+      "trust": [
+        "HIA Member",
+        "QBCC Licensed",
+        "Fixed Price Contracts",
+        "Family Owned"
+      ],
+      "diffs": [
+        {
+          "icon": "✔",
+          "title": "Upfront Designs",
+          "desc": "Every design is thoughtfully curated and priced before you walk in. No surprises, no hidden costs."
+        },
+        {
+          "icon": "✔",
+          "title": "Fixed Price Guarantee",
+          "desc": "The price you sign is the price you pay. Full transparency from day one."
+        },
+        {
+          "icon": "✔",
+          "title": "Personal Service",
+          "desc": "Deal directly with the people who build your home. Not a call centre."
+        },
+        {
+          "icon": "✔",
+          "title": "Queensland Born",
+          "desc": "30+ years building across SEQ. We know the soil, the climate, the covenants."
+        },
+        {
+          "icon": "✔",
+          "title": "1,800+ Homes Delivered",
+          "desc": "A proven track record spanning three decades of Queensland builds."
+        },
+        {
+          "icon": "✔",
+          "title": "Quality Trades Network",
+          "desc": "Long-standing relationships with premium local trades who know our standards."
+        }
+      ],
+      "inclusions": [
+        "2590mm Ceiling Height",
+        "Colorbond Roof",
+        "Stone Benchtops",
+        "900mm Appliances",
+        "Tiled Ensuite + Bathroom",
+        "LED Downlights",
+        "Double Garage",
+        "Termite Protection",
+        "NBN Ready",
+        "Timber-Look Flooring",
+        "Rendered Facade",
+        "6 Year Warranty"
+      ],
+      "gallery": [
+        "https://framerusercontent.com/images/HGdxHW56Y6bjSsLKxYLhp3le99I.jpg?scale-down-to=512&width=1200&height=800",
+        "https://framerusercontent.com/images/nNCyCPdGshL81u34qVwK6jPzAso.jpg?width=600&height=400",
+        "https://framerusercontent.com/images/QwyrGqeKIeb73onAxOWMnpMHbHs.jpg?width=600&height=400",
+        "https://framerusercontent.com/images/lH6oSEDbTnXNHoqYQqH6JXY6aV0.jpg?width=600&height=400",
+        "https://framerusercontent.com/images/7N3UQTEUq2LA6L0iTYkkEMTfBeg.jpg?width=600&height=400"
+      ]
+    },
+    "oxfordgreen": {
+      "heroImg": "https://images.squarespace-cdn.com/content/v1/6886b0e111cb6e56df28dfc5/1754537827008-HOEFG3FZ514HCWHD157H/Coastal_15-03x1500.jpg",
+      "tagline": "An innovative, Australian-designed construction method delivering unmatched efficiency and a higher standard of quality. 10-week builds with EarthWall technology.",
+      "founderName": "",
+      "founderQuote": "",
+      "founderImg": "",
+      "stats": [
+        {
+          "val": "10",
+          "label": "Week Builds"
+        },
+        {
+          "val": "7+",
+          "label": "Star Energy"
+        },
+        {
+          "val": "3x",
+          "label": "Longer Lifespan"
+        },
+        {
+          "val": "QLD",
+          "label": "Manufactured"
+        }
+      ],
+      "trust": [
+        "EarthWall Technology",
+        "Off-Site Construction",
+        "7+ Star NatHERS",
+        "Australian Designed"
+      ],
+      "diffs": [
+        {
+          "icon": "✔",
+          "title": "10-Week Build Time",
+          "desc": "By manufacturing off-site, we halve the average build time - saving tens of thousands in holding costs."
+        },
+        {
+          "icon": "✔",
+          "title": "EarthWall Construction",
+          "desc": "Proprietary pre-cast concrete panel system - greater strength and long-term performance."
+        },
+        {
+          "icon": "✔",
+          "title": "7+ Star Energy Rating",
+          "desc": "Every home engineered to exceed the national benchmark - long-term savings."
+        },
+        {
+          "icon": "✔",
+          "title": "3x Longer Lifespan",
+          "desc": "Superior structural performance and a lifespan up to three times longer than conventional."
+        },
+        {
+          "icon": "✔",
+          "title": "Factory Precision",
+          "desc": "Manufactured off-site in a controlled environment, minimising human error."
+        },
+        {
+          "icon": "✔",
+          "title": "Massive Cost Savings",
+          "desc": "Reduced build time means reduced holding costs, site costs, and loan interest."
+        }
+      ],
+      "inclusions": [
+        "EarthWall Panels",
+        "7+ Star Energy",
+        "Colorbond Roof",
+        "Stone Benchtops",
+        "900mm Appliances",
+        "LED Downlights",
+        "Double Garage",
+        "Termite Resistant",
+        "Solar Ready",
+        "Premium Insulation",
+        "Water-Saving Fixtures",
+        "Structural Warranty"
+      ],
+      "gallery": [
+        "https://images.squarespace-cdn.com/content/v1/6886b0e111cb6e56df28dfc5/1754537827008-HOEFG3FZ514HCWHD157H/Coastal_15-03x1500.jpg",
+        "https://images.squarespace-cdn.com/content/v1/6886b0e111cb6e56df28dfc5/03e464ca-a5db-4c69-94d4-fd1e9507c582/Contemporary_15-03x1500.jpg",
+        "https://images.squarespace-cdn.com/content/v1/6886b0e111cb6e56df28dfc5/1773720462621-KCQYCW24YOOMK5G1672E/Carmel+R4+1000+x+1500.png",
+        "https://images.squarespace-cdn.com/content/v1/6886b0e111cb6e56df28dfc5/1773720523855-772Y2GCIR8S8ZRQJSQB8/Brooklyn+R4+1000+x+1500.png",
+        "https://images.squarespace-cdn.com/content/v1/6886b0e111cb6e56df28dfc5/1773720598932-DFNU2FW95MYEHAA7CQTG/Arcadia+R4+1000+x+1500.png"
+      ]
+    }
+  }
+}

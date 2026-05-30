@@ -471,7 +471,48 @@
  #builders { background: var(--bg-alt); }
 
  .builders-grid {
- display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;
+ display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+ }
+
+ .standard-builders-grid {
+ display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+ }
+
+ .standard-builder-card {
+ background: var(--bg); border-radius: var(--radius);
+ border: 1px solid var(--border); padding: 20px;
+ display: flex; align-items: center; gap: 14px;
+ transition: var(--transition);
+ }
+ .standard-builder-card:hover {
+ transform: translateY(-3px); box-shadow: var(--card-shadow-hover);
+ border-color: rgba(59,125,221,0.25);
+ }
+ .standard-builder-avatar {
+ width: 48px; height: 48px; border-radius: 10px;
+ display: flex; align-items: center; justify-content: center;
+ font-size: 18px; font-weight: 900; color: #fff;
+ flex-shrink: 0; letter-spacing: -0.5px;
+ }
+ .standard-builder-name {
+ font-size: 14px; font-weight: 800; color: var(--primary);
+ letter-spacing: -0.3px; margin-bottom: 3px;
+ }
+ .standard-builder-tier {
+ font-size: 10px; font-weight: 600; color: var(--text-light);
+ text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
+ }
+ .standard-builder-price {
+ font-size: 12px; font-weight: 700; color: var(--accent);
+ }
+
+ .premium-badge {
+ display: inline-flex; align-items: center; gap: 5px;
+ background: linear-gradient(135deg, rgba(200,169,110,0.15), rgba(200,169,110,0.05));
+ border: 1px solid rgba(200,169,110,0.4); border-radius: 6px;
+ padding: 3px 10px; font-size: 10px; font-weight: 700;
+ color: var(--warm); letter-spacing: 0.5px; text-transform: uppercase;
+ margin-bottom: 8px;
  }
 
  .builder-card {
@@ -969,7 +1010,8 @@
 
  /* ─── RESPONSIVE ─────────────────────────────────────────── */
  @media (max-width: 1100px) {
- .builders-grid { grid-template-columns: repeat(3, 1fr); }
+ .builders-grid { grid-template-columns: repeat(2, 1fr); }
+ .standard-builders-grid { grid-template-columns: repeat(3, 1fr); }
  .designs-grid { grid-template-columns: repeat(3, 1fr); }
  .projects-grid { grid-template-columns: repeat(2, 1fr); }
  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
@@ -988,6 +1030,7 @@
  .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
  .builders-stats { grid-template-columns: repeat(2, 1fr); }
  .builders-grid { grid-template-columns: repeat(2, 1fr); }
+ .standard-builders-grid { grid-template-columns: repeat(2, 1fr); }
  .nav-inner { height: 56px; padding: 0 16px; }
  .nav-links { display: none; }
  .nav-links.open {
@@ -1017,6 +1060,7 @@
  .projects-grid { grid-template-columns: 1fr; }
  .project-img { height: 200px; }
  .builders-grid { grid-template-columns: 1fr 1fr; }
+ .standard-builders-grid { grid-template-columns: repeat(2, 1fr); }
  .designs-grid { grid-template-columns: 1fr 1fr; }
  .design-img { height: 140px; }
  .services-grid { grid-template-columns: 1fr; }
@@ -1047,6 +1091,7 @@
  section { padding: 40px 14px; }
  .designs-grid { grid-template-columns: 1fr; }
  .builders-grid { grid-template-columns: 1fr; }
+ .standard-builders-grid { grid-template-columns: 1fr 1fr; }
  .hero-stats { grid-template-columns: repeat(2, 1fr); }
  .stat-item { padding: 12px 6px; }
  .stat-number { font-size: 18px; }
@@ -1726,7 +1771,7 @@
  <div class="trust-bar-inner">
   <div class="trust-bar-item"><div class="trust-bar-num">18</div><div class="trust-bar-label">Active Projects</div></div>
   <div class="trust-bar-item"><div class="trust-bar-num">4,500+</div><div class="trust-bar-label">Lots Available</div></div>
-  <div class="trust-bar-item"><div class="trust-bar-num">4</div><div class="trust-bar-label">Builder Partners</div></div>
+  <div class="trust-bar-item"><div class="trust-bar-num">12</div><div class="trust-bar-label">Builder Partners</div></div>
   <div class="trust-bar-item"><div class="trust-bar-num">$0</div><div class="trust-bar-label">Agency Fees To You</div></div>
  </div>
 </section>
@@ -1822,11 +1867,24 @@
 <!-- ─── BUILDERS ─── -->
 <section id="builders" style="padding-top:24px">
  <div class="section-inner">
- <div class="section-header fade-in">
- <h2 class="section-title">Our Builders</h2>
- <p class="section-subtitle">Browse designs from our trusted builder network</p>
- </div>
- <div class="builders-grid" id="buildersGrid"></div>
+
+  <!-- PREMIUM -->
+  <div class="section-header fade-in" style="margin-bottom:32px">
+   <div class="section-badge" style="background:rgba(200,169,110,0.12);border-color:rgba(200,169,110,0.3);color:var(--warm)">⭐ Queensland's Premium Builders</div>
+   <h2 class="section-title">Our Preferred Builder Partners</h2>
+   <p class="section-subtitle">Hand-selected, vetted, and price-benchmarked. These builders offer exclusive wholesale rates to ProjX buyers — you won't find cheaper going direct.</p>
+  </div>
+  <div class="builders-grid" id="buildersGrid"></div>
+
+  <!-- STANDARD -->
+  <div style="margin-top:64px">
+   <div class="section-header fade-in" style="margin-bottom:28px">
+    <h2 class="section-title" style="font-size:22px">More Builders in Our Network</h2>
+    <p class="section-subtitle">Additional builders active across ProjX estates. All enquiries routed through ProjX — one point of contact for land and build.</p>
+   </div>
+   <div class="standard-builders-grid fade-in" id="standardBuildersGrid"></div>
+  </div>
+
  </div>
 </section>
 
@@ -2104,10 +2162,20 @@
  ];
 
  const BUILDERS = [
- {id:'frd', name:'FRD Homes', color:'#059669', tier:'Wholesale', tagline:'Queensland\'s #1 wholesale builder - proven, consistent, trusted', designs:4, priceRange:'$245k - $380k'},
- {id:'creation', name:'Creation Homes', color:'#3B7DDD', tier:'Entry-Mid', tagline:'Award-winning QLD builder - fixed-price, premium inclusions', designs:4, priceRange:'$285k - $460k'},
- {id:'dare', name:'Dare Homes', color:'#1a1a2e', tier:'Mid-Range Retail', tagline:'1,800+ homes built - upfront designs, no hidden costs, personal service', designs:4, priceRange:'$320k - $480k'},
- {id:'oxfordgreen', name:'Oxford Green Homes', color:'#2d6a4f', tier:'Budget / Speed', tagline:'10-week builds - EarthWallTM construction, 7+ star energy, unmatched speed', designs:4, priceRange:'$220k - $340k'}
+ // ── PREMIUM PARTNERS ──────────────────────────────────────────────
+ {id:'frd', name:'FRD Homes', color:'#059669', tier:'Wholesale', tierGroup:'premium', tagline:'Queensland\'s #1 wholesale builder - proven, consistent, trusted', designs:4, priceRange:'$245k - $380k'},
+ {id:'creation', name:'Creation Homes', color:'#3B7DDD', tier:'Entry-Mid', tierGroup:'premium', tagline:'Award-winning QLD builder - fixed-price, premium inclusions', designs:4, priceRange:'$285k - $460k'},
+ {id:'dare', name:'Dare Homes', color:'#1a1a2e', tier:'Mid-Range Retail', tierGroup:'premium', tagline:'1,800+ homes built - upfront designs, no hidden costs, personal service', designs:4, priceRange:'$320k - $480k'},
+ {id:'oxfordgreen', name:'Oxford Green Homes', color:'#2d6a4f', tier:'Budget / Speed', tierGroup:'premium', tagline:'10-week builds - EarthWallTM construction, 7+ star energy, unmatched speed', designs:4, priceRange:'$220k - $340k'},
+ // ── STANDARD BUILDER NETWORK ──────────────────────────────────────
+ {id:'metricon', name:'Metricon', color:'#E63946', tier:'Volume Builder', tierGroup:'standard', tagline:'Australia\'s largest new home builder. Hundreds of designs across SEQ.', designs:0, priceRange:'$300k - $550k'},
+ {id:'avia', name:'Avia Homes', color:'#F4A261', tier:'Mid-Range', tierGroup:'standard', tagline:'Quality homes across SEQ growth corridors. Fixed-price contracts.', designs:0, priceRange:'$280k - $450k'},
+ {id:'gallery', name:'Gallery Homes', color:'#2A9D8F', tier:'Design-Led', tierGroup:'standard', tagline:'Architectural design meets everyday living. Award-winning facades.', designs:0, priceRange:'$320k - $520k'},
+ {id:'tribeca', name:'Tribeca Homes', color:'#6D6875', tier:'Boutique', tierGroup:'standard', tagline:'Boutique builder with a focus on quality finishes and personal service.', designs:0, priceRange:'$290k - $480k'},
+ {id:'bold', name:'Bold Living', color:'#264653', tier:'Contemporary', tierGroup:'standard', tagline:'Contemporary homes built bold. Modern facades, smart floorplans.', designs:0, priceRange:'$310k - $500k'},
+ {id:'pilgrim', name:'Pilgrim Homes', color:'#E9C46A', tier:'Entry-Level', tierGroup:'standard', tagline:'Accessible home ownership without compromise on quality or inclusions.', designs:0, priceRange:'$250k - $400k'},
+ {id:'gdev', name:'G Developments', color:'#457B9D', tier:'Developer-Builder', tierGroup:'standard', tagline:'Local developer-builder operating across SEQ estates. Strong regional presence.', designs:0, priceRange:'$270k - $430k'},
+ {id:'neptune', name:'Neptune Homes', color:'#1D3557', tier:'Local SEQ', tierGroup:'standard', tagline:'Proud local SEQ builder. Fixed-price H&L packages from Brisbane to the Gold Coast.', designs:0, priceRange:'$280k - $460k'}
  ];
 
  const DESIGNS = [
@@ -2589,34 +2657,51 @@
 
  // ─── BUILDERS ─────────────────────────────────────────────────────
  function renderBuilders() {
+ const premiumBuilders = BUILDERS.filter(function(b) { return b.tierGroup === 'premium'; });
+ const standardBuilders = BUILDERS.filter(function(b) { return b.tierGroup === 'standard'; });
+
+ // ─── PREMIUM GRID ────────────────────────────────────────────────
  const grid = document.getElementById('buildersGrid');
- // Builder cards show logos only (no facade images)
- grid.innerHTML = BUILDERS.map((b, i) => {
- // Per-builder logo styling for consistency
  const logoStyles = {
  'frd': 'max-height:70px;max-width:140px;',
  'creation': 'max-height:50px;max-width:50px;',
  'dare': 'max-height:50px;max-width:140px;',
  'oxfordgreen': 'max-height:50px;max-width:180px;'
  };
+ grid.innerHTML = premiumBuilders.map(function(b, i) {
  const logoStyle = logoStyles[b.id] || 'max-height:60px;max-width:160px;';
- const needsLabel = (b.id === 'creation'); // Creation icon has no text
-
- return `
- <div class="builder-card fade-in fade-in-delay-${i%4+1}" style="display:flex;flex-direction:column">
- <div style="height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg-alt);padding:20px;gap:8px">
- <img src="${BUILDER_LOGOS[b.id]}" alt="${b.name}" style="${logoStyle}object-fit:contain" onerror="this.onerror=null;this.style.display='none'"/>
- ${needsLabel ? '<div style="font-size:11px;font-weight:800;color:var(--primary);letter-spacing:1.5px;text-transform:uppercase">Creation Homes</div>' : ''}
- </div>
- <div style="padding:18px;flex:1;display:flex;flex-direction:column">
- <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:var(--bg-alt);color:var(--text-light);border:1px solid var(--border);display:inline-block;width:fit-content;margin-bottom:8px">${b.tier}</div>
- <div style="font-size:16px;font-weight:800;color:var(--primary);letter-spacing:-0.3px;margin-bottom:4px">${b.name}</div>
- <div style="font-size:11px;color:var(--text-light);margin-bottom:12px;line-height:1.5;flex:1">${b.tagline}</div>
- <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:14px">${b.priceRange}</div>
- <a href="#" class="btn-sm" style="display:block;text-align:center" onclick="event.preventDefault();openWizardForBuilder('${b.id}')">View Designs →</a>
- </div>
- </div>`;
+ const needsLabel = (b.id === 'creation');
+ return '<div class="builder-card fade-in fade-in-delay-' + (i%4+1) + '" style="display:flex;flex-direction:column">' +
+ '<div style="height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg-alt);padding:20px;gap:8px">' +
+ '<img src="' + (BUILDER_LOGOS[b.id] || '') + '" alt="' + b.name + '" style="' + logoStyle + 'object-fit:contain" onerror="this.onerror=null;this.style.display=\'none\'"/>' +
+ (needsLabel ? '<div style="font-size:11px;font-weight:800;color:var(--primary);letter-spacing:1.5px;text-transform:uppercase">Creation Homes</div>' : '') +
+ '</div>' +
+ '<div style="padding:18px;flex:1;display:flex;flex-direction:column">' +
+ '<div class="premium-badge">⭐ Premium Partner</div>' +
+ '<div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:4px;background:var(--bg-alt);color:var(--text-light);border:1px solid var(--border);display:inline-block;width:fit-content;margin-bottom:8px">' + b.tier + '</div>' +
+ '<div style="font-size:16px;font-weight:800;color:var(--primary);letter-spacing:-0.3px;margin-bottom:4px">' + b.name + '</div>' +
+ '<div style="font-size:11px;color:var(--text-light);margin-bottom:12px;line-height:1.5;flex:1">' + b.tagline + '</div>' +
+ '<div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:14px">' + b.priceRange + '</div>' +
+ '<a href="#" class="btn-sm" style="display:block;text-align:center" onclick="event.preventDefault();openWizardForBuilder(\'' + b.id + '\')">View Designs →</a>' +
+ '</div></div>';
  }).join('');
+
+ // ─── STANDARD GRID ───────────────────────────────────────────────
+ const stdGrid = document.getElementById('standardBuildersGrid');
+ if (stdGrid) {
+ stdGrid.innerHTML = standardBuilders.map(function(b) {
+ const initials = b.name.split(' ').slice(0,2).map(function(w) { return w[0]; }).join('');
+ return '<div class="standard-builder-card">' +
+ '<div class="standard-builder-avatar" style="background:' + b.color + '">' + initials + '</div>' +
+ '<div style="flex:1;min-width:0">' +
+ '<div class="standard-builder-name">' + b.name + '</div>' +
+ '<div class="standard-builder-tier">' + b.tier + '</div>' +
+ '<div class="standard-builder-price">' + b.priceRange + '</div>' +
+ '</div>' +
+ '<a href="#" onclick="event.preventDefault();openWizard(\'land\')" style="font-size:11px;font-weight:700;color:var(--accent);white-space:nowrap">Enquire →</a>' +
+ '</div>';
+ }).join('');
+ }
  }
 
  // ─── DESIGNS ──────────────────────────────────────────────────────

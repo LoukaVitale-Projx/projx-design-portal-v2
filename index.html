@@ -2254,10 +2254,12 @@
        DESIGN_DESCRIPTIONS = d.DESIGN_DESCRIPTIONS || {};
        BUILDER_LOGOS = d.BUILDER_LOGOS || {};
        BUILDER_TOUR_LINKS = d.BUILDER_TOUR_LINKS || {};
-       CHEAPEST_BUILD = Math.min(...DESIGNS.map(d => {
-         const n = parseInt((d.price||'0').replace(/[^0-9]/g,''));
-         return isNaN(n) ? 999999 : n;
-       }));
+       CHEAPEST_BUILD = DESIGNS.length
+       ? Math.min(...DESIGNS.map(d => {
+           const n = parseInt((d.price||'0').replace(/[^0-9]/g,''));
+           return isNaN(n) ? 999999 : n;
+         }))
+       : 245000; // fallback if DESIGNS is empty
      });
  }
 
@@ -2268,7 +2270,6 @@
   function getProjectImage(p) {
  return PROJECT_IMAGE_MAP[p.id] || 'img/oakland.jpg';
  }
- const PROJECT_IMAGES = Object.values(PROJECT_IMAGE_MAP);
 
  // ─── DATA ─────────────────────────────────────────────────────────
     // ─── SUBURB LIFESTYLE DATA ───────────────────────────────────────────────
@@ -2369,8 +2370,8 @@
 
  // ─── PHASE 3: LGA FILTER + SEARCH ─────────────────────────────────────────
  // Global state now managed by Store (aliases kept for compatibility)
- Object.defineProperty(window, 'currentLGAFilter', { get() { return Store.get('lga'); }, set(v) { Store.set('lga', v); } });
- Object.defineProperty(window, 'currentSearchQuery', { get() { return Store.get('search'); }, set(v) { Store.set('search', v); } });
+ Object.defineProperty(window, 'currentLGAFilter', { get() { return Store.get('lga'); }, set(v) { Store.set('lga', v); }, configurable: true, enumerable: true });
+ Object.defineProperty(window, 'currentSearchQuery', { get() { return Store.get('search'); }, set(v) { Store.set('search', v); }, configurable: true, enumerable: true });
 
  function initLGAFilter() {
    var regions = [];
@@ -2488,9 +2489,9 @@
    if (notice) notice.style.display = (matchCount === 0 && lga !== 'all') ? 'block' : 'none';
  }
 
- Object.defineProperty(window, 'currentStatusFilter', { get() { return Store.get('status'); }, set(v) { Store.set('status', v); } });
- Object.defineProperty(window, 'currentBudgetFilter', { get() { return Store.get('budget'); }, set(v) { Store.set('budget', v); } });
- Object.defineProperty(window, 'currentBudgetMode', { get() { return Store.get('budgetMode'); }, set(v) { Store.set('budgetMode', v); } });
+ Object.defineProperty(window, 'currentStatusFilter', { get() { return Store.get('status'); }, set(v) { Store.set('status', v); }, configurable: true, enumerable: true });
+ Object.defineProperty(window, 'currentBudgetFilter', { get() { return Store.get('budget'); }, set(v) { Store.set('budget', v); }, configurable: true, enumerable: true });
+ Object.defineProperty(window, 'currentBudgetMode', { get() { return Store.get('budgetMode'); }, set(v) { Store.set('budgetMode', v); }, configurable: true, enumerable: true });
  
 
  function switchBudgetMode(mode) {

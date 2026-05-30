@@ -574,6 +574,70 @@
  display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 36px;
  }
 
+ 
+ /* ─── PHASE 3: LGA FILTER & SEARCH ────────────────────────────── */
+ .lga-filter-row {
+   display: flex; gap: 8px; flex-wrap: nowrap; overflow-x: auto;
+   padding-bottom: 4px; margin-bottom: 12px; scrollbar-width: none;
+ }
+ .lga-filter-row::-webkit-scrollbar { display: none; }
+ .lga-chip {
+   flex-shrink: 0; font-family: 'Montserrat', sans-serif;
+   font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
+   padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--border);
+   background: var(--bg); color: var(--text-light); cursor: pointer;
+   transition: all 0.18s; white-space: nowrap;
+ }
+ .lga-chip:hover { border-color: var(--accent); color: var(--accent); background: rgba(59,125,221,0.06); }
+ .lga-chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+ .estate-search-wrap {
+   display: flex; align-items: center; gap: 8px;
+   background: var(--bg); border: 1.5px solid var(--border);
+   border-radius: 10px; padding: 0 14px; height: 38px;
+   transition: border-color 0.2s; margin-bottom: 12px; max-width: 320px;
+ }
+ .estate-search-wrap:focus-within { border-color: var(--accent); }
+ .estate-search-wrap input {
+   border: none; outline: none; font-family: 'Montserrat', sans-serif;
+   font-size: 12px; font-weight: 500; color: var(--text); background: transparent;
+   width: 100%;
+ }
+ .estate-search-wrap input::placeholder { color: var(--text-xlight); }
+
+ .filter-pills-row {
+   display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+   min-height: 28px; margin-bottom: 12px;
+ }
+ .filter-pill {
+   display: inline-flex; align-items: center; gap: 6px;
+   background: rgba(59,125,221,0.1); border: 1px solid rgba(59,125,221,0.3);
+   color: var(--accent); border-radius: 20px;
+   padding: 3px 10px 3px 12px; font-size: 11px; font-weight: 700;
+ }
+ .filter-pill-x {
+   cursor: pointer; font-size: 13px; line-height: 1;
+   opacity: 0.7; transition: opacity 0.15s;
+ }
+ .filter-pill-x:hover { opacity: 1; }
+ .filter-clear-all {
+   font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700;
+   color: var(--text-light); background: none; border: none; cursor: pointer;
+   text-decoration: underline; padding: 0;
+ }
+ .filter-clear-all:hover { color: var(--primary); }
+
+ .lga-dim { opacity: 0.35; pointer-events: none; filter: grayscale(0.5); }
+ .builder-lga-notice {
+   background: rgba(59,125,221,0.06); border: 1px dashed rgba(59,125,221,0.25);
+   border-radius: var(--radius); padding: 14px 18px; font-size: 12px;
+   color: var(--text-light); text-align: center; margin-top: 12px; grid-column: 1/-1;
+ }
+
+ @media (max-width: 640px) {
+   .estate-search-wrap { max-width: 100%; }
+ }
+
  .filter-chip {
  padding: 9px 20px; border-radius: 50px;
  font-family: 'Montserrat', sans-serif;
@@ -1864,6 +1928,25 @@
  </button>
  </div>
  </div>
+ <!-- LGA/REGION FILTER ROW -->
+ <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;margin-bottom:4px">
+  <div style="flex:1;min-width:0">
+   <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-xlight);margin-bottom:6px">Filter by Region</div>
+   <div class="lga-filter-row" id="lgaFilterRow">
+    <button class="lga-chip active" data-lga="all" onclick="filterByLGA('all')">All Regions</button>
+   </div>
+  </div>
+  <div style="flex-shrink:0">
+   <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-xlight);margin-bottom:6px">Search</div>
+   <div class="estate-search-wrap">
+    <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-xlight);flex-shrink:0"><circle cx="9" cy="9" r="7"/><line x1="16" y1="16" x2="12.5" y2="12.5"/></svg>
+    <input type="text" id="estateSearchInput" placeholder="Estate or suburb..." oninput="searchEstates(this.value)">
+   </div>
+  </div>
+ </div>
+ <!-- FILTER PILLS -->
+ <div class="filter-pills-row" id="filterPillsRow"></div>
+
  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
  <div style="display:flex;gap:4px;background:var(--bg-alt);border:1px solid var(--border);border-radius:10px;padding:4px;margin-right:8px">
  <button id="budgetModePackage" style="padding:6px 14px;border:none;border-radius:8px;font-family:Montserrat,sans-serif;font-size:12px;font-weight:600;cursor:pointer;background:var(--primary);color:#fff;transition:all 0.2s" onclick="switchBudgetMode('package')">Package Budget</button>
@@ -1909,6 +1992,7 @@
     <p class="section-subtitle">Additional builders active across ProjX estates. All enquiries routed through ProjX — one point of contact for land and build.</p>
    </div>
    <div class="standard-builders-grid fade-in" id="standardBuildersGrid"></div>
+   <div id="builderLGANotice" class="builder-lga-notice" style="display:none">No builders in our network currently cover this region. <a href="#" onclick="event.preventDefault();openWizard('land')" style="color:var(--accent);font-weight:700">Enquire with ProjX →</a></div>
   </div>
 
  </div>
@@ -2538,6 +2622,8 @@
  renderBuilders();
  renderPastProjects();
  initObserver();
+ initLGAFilter();
+ renderFilterPills();
  }
 
  // ─── RENDER PAST PROJECTS ──────────────────────────────────────────
@@ -2571,6 +2657,111 @@
  // ─── PROJECTS ─────────────────────────────────────────────────────
  function getProjectStatus(p) {
  return p.minPrice > 0 ? 'available' : 'coming-soon';
+ }
+
+
+ // ─── PHASE 3: LGA FILTER + SEARCH ─────────────────────────────────────────
+ var currentLGAFilter = 'all';
+ var currentSearchQuery = '';
+
+ function initLGAFilter() {
+   var regions = [];
+   PROJECTS.forEach(function(p) {
+     if (p.region && regions.indexOf(p.region) === -1) regions.push(p.region);
+   });
+   regions.sort();
+   var row = document.getElementById('lgaFilterRow');
+   if (!row) return;
+   // Keep "All Regions" chip, append region chips
+   regions.forEach(function(region) {
+     var btn = document.createElement('button');
+     btn.className = 'lga-chip';
+     btn.setAttribute('data-lga', region);
+     btn.textContent = region;
+     btn.onclick = function() { filterByLGA(region); };
+     row.appendChild(btn);
+   });
+ }
+
+ function filterByLGA(lga) {
+   currentLGAFilter = lga;
+   document.querySelectorAll('.lga-chip').forEach(function(btn) {
+     btn.classList.toggle('active', btn.getAttribute('data-lga') === lga);
+   });
+   renderProjects(null);
+   updateBuildersByLGA(lga);
+   renderFilterPills();
+ }
+
+ function searchEstates(query) {
+   currentSearchQuery = query.toLowerCase().trim();
+   renderProjects(null);
+   renderFilterPills();
+ }
+
+ function clearAllFilters() {
+   currentLGAFilter = 'all';
+   currentSearchQuery = '';
+   currentStatusFilter = 'all';
+   currentBudgetFilter = 'all';
+   var searchInput = document.getElementById('estateSearchInput');
+   if (searchInput) searchInput.value = '';
+   document.querySelectorAll('.lga-chip').forEach(function(btn) {
+     btn.classList.toggle('active', btn.getAttribute('data-lga') === 'all');
+   });
+   document.querySelectorAll('.estate-filter').forEach(function(btn) {
+     btn.classList.toggle('active', btn.dataset.filter === 'all');
+   });
+   document.querySelectorAll('.estate-budget').forEach(function(btn) {
+     btn.classList.toggle('active', btn.dataset.budget === 'all');
+   });
+   updateBuildersByLGA('all');
+   renderProjects(null);
+   renderFilterPills();
+ }
+
+ function renderFilterPills() {
+   var row = document.getElementById('filterPillsRow');
+   if (!row) return;
+   var pills = [];
+   if (currentLGAFilter !== 'all') {
+     pills.push({label: '📍 ' + currentLGAFilter, clear: "filterByLGA('all')"});
+   }
+   if (currentSearchQuery) {
+     pills.push({label: '🔍 "' + currentSearchQuery + '"', clear: "searchEstates(''); document.getElementById('estateSearchInput').value=''"});
+   }
+   if (currentStatusFilter !== 'all') {
+     var statusLabel = currentStatusFilter === 'available' ? 'Available Now' : 'Coming Soon';
+     pills.push({label: statusLabel, clear: "renderProjects('all')"});
+   }
+   var pillsHtml = pills.map(function(p) {
+     return '<span class="filter-pill">' + p.label + '<span class="filter-pill-x" onclick="' + p.clear + ';renderFilterPills()">×</span></span>';
+   }).join('');
+   if (pills.length > 0) {
+     pillsHtml += '<button class="filter-clear-all" onclick="clearAllFilters()">Clear all</button>';
+   }
+   row.innerHTML = pillsHtml;
+   row.style.display = pills.length > 0 ? 'flex' : 'none';
+ }
+
+ function updateBuildersByLGA(lga) {
+   var allCards = document.querySelectorAll('[data-builder-id]');
+   var matchCount = 0;
+   allCards.forEach(function(card) {
+     var bid = card.getAttribute('data-builder-id');
+     if (lga === 'all') {
+       card.classList.remove('lga-dim');
+       matchCount++;
+     } else {
+       var builderLGAs = BUILDER_LGAS[bid] || [];
+       var matches = builderLGAs.some(function(l) { return l === lga; });
+       card.classList.toggle('lga-dim', !matches);
+       if (matches) matchCount++;
+     }
+   });
+   // Show/hide the "no builders" notice
+   var notice = document.getElementById('builderLGANotice');
+   if (notice) notice.style.display = (matchCount === 0 && lga !== 'all') ? 'block' : 'none';
  }
 
  var currentStatusFilter = 'all';
@@ -2615,6 +2806,15 @@
  var show = true;
  // Status filter
  if (currentStatusFilter !== 'all' && getProjectStatus(p) !== currentStatusFilter) show = false;
+ // LGA filter
+ if (show && currentLGAFilter !== 'all' && p.region !== currentLGAFilter) show = false;
+ // Search filter
+ if (show && currentSearchQuery) {
+   var q = currentSearchQuery;
+   var nameMatch = (p.name && p.name.toLowerCase().indexOf(q) > -1);
+   var subMatch = (p.suburb && p.suburb.toLowerCase().indexOf(q) > -1);
+   if (!nameMatch && !subMatch) show = false;
+ }
  // Budget filter
  if (show && currentBudgetFilter !== 'all') {
  var maxBudget = parseInt(currentBudgetFilter);
@@ -2639,6 +2839,19 @@
  filter = filter || 'all';
  const grid = document.getElementById('projectsGrid');
  var filtered = filter === 'all' ? PROJECTS : PROJECTS.filter(function(p) { return getProjectStatus(p) === filter; });
+ // Apply LGA/Region filter
+ if (currentLGAFilter !== 'all') {
+   filtered = filtered.filter(function(p) { return p.region === currentLGAFilter; });
+ }
+ // Apply search filter
+ if (currentSearchQuery) {
+   filtered = filtered.filter(function(p) {
+     var q = currentSearchQuery;
+     return (p.name && p.name.toLowerCase().indexOf(q) > -1) ||
+            (p.suburb && p.suburb.toLowerCase().indexOf(q) > -1) ||
+            (p.region && p.region.toLowerCase().indexOf(q) > -1);
+   });
+ }
     // Sort: available first, then coming soon
     filtered = filtered.slice().sort(function(a, b) {
       var aStatus = getProjectStatus(a) === 'available' ? 0 : 1;
@@ -2660,6 +2873,15 @@
  } else {
  filtered = filtered.filter(function(p) { return (p.minPrice + offset) >= 1000000 || p.minPrice === 0; });
  }
+ }
+ if (filtered.length === 0) {
+   grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px 24px;color:var(--text-light)">' +
+     '<div style="font-size:32px;margin-bottom:12px">🔍</div>' +
+     '<div style="font-size:16px;font-weight:700;color:var(--primary);margin-bottom:8px">No estates found</div>' +
+     '<div style="font-size:13px;margin-bottom:20px">Try adjusting your filters or search query.</div>' +
+     '<button onclick="clearAllFilters()" class="btn-sm">Clear All Filters</button>' +
+   '</div>';
+   return;
  }
  grid.innerHTML = filtered.map((p, i) => {
  const status = getProjectStatus(p);
@@ -2754,7 +2976,7 @@
  grid.innerHTML = premiumBuilders.map(function(b, i) {
  const logoStyle = logoStyles[b.id] || 'max-height:60px;max-width:160px;';
  const needsLabel = (b.id === 'creation');
- return '<div class="builder-card fade-in fade-in-delay-' + (i%4+1) + '" style="display:flex;flex-direction:column">' +
+ return '<div class="builder-card fade-in fade-in-delay-' + (i%4+1) + '" data-builder-id="' + b.id + '" style="display:flex;flex-direction:column">' +
  '<div style="height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--bg-alt);padding:20px;gap:8px">' +
  '<img src="' + (BUILDER_LOGOS[b.id] || '') + '" alt="' + b.name + '" style="' + logoStyle + 'object-fit:contain" onerror="this.onerror=null;this.style.display=\'none\'"/>' +
  (needsLabel ? '<div style="font-size:11px;font-weight:800;color:var(--primary);letter-spacing:1.5px;text-transform:uppercase">Creation Homes</div>' : '') +
@@ -2774,7 +2996,7 @@
  if (stdGrid) {
  stdGrid.innerHTML = standardBuilders.map(function(b) {
  const initials = b.name.split(' ').slice(0,2).map(function(w) { return w[0]; }).join('');
- return '<div class="standard-builder-card">' +
+ return '<div class="standard-builder-card" data-builder-id="' + b.id + '">' +
  '<div class="standard-builder-avatar" style="background:' + b.color + '">' + initials + '</div>' +
  '<div style="flex:1;min-width:0">' +
  '<div class="standard-builder-name">' + b.name + '</div>' +

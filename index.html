@@ -1090,6 +1090,18 @@
    .past-grid { grid-template-columns: repeat(2, 1fr); }
  }
 
+ 
+ /* Who is ProjX responsive */
+ @media (max-width: 900px) {
+   #who-is-projx [style*="grid-template-columns:1fr 1fr;gap:64px"] {
+     grid-template-columns: 1fr !important;
+     gap: 40px !important;
+   }
+ }
+ @media (max-width: 640px) {
+   #who-is-projx { padding: 56px 16px; }
+ }
+
  @media (max-width: 1100px) {
  .builders-grid { grid-template-columns: repeat(2, 1fr); }
  .standard-builders-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1841,6 +1853,7 @@
  <span style="display:none;font-size:22px;font-weight:900;letter-spacing:-0.5px;color:var(--primary)">ProjX</span>
  </a>
  <ul class="nav-links" id="navLinks">
+ <li><a href="#who-is-projx">About</a></li>
  <li><a href="#why-projx">Why ProjX</a></li>
  <li><a href="#estates">Estates</a></li>
  <li><a href="#builders">Builders</a></li>
@@ -1861,7 +1874,7 @@
   <div class="hero-source-badge"><span class="dot"></span> Direct From The Source</div>
   <h1 class="hero-title" style="font-size:clamp(32px,5.5vw,58px);margin-bottom:20px;letter-spacing:-2.5px;line-height:1.05;color:#fff">South East Queensland's<br><span style="color:var(--accent)">House &amp; Land Marketplace</span></h1>
   <p style="font-size:clamp(15px,1.6vw,18px);color:rgba(255,255,255,0.75);margin-bottom:14px;line-height:1.75;max-width:620px;margin-left:auto;margin-right:auto;font-weight:400">The only platform where you get direct access to the land, the builder, and the best pricing — guaranteed. No agents. No markups. Just better deals.</p>
-  <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:40px;letter-spacing:0.5px">4,500+ lots · 18 active projects · 4 builder partners</p>
+  <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:40px;letter-spacing:0.5px">12 builder partners · 18 active projects · 4,500+ lots</p>
   <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:48px">
    <a href="#estates" class="btn-primary" style="background:#fff;color:var(--primary)">Browse Estates ↓</a>
    <a href="#why-projx" class="btn-outline" style="border-color:rgba(255,255,255,0.25);color:rgba(255,255,255,0.85)">Why ProjX →</a>
@@ -1884,6 +1897,42 @@
 </section>
 
 <!-- ─── WHY PROJX ─── -->
+<!-- ─── WHO IS PROJX ─── -->
+<section id="who-is-projx" style="background:var(--primary);padding:80px 32px">
+ <div class="section-inner">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center">
+   <div>
+    <div class="section-badge" style="background:rgba(200,169,110,0.15);border-color:rgba(200,169,110,0.35);color:var(--warm);margin-bottom:20px">About ProjX</div>
+    <h2 style="font-size:clamp(28px,4vw,42px);font-weight:900;color:#fff;line-height:1.15;letter-spacing:-1px;margin-bottom:20px">SEQ's Appointed Project Marketer. Not a Middleman.</h2>
+    <p style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:24px">ProjX is the developer's exclusive, appointed project marketer across 18 active estates in South East Queensland. When you enquire through this portal, you're talking directly to the team that sits at the source — the same people who set the price, manage the stock, and control the release schedule.</p>
+    <p style="font-size:15px;color:rgba(255,255,255,0.65);line-height:1.8;margin-bottom:32px">There is no referral agent in between. No third-party taking a clip. No inflated packages to cover someone else's margin. You get the same price a developer's preferred purchaser gets — because that's exactly who you are when you buy through ProjX.</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+     <a href="#estates" class="btn-primary" style="background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.2);color:#fff">Browse Estates ↓</a>
+     <a href="#why-projx" style="font-size:14px;font-weight:700;color:var(--warm);text-decoration:none;display:flex;align-items:center;gap:6px">Why it matters →</a>
+    </div>
+   </div>
+   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:28px;text-align:center">
+     <div style="font-size:42px;font-weight:900;color:#fff;letter-spacing:-2px">18</div>
+     <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.8px;margin-top:4px">Active Estates</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:28px;text-align:center">
+     <div style="font-size:42px;font-weight:900;color:#fff;letter-spacing:-2px">4,500+</div>
+     <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.8px;margin-top:4px">Lots Available</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:28px;text-align:center">
+     <div style="font-size:42px;font-weight:900;color:#fff;letter-spacing:-2px">12</div>
+     <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.8px;margin-top:4px">Builder Partners</div>
+    </div>
+    <div style="background:rgba(200,169,110,0.1);border:1px solid rgba(200,169,110,0.3);border-radius:var(--radius-lg);padding:28px;text-align:center">
+     <div style="font-size:42px;font-weight:900;color:var(--warm);letter-spacing:-2px">$0</div>
+     <div style="font-size:12px;font-weight:700;color:rgba(200,169,110,0.7);text-transform:uppercase;letter-spacing:0.8px;margin-top:4px">Fees to Buyers</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
 <section id="why-projx">
  <div class="section-inner">
   <div class="section-header fade-in" style="text-align:center;max-width:700px;margin:0 auto 52px">
@@ -1995,10 +2044,19 @@
  <div class="section-inner">
 
   <!-- PREMIUM -->
-  <div class="section-header fade-in" style="margin-bottom:32px">
+  <div class="section-header fade-in" style="margin-bottom:24px">
    <div class="section-badge" style="background:rgba(200,169,110,0.12);border-color:rgba(200,169,110,0.3);color:var(--warm)">⭐ Queensland's Premium Builders</div>
    <h2 class="section-title">Our Preferred Builder Partners</h2>
    <p class="section-subtitle">Hand-selected, vetted, and price-benchmarked. These builders offer exclusive wholesale rates to ProjX buyers — you won't find cheaper going direct.</p>
+  </div>
+  <!-- Builder price filter -->
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;align-items:center">
+   <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-xlight)">Filter by package:</span>
+   <button class="filter-chip builder-price-chip active" data-price="all" onclick="filterBuildersByPrice('all')">All Budgets</button>
+   <button class="filter-chip builder-price-chip" data-price="300" onclick="filterBuildersByPrice('300')">Under $300k build</button>
+   <button class="filter-chip builder-price-chip" data-price="400" onclick="filterBuildersByPrice('400')">$300k – $400k</button>
+   <button class="filter-chip builder-price-chip" data-price="500" onclick="filterBuildersByPrice('500')">$400k – $500k</button>
+   <button class="filter-chip builder-price-chip" data-price="501" onclick="filterBuildersByPrice('501')">$500k+</button>
   </div>
   <div class="builders-grid" id="buildersGrid"></div>
 
@@ -2373,21 +2431,43 @@
  Object.defineProperty(window, 'currentLGAFilter', { get() { return Store.get('lga'); }, set(v) { Store.set('lga', v); }, configurable: true, enumerable: true });
  Object.defineProperty(window, 'currentSearchQuery', { get() { return Store.get('search'); }, set(v) { Store.set('search', v); }, configurable: true, enumerable: true });
 
+ // Phase 2.2: Prescribed SEQ LGA list (default — updated when Louka supplies full matrix)
+ var SEQ_LGAS = [
+   'Moreton Bay', 'Logan', 'Ipswich', 'Sunshine Coast', 'Gold Coast',
+   'Scenic Rim', 'Lockyer Valley', 'Redlands', 'Toowoomba', 'Gympie',
+   'Somerset', 'Southern Downs', 'Northern NSW'
+ ];
+
+ // LGA to region mapping (maps LGAs to project region values)
+ var LGA_TO_REGION = {
+   'Moreton Bay': 'Moreton Bay',
+   'Logan': 'Logan',
+   'Ipswich': 'Ipswich',
+   'Sunshine Coast': 'Sunshine Coast',
+   'Gold Coast': 'Gold Coast',
+   'Scenic Rim': 'Scenic Rim',
+   'Lockyer Valley': 'Lockyer Valley',
+   'Redlands': 'Redlands',
+   'Toowoomba': 'Toowoomba',
+   'Gympie': 'Gympie',
+   'Somerset': 'Somerset',
+   'Southern Downs': 'Southern Downs',
+   'Northern NSW': 'Northern NSW'
+ };
+
  function initLGAFilter() {
-   var regions = [];
-   PROJECTS.forEach(function(p) {
-     if (p.region && regions.indexOf(p.region) === -1) regions.push(p.region);
-   });
-   regions.sort();
    var row = document.getElementById('lgaFilterRow');
    if (!row) return;
-   // Keep "All Regions" chip, append region chips
-   regions.forEach(function(region) {
+   // Use prescribed SEQ LGA list, only show LGAs that have at least 1 project
+   var activeRegions = new Set(PROJECTS.map(function(p) { return p.region; }));
+   SEQ_LGAS.forEach(function(lga) {
+     var region = LGA_TO_REGION[lga] || lga;
+     if (!activeRegions.has(region)) return; // skip LGAs with no projects
      var btn = document.createElement('button');
      btn.className = 'lga-chip';
-     btn.setAttribute('data-lga', region);
-     btn.textContent = region;
-     btn.onclick = function() { filterByLGA(region); };
+     btn.setAttribute('data-lga', lga);
+     btn.textContent = lga;
+     btn.onclick = function() { filterByLGA(lga); };
      row.appendChild(btn);
    });
  }
@@ -2469,6 +2549,33 @@
    else if (action === 'status-clear') renderProjects('all');
  }
 
+ // Phase 2.3: Builder pricing filter
+ var currentBuilderPriceFilter = 'all';
+ function filterBuildersByPrice(tier) {
+   currentBuilderPriceFilter = tier;
+   document.querySelectorAll('.builder-price-chip').forEach(function(btn) {
+     btn.classList.toggle('active', btn.getAttribute('data-price') === tier);
+   });
+   var allCards = document.querySelectorAll('[data-builder-id]');
+   allCards.forEach(function(card) {
+     var bid = card.getAttribute('data-builder-id');
+     var builder = BUILDERS ? BUILDERS.find(function(b) { return b.id === bid; }) : null;
+     if (!builder) return;
+     if (tier === 'all') { card.style.display = ''; return; }
+     // Parse min build price from priceRange string e.g. "$245k - $380k"
+     var minMatch = (builder.priceRange || '').match(/(\d+)k/);
+     var maxMatch = (builder.priceRange || '').match(/-(\s*\$?)(\d+)k/);
+     var minP = minMatch ? parseInt(minMatch[1]) * 1000 : 0;
+     var maxP = maxMatch ? parseInt(maxMatch[2]) * 1000 : 999999;
+     var show = false;
+     if (tier === '300') show = minP < 300000;
+     else if (tier === '400') show = minP >= 250000 && minP < 400000;
+     else if (tier === '500') show = minP >= 350000 && maxP <= 520000;
+     else if (tier === '501') show = maxP >= 500000;
+     card.style.display = show ? '' : 'none';
+   });
+ }
+
  function updateBuildersByLGA(lga) {
    var allCards = document.querySelectorAll('[data-builder-id]');
    var matchCount = 0;
@@ -2531,8 +2638,11 @@
  var show = true;
  // Status filter
  if (currentStatusFilter !== 'all' && getProjectStatus(p) !== currentStatusFilter) show = false;
- // LGA filter
- if (show && currentLGAFilter !== 'all' && p.region !== currentLGAFilter) show = false;
+ // LGA filter (map LGA to region for comparison)
+ if (show && currentLGAFilter !== 'all') {
+   var mappedRegion = LGA_TO_REGION[currentLGAFilter] || currentLGAFilter;
+   if (p.region !== mappedRegion) show = false;
+ }
  // Search filter
  if (show && currentSearchQuery) {
    var q = currentSearchQuery;
@@ -2564,9 +2674,10 @@
  filter = filter || 'all';
  const grid = document.getElementById('projectsGrid');
  var filtered = filter === 'all' ? PROJECTS : PROJECTS.filter(function(p) { return getProjectStatus(p) === filter; });
- // Apply LGA/Region filter
+ // Apply LGA/Region filter (map LGA name to project region value)
  if (currentLGAFilter !== 'all') {
-   filtered = filtered.filter(function(p) { return p.region === currentLGAFilter; });
+   var lgaRegion = LGA_TO_REGION[currentLGAFilter] || currentLGAFilter;
+   filtered = filtered.filter(function(p) { return p.region === lgaRegion; });
  }
  // Apply search filter
  if (currentSearchQuery) {
@@ -4034,6 +4145,19 @@
  '<div class="wizard-form-group"><label class="wizard-form-label">Full Name *</label><input type="text" class="wizard-form-input" id="wLeadName" placeholder="John Smith" required /></div>' +
  '<div class="wizard-form-group"><label class="wizard-form-label">Email *</label><input type="email" class="wizard-form-input" id="wLeadEmail" placeholder="john@email.com" required /></div>' +
  '<div class="wizard-form-group"><label class="wizard-form-label">Phone *</label><input type="tel" class="wizard-form-input" id="wLeadPhone" placeholder="04XX XXX XXX" required /></div>' +
+ // Phase 3.2: Build budget field — required on Coming Soon projects
+ ((!wizardState.project || !wizardState.project.minPrice || wizardState.project.minPrice === 0) ?
+ '<div class="wizard-form-group" style="background:rgba(59,125,221,0.06);border:1px solid rgba(59,125,221,0.2);border-radius:10px;padding:14px 16px">' +
+ '<label class="wizard-form-label" style="color:var(--accent)">Build Budget * <span style="font-size:10px;opacity:0.7">(required for early registration)</span></label>' +
+ '<select class="wizard-form-select" id="wLeadBuildBudget" required>' +
+ '<option value="">Select your build budget...</option>' +
+ '<option value="under-300">Under $300,000</option>' +
+ '<option value="300-400">$300,000 – $400,000</option>' +
+ '<option value="400-500">$400,000 – $500,000</option>' +
+ '<option value="500-600">$500,000 – $600,000</option>' +
+ '<option value="600-plus">$600,000+</option>' +
+ '<option value="not-sure">Not sure yet</option>' +
+ '</select></div>' : '') +
  '<div class="wizard-form-group"><label class="wizard-form-label">Preferred Contact Time</label><select class="wizard-form-select"><option value="anytime">Anytime</option><option value="morning">Morning</option><option value="afternoon">Afternoon</option><option value="evening">Evening</option></select></div>' +
  '<div class="wizard-form-group"><label class="wizard-form-label">Message (optional)</label><textarea class="wizard-form-textarea" placeholder="Any questions or notes for our team..."></textarea></div>' +
  '<button type="submit" class="wizard-submit-btn">Request My Package →</button>' +
@@ -4111,7 +4235,8 @@
  Design: d ? d.name : 'Not selected',
  Builder: b ? b.name : 'Not selected',
  Mode: wizardState.mode === 'land' ? 'Land First' : 'Build First',
- Source: 'H&L Design Portal'
+ Source: 'H&L Design Portal',
+     Build_Budget: (document.getElementById('wLeadBuildBudget') ? document.getElementById('wLeadBuildBudget').value : 'N/A')
  };
  fetch('https://formsubmit.co/ajax/louka@projxaustralia.com.au', {
  method: 'POST',

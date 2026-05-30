@@ -985,6 +985,7 @@
  .calc-grid { grid-template-columns: 1fr; }
  .services-grid { grid-template-columns: repeat(2, 1fr); }
  .value-props { grid-template-columns: 1fr; }
+ .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
  .builders-stats { grid-template-columns: repeat(2, 1fr); }
  .builders-grid { grid-template-columns: repeat(2, 1fr); }
  .nav-inner { height: 56px; padding: 0 16px; }
@@ -1020,6 +1021,7 @@
  .design-img { height: 140px; }
  .services-grid { grid-template-columns: 1fr; }
  .builders-stats { grid-template-columns: 1fr 1fr; }
+ .testimonials-grid { grid-template-columns: 1fr; }
  .form-grid { grid-template-columns: 1fr; }
  .form-card { padding: 24px 16px; }
  .footer-grid { grid-template-columns: 1fr; gap: 24px; }
@@ -1441,6 +1443,12 @@
  .compare-pill:hover { transform: translateX(-50%) translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.25); }
 
  /* ─── TESTIMONIALS ──────────────────────────────────────────── */
+ .testimonials-grid {
+ display: grid;
+ grid-template-columns: repeat(3, 1fr);
+ gap: 24px;
+ }
+
  .testimonial-card {
  background: var(--bg);
  border: 1px solid var(--border);
@@ -1833,6 +1841,135 @@
   <div class="past-grid fade-in" id="pastProjectsGrid"></div>
   <div style="text-align:center;margin-top:40px">
    <p style="font-size:14px;color:rgba(255,255,255,0.35);font-weight:500">And counting. Every project above is fully settled and built.</p>
+  </div>
+ </div>
+</section>
+
+<!-- ─── TESTIMONIALS ─── -->
+<section id="testimonials" style="padding:96px 32px;background:var(--bg-alt)">
+ <div class="section-inner">
+  <div class="section-header fade-in" style="text-align:center;max-width:600px;margin:0 auto 52px">
+   <div class="section-badge">What Buyers Say</div>
+   <h2 class="section-title">Real Outcomes. Real Buyers.</h2>
+   <p class="section-subtitle">From first enquiry to settled home — here's what ProjX buyers say about the journey.</p>
+  </div>
+  <div class="testimonials-grid fade-in">
+   <div class="testimonial-card">
+    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+    <p class="testimonial-quote">"We had no idea where to start with house and land. ProjX found us the perfect lot at Woodchester, matched us with a builder, and had us signing contracts in under 4 weeks. Couldn't believe how easy it was."</p>
+    <div>
+     <div class="testimonial-author">Sarah &amp; James</div>
+     <div class="testimonial-estate">Woodchester Estate, Jimboomba</div>
+    </div>
+   </div>
+   <div class="testimonial-card">
+    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+    <p class="testimonial-quote">"I'd been going around in circles for months. One call with ProjX and I had three lot options and two builder comparisons same day. The pricing was genuinely better than anything I'd found myself."</p>
+    <div>
+     <div class="testimonial-author">Michael T.</div>
+     <div class="testimonial-estate">Lakeview Estate, North Lakes</div>
+    </div>
+   </div>
+   <div class="testimonial-card">
+    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+    <p class="testimonial-quote">"As investors we needed certainty on price and timeline. ProjX delivered both — fixed price contract, known handover window, and the whole process was seamless. We've already referred three friends."</p>
+    <div>
+     <div class="testimonial-author">David &amp; Lin</div>
+     <div class="testimonial-estate">Oakland Estate, Caboolture</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ─── PARTNER SERVICES ─── -->
+<section id="partner-services" style="padding:96px 32px;background:var(--bg)">
+ <div class="section-inner">
+  <div class="section-header fade-in" style="text-align:center;max-width:600px;margin:0 auto 52px">
+   <div class="section-badge">Complete Your Journey</div>
+   <h2 class="section-title">Everything You Need, In One Place</h2>
+   <p class="section-subtitle">Our trusted partners make every step of the process seamless — from finance to protection.</p>
+  </div>
+  <div class="services-grid fade-in">
+   <div class="service-card">
+    <div class="service-icon" style="background:rgba(16,185,129,0.1)">🏦</div>
+    <div class="service-title">Home Loans</div>
+    <div class="service-desc">Specialist mortgage brokers who know house &amp; land inside out. Access to 40+ lenders and expert investor structuring.</div>
+    <div class="service-highlight">Compare 40+ lenders</div>
+    <a href="#" onclick="event.preventDefault();openWizard('land')" class="btn-primary" style="width:100%;justify-content:center;background:#10B981;border-color:#10B981">Get Pre-Approved</a>
+   </div>
+   <div class="service-card">
+    <div class="service-icon" style="background:rgba(59,125,221,0.1)">⚖️</div>
+    <div class="service-title">Conveyancing</div>
+    <div class="service-desc">Expert property law from contract review through to settlement. Fixed-fee, fully transparent, no surprises.</div>
+    <div class="service-highlight">Fixed-fee from $1,200</div>
+    <a href="#" onclick="event.preventDefault();openWizard('land')" class="btn-primary" style="width:100%;justify-content:center">Get a Quote</a>
+   </div>
+   <div class="service-card">
+    <div class="service-icon" style="background:rgba(245,158,11,0.1)">🛡️</div>
+    <div class="service-title">Home Insurance</div>
+    <div class="service-desc">Protect your investment from day one. Builder's warranty and ongoing cover — compared and placed for you.</div>
+    <div class="service-highlight">Protect from day one</div>
+    <a href="#" onclick="event.preventDefault();openWizard('land')" class="btn-primary" style="width:100%;justify-content:center">Compare Policies</a>
+   </div>
+   <div class="service-card">
+    <div class="service-icon" style="background:rgba(139,92,246,0.1)">📊</div>
+    <div class="service-title">Financial Planning</div>
+    <div class="service-desc">Structure your wealth strategy around your new asset. Tax, depreciation, and property portfolio planning.</div>
+    <div class="service-highlight">Grow your wealth</div>
+    <a href="#" onclick="event.preventDefault();openWizard('land')" class="btn-primary" style="width:100%;justify-content:center">Book Consultation</a>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ─── FOR BUILDERS ─── -->
+<section id="for-builders">
+ <div class="builders-pattern"></div>
+ <div class="section-inner" style="position:relative">
+  <div class="section-header fade-in" style="text-align:center;max-width:680px;margin:0 auto 52px">
+   <div class="section-badge">For Builders</div>
+   <h2 class="section-title">Partner With ProjX</h2>
+   <p class="section-subtitle">Get your designs in front of qualified buyers across 4,500+ lots in 18 active projects across South East Queensland.</p>
+  </div>
+  <div class="value-props fade-in">
+   <div class="value-prop">
+    <div class="value-prop-icon">🎯</div>
+    <div class="value-prop-title">Qualified Leads</div>
+    <div class="value-prop-desc">Every EOI comes with lot preference, budget, and design selection already completed. Your sales team picks up exactly where the portal leaves off.</div>
+   </div>
+   <div class="value-prop">
+    <div class="value-prop-icon">⚡</div>
+    <div class="value-prop-title">Instant Matching</div>
+    <div class="value-prop-desc">Our algorithm matches your designs to compatible lots automatically. Buyers only see designs that work on the lots they've selected — no wasted enquiries.</div>
+   </div>
+   <div class="value-prop">
+    <div class="value-prop-icon">💰</div>
+    <div class="value-prop-title">Zero Upfront Cost</div>
+    <div class="value-prop-desc">Commission-based model. You only pay when a buyer signs a build contract. No listing fees, no monthly retainer, no lock-in contracts.</div>
+   </div>
+  </div>
+  <div class="builders-stats fade-in">
+   <div class="builders-stat">
+    <div class="builders-stat-num">4,500+</div>
+    <div class="builders-stat-label">Active Lots</div>
+   </div>
+   <div class="builders-stat">
+    <div class="builders-stat-num">$250M+</div>
+    <div class="builders-stat-label">Lot Pipeline</div>
+   </div>
+   <div class="builders-stat">
+    <div class="builders-stat-num">9</div>
+    <div class="builders-stat-label">SEQ Regions</div>
+   </div>
+   <div class="builders-stat">
+    <div class="builders-stat-num">40+</div>
+    <div class="builders-stat-label">EOIs / Month</div>
+   </div>
+  </div>
+  <div class="builders-cta fade-in">
+   <a href="mailto:builders@projxaustralia.com.au" class="btn-primary" style="font-size:17px;padding:18px 48px;border-radius:12px;letter-spacing:-0.3px">Become a Partner Builder →</a>
+   <p style="margin-top:16px;font-size:13px;color:rgba(255,255,255,0.35);font-weight:500">Reach out at builders@projxaustralia.com.au</p>
   </div>
  </div>
 </section>
@@ -2233,8 +2370,7 @@
  'Fintona': 'A premium double-storey with five bedrooms, three bathrooms, and statement living spaces. Ground floor features a grand open-plan area, while upstairs provides a private family wing.'
  };
 
- // Auto-init (gate disabled during development)
- document.addEventListener('DOMContentLoaded', function() { initPortal(); });
+ // Auto-init handled by window.load above (gate bypass + initPortal)
 
  // ─── PAST PROJECTS DATA ───────────────────────────────────────────
  const PAST_PROJECTS = [
@@ -2617,8 +2753,17 @@
  obs.unobserve(e.target);
  }
  });
- }, { threshold: 0.08 });
+ }, { threshold: 0.05, rootMargin: '0px 0px 60px 0px' });
  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+ // Force-visible any elements already in the viewport at init time
+ requestAnimationFrame(function() {
+ document.querySelectorAll('.fade-in').forEach(function(el) {
+ var rect = el.getBoundingClientRect();
+ if (rect.top < window.innerHeight && rect.bottom > 0) {
+ el.classList.add('visible');
+ }
+ });
+ });
  }
 
  // ─── COUNTER ANIMATION ────────────────────────────────────────────

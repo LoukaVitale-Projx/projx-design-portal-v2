@@ -1101,6 +1101,14 @@
  }
 
  
+ 
+ /* Developer Portal */
+ @media (max-width: 900px) {
+   #developer-portal [style*="grid-template-columns:1fr 1fr"] {
+     grid-template-columns: 1fr !important;
+   }
+ }
+
  /* Who is ProjX responsive */
  @media (max-width: 900px) {
    #who-is-projx [style*="grid-template-columns:1fr 1fr;gap:64px"] {
@@ -1912,6 +1920,7 @@
  <li><a href="#estates">Estates</a></li>
  <li><a href="#builders">Builders</a></li>
  <li><a href="#past-projects">Track Record</a></li>
+ <li><a href="#developer-portal" style="font-size:12px;font-weight:700;color:var(--text-light);text-decoration:none;padding:7px 14px;border:1.5px solid var(--border);border-radius:8px;transition:all 0.2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-light)'">Developer Access</a></li>
  <li><a href="#" class="nav-cta" onclick="event.preventDefault();openWizard('land')">Register Interest</a></li>
  </ul>
  <button class="nav-hamburger" id="hamburger" onclick="toggleNav()" aria-label="Menu">
@@ -2325,6 +2334,69 @@
   <div class="builders-cta fade-in">
    <a href="mailto:builders@projxaustralia.com.au" class="btn-primary" style="font-size:17px;padding:18px 48px;border-radius:12px;letter-spacing:-0.3px">Become a Partner Builder →</a>
    <p style="margin-top:16px;font-size:13px;color:rgba(255,255,255,0.35);font-weight:500">Reach out at builders@projxaustralia.com.au</p>
+  </div>
+ </div>
+</section>
+
+<!-- ─── DEVELOPER PORTAL ─── -->
+<section id="developer-portal" style="background:#0d1117;padding:80px 32px;border-top:1px solid rgba(255,255,255,0.06)">
+ <div class="section-inner">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start">
+
+   <!-- Left: Existing developer login -->
+   <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:36px">
+    <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(59,125,221,0.8);margin-bottom:14px">Existing Developer</div>
+    <h3 style="font-size:clamp(20px,2.5vw,28px);font-weight:900;color:#fff;letter-spacing:-0.5px;margin-bottom:12px;line-height:1.2">Access Your Developer Portal</h3>
+    <p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.8;margin-bottom:28px">If you're an existing ProjX developer, log in to your real-time sales pipeline dashboard. View lot availability, contract status, settlement tracking, and buyer enquiry data for your project.</p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+     <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.6)">
+      <span style="color:#10B981;font-size:16px">✓</span> Real-time lot availability &amp; status
+     </div>
+     <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.6)">
+      <span style="color:#10B981;font-size:16px">✓</span> Contract &amp; settlement pipeline
+     </div>
+     <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.6)">
+      <span style="color:#10B981;font-size:16px">✓</span> EOI &amp; buyer enquiry tracking
+     </div>
+     <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.6)">
+      <span style="color:#10B981;font-size:16px">✓</span> Marketing performance data
+     </div>
+    </div>
+    <a href="mailto:info@projxaustralia.com.au?subject=Developer Portal Access Request" style="display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:13px 28px;border-radius:10px;font-family:Montserrat,sans-serif;font-size:14px;font-weight:700;text-decoration:none;transition:all 0.2s" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">→ Login to Developer Portal</a>
+    <div style="margin-top:12px;font-size:11px;color:rgba(255,255,255,0.25)">Access provided to ProjX-appointed projects only. Contact your Project Director for credentials.</div>
+   </div>
+
+   <!-- Right: New developer registration -->
+   <div style="background:rgba(200,169,110,0.05);border:1px solid rgba(200,169,110,0.2);border-radius:20px;padding:36px">
+    <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--warm);margin-bottom:14px">New Developer Enquiry</div>
+    <h3 style="font-size:clamp(20px,2.5vw,28px);font-weight:900;color:#fff;letter-spacing:-0.5px;margin-bottom:12px;line-height:1.2">Not a ProjX developer yet?</h3>
+    <p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.8;margin-bottom:24px">ProjX is one of SEQ's largest project marketing firms. If you have a land subdivision, H&amp;L project, or residential development and want to talk about project marketing, register your interest below.</p>
+    <form id="devEnquiryForm" onsubmit="submitDevEnquiry(event)">
+     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <input type="text" id="devName" placeholder="Your name *" required style="padding:10px 14px;border:1.5px solid rgba(255,255,255,0.12);border-radius:8px;background:rgba(255,255,255,0.06);color:#fff;font-family:Montserrat,sans-serif;font-size:13px">
+      <input type="text" id="devCompany" placeholder="Company / entity *" required style="padding:10px 14px;border:1.5px solid rgba(255,255,255,0.12);border-radius:8px;background:rgba(255,255,255,0.06);color:#fff;font-family:Montserrat,sans-serif;font-size:13px">
+     </div>
+     <input type="email" id="devEmail" placeholder="Email address *" required style="width:100%;padding:10px 14px;border:1.5px solid rgba(255,255,255,0.12);border-radius:8px;background:rgba(255,255,255,0.06);color:#fff;font-family:Montserrat,sans-serif;font-size:13px;margin-bottom:10px;box-sizing:border-box">
+     <input type="tel" id="devPhone" placeholder="Phone number *" required style="width:100%;padding:10px 14px;border:1.5px solid rgba(255,255,255,0.12);border-radius:8px;background:rgba(255,255,255,0.06);color:#fff;font-family:Montserrat,sans-serif;font-size:13px;margin-bottom:10px;box-sizing:border-box">
+     <input type="text" id="devSite" placeholder="Site / project location (suburb)" style="width:100%;padding:10px 14px;border:1.5px solid rgba(255,255,255,0.12);border-radius:8px;background:rgba(255,255,255,0.06);color:#fff;font-family:Montserrat,sans-serif;font-size:13px;margin-bottom:10px;box-sizing:border-box">
+     <select id="devLots" style="width:100%;padding:10px 14px;border:1.5px solid rgba(255,255,255,0.12);border-radius:8px;background:#1a2132;color:rgba(255,255,255,0.7);font-family:Montserrat,sans-serif;font-size:13px;margin-bottom:16px;box-sizing:border-box">
+      <option value="">Approximate lot / unit count</option>
+      <option>Under 50 lots</option>
+      <option>50 – 150 lots</option>
+      <option>150 – 500 lots</option>
+      <option>500+ lots</option>
+      <option>Townhouse / apartment project</option>
+      <option>Not sure yet</option>
+     </select>
+     <button type="submit" style="width:100%;padding:13px;background:var(--warm);color:var(--primary);border:none;border-radius:10px;font-family:Montserrat,sans-serif;font-size:14px;font-weight:800;cursor:pointer">Register Developer Interest →</button>
+    </form>
+    <div id="devEnquirySuccess" style="display:none;text-align:center;padding:20px 0">
+     <div style="font-size:32px;margin-bottom:10px">✅</div>
+     <div style="font-weight:800;color:#fff;margin-bottom:6px">Registered.</div>
+     <div style="font-size:12px;color:rgba(255,255,255,0.5)">A ProjX director will be in touch within 24 hours.</div>
+    </div>
+   </div>
+
   </div>
  </div>
 </section>
@@ -4799,6 +4871,29 @@
 
 <script>
 // ─── CHAT WIDGET ───────────────────────────────────────────────
+function submitDevEnquiry(e) {
+  e.preventDefault();
+  var name = document.getElementById('devName').value.trim();
+  var company = document.getElementById('devCompany').value.trim();
+  var email = document.getElementById('devEmail').value.trim();
+  var phone = document.getElementById('devPhone').value.trim();
+  var site = document.getElementById('devSite').value.trim();
+  var lots = document.getElementById('devLots').value;
+  if (!name || !company || !email || !phone) return;
+  document.getElementById('devEnquiryForm').style.display = 'none';
+  document.getElementById('devEnquirySuccess').style.display = 'block';
+  fetch('https://formsubmit.co/ajax/louka@projxaustralia.com.au', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','Accept':'application/json'},
+    body: JSON.stringify({
+      _subject: '\u{1F3D7}\uFE0F New Developer Enquiry: ' + company + ' (' + name + ')',
+      Name: name, Company: company, Email: email, Phone: phone,
+      Site: site || 'Not specified', Lots: lots || 'Not specified',
+      Source: 'Developer Portal Enquiry'
+    })
+  }).catch(function(){});
+}
+
 function toggleChat() {
   var panel = document.getElementById('chatPanel');
   var badge = document.getElementById('chatBadge');

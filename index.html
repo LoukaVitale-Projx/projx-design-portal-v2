@@ -2016,7 +2016,7 @@
    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-xlight);margin-bottom:6px">Search</div>
    <div class="estate-search-wrap">
     <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-xlight);flex-shrink:0"><circle cx="9" cy="9" r="7"/><line x1="16" y1="16" x2="12.5" y2="12.5"/></svg>
-    <input type="text" id="estateSearchInput" placeholder="Estate or suburb..." oninput="searchEstates(this.value)">
+    <input type="text" id="estateSearchInput" placeholder="Suburb, estate or region..." oninput="searchEstates(this.value)">
    </div>
   </div>
  </div>
@@ -2503,15 +2503,65 @@
    renderFilterPills();
  }
 
+ // Haversine distance in km
+ function haversineKm(lat1, lng1, lat2, lng2) {
+   var R = 6371;
+   var dLat = (lat2 - lat1) * Math.PI / 180;
+   var dLng = (lng2 - lng1) * Math.PI / 180;
+   var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+           Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*
+           Math.sin(dLng/2)*Math.sin(dLng/2);
+   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+ }
+
+ var _proximityCenter = null; // {lat, lng, label} when suburb geocoded
+ var _geocodeTimer = null;
+
  function searchEstates(query) {
    currentSearchQuery = query.toLowerCase().trim();
+   // Clear proximity if search cleared
+   if (!currentSearchQuery) {
+     _proximityCenter = null;
+     renderProjects(null);
+     renderFilterPills();
+     return;
+   }
+   // Instant string-match render first
    renderProjects(null);
    renderFilterPills();
+   // Debounced geocoding for suburb proximity
+   clearTimeout(_geocodeTimer);
+   _geocodeTimer = setTimeout(function() {
+     geocodeSuburb(currentSearchQuery);
+   }, 700);
+ }
+
+ function geocodeSuburb(query) {
+   var searchEl = document.getElementById('estateSearchInput');
+   // Add spinner hint
+   var url = 'https://nominatim.openstreetmap.org/search?q=' +
+     encodeURIComponent(query + ' Queensland Australia') +
+     '&format=json&limit=1&countrycodes=au';
+   fetch(url, { headers: { 'User-Agent': 'ProjX-Portal/1.0 (louka@projxaustralia.com.au)', 'Accept-Language': 'en' } })
+     .then(function(r) { return r.json(); })
+     .then(function(results) {
+       if (!results || !results.length) return;
+       var r = results[0];
+       var lat = parseFloat(r.lat), lng = parseFloat(r.lon);
+       if (isNaN(lat) || isNaN(lng)) return;
+       // Extract suburb name from display_name
+       var label = r.display_name ? r.display_name.split(',')[0] : query;
+       _proximityCenter = { lat: lat, lng: lng, label: label };
+       renderProjects(null); // re-render with proximity sort + badges
+       renderFilterPills();
+     })
+     .catch(function() { /* geocode failed silently, string search still works */ });
  }
 
  function clearAllFilters() {
    currentLGAFilter = 'all';
    currentSearchQuery = '';
+   _proximityCenter = null;
    currentStatusFilter = 'all';
    currentBudgetFilter = 'all';
    var searchInput = document.getElementById('estateSearchInput');
@@ -2565,7 +2615,7 @@
  function handlePillClear(el) {
    var action = el.getAttribute('data-clear');
    if (action === 'lga-clear') filterByLGA('all');
-   else if (action === 'search-clear') { searchEstates(''); var inp = document.getElementById('estateSearchInput'); if(inp) inp.value=''; }
+   else if (action === 'search-clear') { _proximityCenter = null; searchEstates(''); var inp = document.getElementById('estateSearchInput'); if(inp) inp.value=''; }
    else if (action === 'status-clear') renderProjects('all');
  }
 
@@ -2708,12 +2758,21 @@
             (p.region && p.region.toLowerCase().indexOf(q) > -1);
    });
  }
-    // Sort: available first, then coming soon
-    filtered = filtered.slice().sort(function(a, b) {
-      var aStatus = getProjectStatus(a) === 'available' ? 0 : 1;
-      var bStatus = getProjectStatus(b) === 'available' ? 0 : 1;
-      return aStatus - bStatus;
-    });
+    // Sort: proximity if suburb geocoded, otherwise available-first
+    if (_proximityCenter && filtered.length > 0) {
+      // Add distance to each project and sort by it
+      filtered = filtered.map(function(p) {
+        var dist = (p.lat && p.lng) ? haversineKm(_proximityCenter.lat, _proximityCenter.lng, p.lat, p.lng) : 9999;
+        return Object.assign({}, p, { _distKm: dist });
+      }).filter(function(p) { return p._distKm <= 150; }) // max 150km radius
+        .sort(function(a, b) { return a._distKm - b._distKm; });
+    } else {
+      filtered = filtered.slice().sort(function(a, b) {
+        var aStatus = getProjectStatus(a) === 'available' ? 0 : 1;
+        var bStatus = getProjectStatus(b) === 'available' ? 0 : 1;
+        return aStatus - bStatus;
+      });
+    }
  // Apply budget filter
  if (currentBudgetFilter !== 'all') {
  var maxBudget = parseInt(currentBudgetFilter);
@@ -2759,7 +2818,10 @@
  <div style="position:absolute;top:10px;right:10px;background:${status === 'available' ? '#059669' : '#D97706'};color:#fff;font-size:10px;font-weight:700;padding:5px 12px;border-radius:6px;letter-spacing:0.3px;box-shadow:0 2px 8px rgba(0,0,0,0.25)">${statusLabel}</div>
  </div>
  <div class="project-body">
- <div class="project-region region-${p.region.replace(/ /g, '\\ ')}">${p.region}</div>
+ <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+  <div class="project-region region-${p.region.replace(/ /g, '\\ ')}">${p.region}</div>
+  ${p._distKm && p._distKm < 9999 ? '<span style="font-size:10px;font-weight:700;color:var(--accent);background:rgba(59,125,221,0.08);border:1px solid rgba(59,125,221,0.2);border-radius:20px;padding:2px 8px">' + (p._distKm < 1 ? '<1 km' : Math.round(p._distKm) + ' km') + ' away</span>' : ""}
+ </div>
  <div class="project-name">${p.name}</div>
  <div class="project-suburb"> ${p.suburb}</div>
  <div class="project-price"><strong>${p.minPrice > 0 ? fmtPrice(p.minPrice) + ' \u2013 ' + fmtPrice(p.maxPrice) : 'Pricing TBA'}</strong>${p.minPrice > 0 ? ' lot price range' : ''}</div>

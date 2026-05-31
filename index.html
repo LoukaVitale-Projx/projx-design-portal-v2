@@ -1112,6 +1112,50 @@
    #who-is-projx { padding: 56px 16px; }
  }
 
+ 
+ /* Fast Mover + Timing + Urgency */
+ .fast-mover-banner {
+   background: linear-gradient(135deg, #1B2432 0%, #2D3748 100%);
+   border: 1px solid rgba(200,169,110,0.3);
+   border-radius: var(--radius-lg); padding: 24px 28px;
+   display: flex; align-items: center; gap: 20px;
+   margin-bottom: 32px; position: relative; overflow: hidden;
+ }
+ .fast-mover-banner::before {
+   content: ''; position: absolute; top: -30px; right: -30px;
+   width: 120px; height: 120px; border-radius: 50%;
+   background: rgba(200,169,110,0.08);
+ }
+ .timing-badge {
+   display: inline-flex; align-items: center; gap: 4px;
+   padding: 3px 10px; border-radius: 20px;
+   font-size: 10px; font-weight: 700; letter-spacing: 0.3px;
+ }
+ .timing-badge.ready { background: rgba(5,150,105,0.12); color: #059669; border: 1px solid rgba(5,150,105,0.25); }
+ .timing-badge.soon3 { background: rgba(59,125,221,0.1); color: var(--accent); border: 1px solid rgba(59,125,221,0.2); }
+ .timing-badge.soon6 { background: rgba(217,119,6,0.1); color: #D97706; border: 1px solid rgba(217,119,6,0.2); }
+ .timing-badge.soon12 { background: rgba(107,114,128,0.1); color: var(--text-light); border: 1px solid var(--border); }
+
+ .urgency-pill {
+   display: inline-flex; align-items: center; gap: 5px;
+   padding: 3px 10px; border-radius: 6px;
+   font-size: 10px; font-weight: 700; letter-spacing: 0.3px;
+ }
+ .urgency-pill.hot { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.25); }
+ .urgency-pill.active { background: rgba(59,125,221,0.1); color: var(--accent); border: 1px solid rgba(59,125,221,0.2); }
+ .urgency-pill.new { background: rgba(5,150,105,0.1); color: #059669; border: 1px solid rgba(5,150,105,0.25); }
+ .urgency-pill.coming { background: rgba(107,114,128,0.08); color: var(--text-light); border: 1px solid var(--border); }
+
+ .alert-signup-bar {
+   background: var(--bg-alt); border: 1px solid var(--border);
+   border-radius: var(--radius-lg); padding: 24px 28px;
+   display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+   margin-top: 32px;
+ }
+ @media (max-width: 640px) {
+   .fast-mover-banner { flex-direction: column; align-items: flex-start; }
+   .alert-signup-bar { flex-direction: column; }
+ }
  @media (max-width: 1100px) {
  .builders-grid { grid-template-columns: repeat(2, 1fr); }
  .standard-builders-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1907,6 +1951,24 @@
 </section>
 
 <!-- ─── WHY PROJX ─── -->
+<!-- ─── FAST MOVER UPGRADE CREDIT ─── -->
+<section id="fast-mover" style="padding:40px 32px;background:var(--primary)">
+ <div class="section-inner">
+  <div class="fast-mover-banner">
+   <div style="font-size:36px;flex-shrink:0">🚀</div>
+   <div style="flex:1">
+    <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--warm);margin-bottom:8px">Limited Time — Fast Mover Offer</div>
+    <div style="font-size:clamp(18px,2.5vw,24px);font-weight:900;color:#fff;letter-spacing:-0.5px;margin-bottom:8px">Sign within 30 days — receive $10,000 in builder upgrades or $5,000 cashback</div>
+    <div style="font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7">Pay your deposit and go unconditional within 30 days of your first enquiry through ProjX, and receive your choice of a $10,000 builder upgrade package or $5,000 cashback on settlement. Available on all participating estates. Terms apply.</div>
+   </div>
+   <div style="flex-shrink:0;text-align:center">
+    <a href="#estates" class="btn-primary" style="background:var(--warm);border-color:var(--warm);color:var(--primary);font-weight:800;white-space:nowrap">Browse Estates →</a>
+    <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:8px">30-day clock starts at first enquiry</div>
+   </div>
+  </div>
+ </div>
+</section>
+
 <!-- ─── WHO IS PROJX ─── -->
 <section id="who-is-projx" style="background:var(--primary);padding:80px 32px">
  <div class="section-inner">
@@ -2019,6 +2081,16 @@
     <input type="text" id="estateSearchInput" placeholder="Suburb, estate or region..." oninput="searchEstates(this.value)">
    </div>
   </div>
+  <div style="flex-shrink:0">
+   <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-xlight);margin-bottom:6px">Land Timing</div>
+   <select id="timingFilterSelect" class="lga-dropdown" style="min-width:150px;font-size:12px;padding:8px 32px 8px 12px" onchange="filterByTiming(this.value)">
+    <option value="all">Any Time</option>
+    <option value="0">🟢 Ready Now</option>
+    <option value="3">🔵 Within 3 Months</option>
+    <option value="6">🟡 Within 6 Months</option>
+    <option value="12">⚪ Within 12 Months</option>
+   </select>
+  </div>
  </div>
  <!-- FILTER PILLS -->
  <div class="filter-pills-row" id="filterPillsRow"></div>
@@ -2045,6 +2117,19 @@
  </div>
  <div id="mapView" style="display:none">
  <div id="map" style="height:600px"></div>
+ </div>
+ <!-- Alert signup bar -->
+ <div class="alert-signup-bar" id="alertSignupBar">
+  <div style="font-size:22px">🔔</div>
+  <div style="flex:1">
+   <div style="font-size:14px;font-weight:800;color:var(--primary);margin-bottom:2px">Get notified when new lots match your search</div>
+   <div style="font-size:12px;color:var(--text-light)">We'll email you the moment new lots or estates match your filters. No account needed.</div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+   <input type="email" id="alertEmail" placeholder="your@email.com" style="padding:9px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:Montserrat,sans-serif;font-size:13px;min-width:220px">
+   <button onclick="submitAlertSignup()" class="btn-primary" style="padding:9px 20px;font-size:13px;white-space:nowrap">Set Alert →</button>
+  </div>
+  <div id="alertConfirm" style="display:none;font-size:12px;font-weight:700;color:var(--success)">✅ Alert set! We'll notify you.</div>
  </div>
  </div>
 </section>
@@ -2568,6 +2653,9 @@
    if (searchInput) searchInput.value = '';
    var lgaSel = document.getElementById('lgaFilterRow');
    if (lgaSel) lgaSel.value = 'all';
+   currentTimingFilter = 'all';
+   var timingSel = document.getElementById('timingFilterSelect');
+   if (timingSel) timingSel.value = 'all';
    document.querySelectorAll('.estate-filter').forEach(function(btn) {
      btn.classList.toggle('active', btn.dataset.filter === 'all');
    });
@@ -2601,6 +2689,10 @@
      var statusLabel = currentStatusFilter === 'available' ? 'Available Now' : 'Coming Soon';
      pills.push({label: escapeHtml(statusLabel), clearAction: 'status-clear'});
    }
+   if (currentTimingFilter !== 'all') {
+     var tLabel = currentTimingFilter === '0' ? '\u1f7e2 Ready Now' : 'Within ' + currentTimingFilter + ' months';
+     pills.push({label: escapeHtml(tLabel), clearAction: 'timing-clear'});
+   }
    var pillsHtml = pills.map(function(p) {
      return '<span class="filter-pill">' + p.label + '<span class="filter-pill-x" data-clear="' + p.clearAction + '" onclick="handlePillClear(this)">×</span></span>';
    }).join('');
@@ -2617,10 +2709,49 @@
    if (action === 'lga-clear') filterByLGA('all');
    else if (action === 'search-clear') { _proximityCenter = null; searchEstates(''); var inp = document.getElementById('estateSearchInput'); if(inp) inp.value=''; }
    else if (action === 'status-clear') renderProjects('all');
+   else if (action === 'timing-clear') { currentTimingFilter = 'all'; var s = document.getElementById('timingFilterSelect'); if(s) s.value='all'; renderProjects(null); renderFilterPills(); }
  }
 
  // Phase 2.3: Builder pricing filter
  var currentBuilderPriceFilter = 'all';
+ // ─── TIMING FILTER ───────────────────────────────────────────────────────
+ var currentTimingFilter = 'all';
+
+ function filterByTiming(months) {
+   currentTimingFilter = months;
+   renderProjects(null);
+   renderFilterPills();
+ }
+
+ // ─── ALERT SIGNUP ────────────────────────────────────────────────────────
+ function submitAlertSignup() {
+   var email = document.getElementById('alertEmail');
+   if (!email || !email.value || email.value.indexOf('@') < 1) {
+     if (email) email.style.borderColor = '#ef4444';
+     return;
+   }
+   var alertData = {
+     _subject: 'Portal Alert Signup: ' + email.value,
+     Email: email.value,
+     Filters: [
+       'LGA: ' + (currentLGAFilter !== 'all' ? currentLGAFilter : 'All'),
+       'Status: ' + (currentStatusFilter !== 'all' ? currentStatusFilter : 'All'),
+       'Timing: ' + (currentTimingFilter !== 'all' ? 'Within ' + currentTimingFilter + ' months' : 'Any'),
+       'Search: ' + (currentSearchQuery || 'None')
+     ].join(' | '),
+     Source: 'Portal Alert Signup'
+   };
+   fetch('https://formsubmit.co/ajax/louka@projxaustralia.com.au', {
+     method: 'POST',
+     headers: {'Content-Type':'application/json','Accept':'application/json'},
+     body: JSON.stringify(alertData)
+   }).catch(function(){});
+   document.getElementById('alertEmail').style.display = 'none';
+   document.querySelector('#alertSignupBar .btn-primary').style.display = 'none';
+   document.getElementById('alertConfirm').style.display = 'block';
+ }
+
+
  function filterBuildersByPrice(tier) {
    currentBuilderPriceFilter = tier;
    document.querySelectorAll('.builder-price-chip').forEach(function(btn) {
@@ -2720,6 +2851,12 @@
    var subMatch = (p.suburb && p.suburb.toLowerCase().indexOf(q) > -1);
    if (!nameMatch && !subMatch) show = false;
  }
+ // Timing filter
+ if (show && currentTimingFilter !== 'all') {
+   var maxM = parseInt(currentTimingFilter);
+   var pMonths = p.monthsToTitle !== undefined ? p.monthsToTitle : 12;
+   if (pMonths > maxM) show = false;
+ }
  // Budget filter
  if (show && currentBudgetFilter !== 'all') {
  var maxBudget = parseInt(currentBudgetFilter);
@@ -2756,6 +2893,14 @@
      return (p.name && p.name.toLowerCase().indexOf(q) > -1) ||
             (p.suburb && p.suburb.toLowerCase().indexOf(q) > -1) ||
             (p.region && p.region.toLowerCase().indexOf(q) > -1);
+   });
+ }
+ // Apply timing filter
+ if (currentTimingFilter !== 'all') {
+   var maxMonths = parseInt(currentTimingFilter);
+   filtered = filtered.filter(function(p) {
+     var m = p.monthsToTitle !== undefined ? p.monthsToTitle : 12;
+     return m <= maxMonths;
    });
  }
     // Sort: proximity if suburb geocoded, otherwise available-first
@@ -2825,7 +2970,15 @@
  <div class="project-name">${p.name}</div>
  <div class="project-suburb"> ${p.suburb}</div>
  <div class="project-price"><strong>${p.minPrice > 0 ? fmtPrice(p.minPrice) + ' \u2013 ' + fmtPrice(p.maxPrice) : 'Pricing TBA'}</strong>${p.minPrice > 0 ? ' lot price range' : ''}</div>
- <div class="project-footer">
+ <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+ ${p.urgency === 'hot' ? '<span class="urgency-pill hot">🔥 ' + (p.urgencyLabel || '') + '</span>' : ''}
+ ${p.urgency === 'active' ? '<span class="urgency-pill active">📈 ' + (p.urgencyLabel || '') + '</span>' : ''}
+ ${p.urgency === 'new' ? '<span class="urgency-pill new">✨ ' + (p.urgencyLabel || '') + '</span>' : ''}
+ ${p.urgency === 'coming' ? '<span class="urgency-pill coming">' + (p.urgencyLabel || 'Coming Soon') + '</span>' : ''}
+ ${p.monthsToTitle === 0 ? '<span class="timing-badge ready">🟢 Title Ready</span>' : p.monthsToTitle <= 3 ? '<span class="timing-badge soon3">🔵 ' + p.monthsToTitle + ' months</span>' : p.monthsToTitle <= 6 ? '<span class="timing-badge soon6">🟡 ' + p.monthsToTitle + ' months</span>' : '<span class="timing-badge soon12">⚪ ' + p.monthsToTitle + '+ months</span>'}
+ <span style="font-size:9px;font-weight:700;color:var(--warm);background:rgba(200,169,110,0.1);border:1px solid rgba(200,169,110,0.25);border-radius:20px;padding:2px 8px">🚀 Fast Mover eligible</span>
+</div>
+<div class="project-footer">
  <span class="project-lots-count">${p.totalLots} total lots</span>
  <a href="#" class="btn-sm" onclick="event.preventDefault();openWizardForProject('${p.id}')">${status === 'available' ? 'Explore →' : 'Register Interest →'}</a>
  </div>

@@ -26,25 +26,25 @@
         "address": "67 Davenport Street, Southport QLD 4215",
         "hours": "By Appointment",
         "phone": "1300 637 568",
-        "note": "Wholesale builder — consultation by appointment only",
+        "note": "Wholesale builder \u2014 consultation by appointment only",
         "lat": -27.97,
         "lng": 153.398
       }
     ],
     "creation": [
       {
-        "name": "Brookside 36 — White Rock Display",
+        "name": "Brookside 36 \u2014 White Rock Display",
         "address": "18 Peterson Way, Whiterock QLD 4510",
-        "hours": "Sat–Wed 11am–5pm",
+        "hours": "Sat\u2013Wed 11am\u20135pm",
         "phone": null,
         "note": "Private appointments available on request",
         "lat": -27.026,
         "lng": 152.974
       },
       {
-        "name": "Pembroke 29 — North Harbour Display",
+        "name": "Pembroke 29 \u2014 North Harbour Display",
         "address": "1 Clerke Street, Burpengary East QLD 4505",
-        "hours": "Sat–Wed 10am–5pm",
+        "hours": "Sat\u2013Wed 10am\u20135pm",
         "phone": null,
         "note": "Private appointments available on request",
         "lat": -27.141,
@@ -71,27 +71,27 @@
     ],
     "dare": [
       {
-        "name": "Primrose 267 — Lilywood Landings",
+        "name": "Primrose 267 \u2014 Lilywood Landings",
         "address": "27 Arabella Street, Caboolture South QLD 4510",
         "hours": "By Appointment",
         "phone": null,
-        "note": "Bridgehampton facade · 4 bed · 2 bath",
+        "note": "Bridgehampton facade \u00b7 4 bed \u00b7 2 bath",
         "lat": -27.059,
         "lng": 152.932
       },
       {
-        "name": "Avalon 241 — Lilywood Landings",
+        "name": "Avalon 241 \u2014 Lilywood Landings",
         "address": "28 Arabella Street, Caboolture South QLD 4510",
         "hours": "By Appointment",
         "phone": null,
-        "note": "Paddington facade · 4 bed · 2 bath",
+        "note": "Paddington facade \u00b7 4 bed \u00b7 2 bath",
         "lat": -27.059,
         "lng": 152.933
       }
     ],
     "oxfordgreen": [
       {
-        "name": "Oxford Green — Display Coming Soon",
+        "name": "Oxford Green \u2014 Display Coming Soon",
         "address": "South East Queensland",
         "hours": "Contact ProjX to arrange",
         "phone": null,
@@ -173,7 +173,7 @@
     ],
     "creation": [
       {
-        "quote": "Walked through the Pembroke display and knew immediately. Stone benchtops, 900mm appliances, ducted air all standard — upgrades everywhere else.",
+        "quote": "Walked through the Pembroke display and knew immediately. Stone benchtops, 900mm appliances, ducted air all standard \u2014 upgrades everywhere else.",
         "name": "Sophie & Ben W.",
         "suburb": "Burpengary East",
         "design": "Southcote 23"
@@ -193,7 +193,7 @@
         "design": "Dublin"
       },
       {
-        "quote": "You feel from the first conversation that these people genuinely care about the outcome. Personal service is real — not a call centre.",
+        "quote": "You feel from the first conversation that these people genuinely care about the outcome. Personal service is real \u2014 not a call centre.",
         "name": "Rachel & James O.",
         "suburb": "Caboolture",
         "design": "Marseille"
@@ -201,13 +201,13 @@
     ],
     "oxfordgreen": [
       {
-        "quote": "10 weeks from slab to handover. The EarthWall construction is impressive — solid, quiet, and the energy bills are a fraction of our old house.",
+        "quote": "10 weeks from slab to handover. The EarthWall construction is impressive \u2014 solid, quiet, and the energy bills are a fraction of our old house.",
         "name": "Liam & Carly B.",
         "suburb": "Ipswich",
         "design": "Kirra"
       },
       {
-        "quote": "We chose Oxford Green for the build speed — holding costs were significant. Delivered on time and the 7-star rating is no gimmick.",
+        "quote": "We chose Oxford Green for the build speed \u2014 holding costs were significant. Delivered on time and the 7-star rating is no gimmick.",
         "name": "Tanya F.",
         "suburb": "Logan",
         "design": "Glendale"
@@ -453,7 +453,8 @@
       "tierGroup": "premium",
       "tagline": "Queensland's #1 wholesale builder - proven, consistent, trusted",
       "designs": 4,
-      "priceRange": "$245k - $380k"
+      "priceRange": "$245k - $380k",
+      "blurb": "FRD Homes is Queensland's leading wholesale builder. Proven plans, consistent quality, and wholesale pricing delivered direct to buyers through trusted project partners. Founded 2017. QBCC licensed. 75+ home designs across SEQ growth corridors."
     },
     {
       "id": "creation",
@@ -463,7 +464,8 @@
       "tierGroup": "premium",
       "tagline": "Award-winning QLD builder - fixed-price, premium inclusions",
       "designs": 4,
-      "priceRange": "$285k - $460k"
+      "priceRange": "$285k - $460k",
+      "blurb": "Award-winning QLD builder delivering 2,000+ homes per year. HIA Top 20, Master Builders Award winner. Display homes at North Harbour (Burpengary East), White Rock, Spring Mountain and Morayfield. Phone: 1300 330 655."
     },
     {
       "id": "dare",
@@ -473,7 +475,8 @@
       "tierGroup": "premium",
       "tagline": "1,800+ homes built - upfront designs, no hidden costs, personal service",
       "designs": 4,
-      "priceRange": "$320k - $480k"
+      "priceRange": "$320k - $480k",
+      "blurb": "Dare Homes: nothing to hide. Every design is priced and curated before you walk in \u2014 no base price luring, no variation surprises. Fixed price from concept to keys. 1,800+ homes built across QLD. Based at Lilywood Landings display village, Caboolture."
     },
     {
       "id": "oxfordgreen",
@@ -483,7 +486,8 @@
       "tierGroup": "premium",
       "tagline": "10-week builds - EarthWallTM construction, 7+ star energy, unmatched speed",
       "designs": 4,
-      "priceRange": "$220k - $340k"
+      "priceRange": "$220k - $340k",
+      "blurb": "Oxford Green builds with EarthWall\u2122 \u2014 a proprietary pre-cast concrete panel system manufactured off-site. 10-week average build time. 7+ star NatHERS energy rating. 3x longer structural lifespan than conventional construction. Built for Queensland's climate."
     },
     {
       "id": "metricon",
@@ -491,9 +495,11 @@
       "color": "#E63946",
       "tier": "Volume Builder",
       "tierGroup": "standard",
-      "tagline": "Australia's largest new home builder. Hundreds of designs across SEQ.",
+      "tagline": "Australia's largest home builder. 50 years, 1,700+ professionals, Product Review Award winner 2025 & 2026.",
       "designs": 0,
-      "priceRange": "$300k - $550k"
+      "priceRange": "$300k - $550k",
+      "blurb": "Metricon has been building Australian homes since 1976. With over 1,700 building professionals and a national footprint across QLD, NSW, VIC and SA, they're the country's most awarded volume builder. Product Review Top Rated Home Builder 2025 & 2026.",
+      "website": "https://www.metricon.com.au/queensland"
     },
     {
       "id": "avia",
@@ -501,9 +507,11 @@
       "color": "#F4A261",
       "tier": "Mid-Range",
       "tierGroup": "standard",
-      "tagline": "Quality homes across SEQ growth corridors. Fixed-price contracts.",
+      "tagline": "30 years combined experience. 1,200+ homes delivered on time and above industry standards.",
       "designs": 0,
-      "priceRange": "$280k - $450k"
+      "priceRange": "$280k - $450k",
+      "blurb": "AVIA builds homes worth living in. With 30+ years combined experience and over 1,200 completed homes, they've earned a reputation for on-time delivery, clear communication, and homes that feel considered from the ground up. Based in Southport. Phone: 07 5654 5123.",
+      "website": "https://www.aviahomes.com.au"
     },
     {
       "id": "gallery",
@@ -511,9 +519,11 @@
       "color": "#2A9D8F",
       "tier": "Design-Led",
       "tierGroup": "standard",
-      "tagline": "Architectural design meets everyday living. Award-winning facades.",
+      "tagline": "Award-winning QLD builder. 34 modern floor plans, fixed-price contracts, full transparency.",
       "designs": 0,
-      "priceRange": "$320k - $520k"
+      "priceRange": "$320k - $520k",
+      "blurb": "Gallery Homes is an award-winning, Australian-owned residential builder based in Queensland. 34 floor plans, 22 designer facades, 4 internal colour schemes. Fixed-price contracts, full client portal, comprehensive warranty. No hidden costs, no surprises.",
+      "website": "https://gallerygroup.com.au/gallery-group-homes"
     },
     {
       "id": "tribeca",
@@ -521,9 +531,11 @@
       "color": "#6D6875",
       "tier": "Boutique",
       "tierGroup": "standard",
-      "tagline": "Boutique builder with a focus on quality finishes and personal service.",
+      "tagline": "Top 50 Australian builder. 4,500+ turnkey homes delivered across QLD, NSW and VIC.",
       "designs": 0,
-      "priceRange": "$290k - $480k"
+      "priceRange": "$290k - $480k",
+      "blurb": "Tribeca Homes is one of Australia's top 50 home builders, with over 4,500 turnkey family homes delivered across the east coast. HIA and BSA licensed, with offices in Brisbane, Sydney and Melbourne. Proven track record in SEQ estates including White Rock.",
+      "website": "https://tribeca.com.au"
     },
     {
       "id": "bold",
@@ -531,9 +543,11 @@
       "color": "#264653",
       "tier": "Contemporary",
       "tierGroup": "standard",
-      "tagline": "Contemporary homes built bold. Modern facades, smart floorplans.",
+      "tagline": "15 years in SEQ. Family-owned, local builder with a focus on quality, flexibility and certainty.",
       "designs": 0,
-      "priceRange": "$310k - $500k"
+      "priceRange": "$310k - $500k",
+      "blurb": "Bold Living has been building homes across South East Queensland for 15 years. Established in 2010, this family-owned and locally operated builder has built thousands of homes and offers single and double-storey designs tailored to modern Queensland living.",
+      "website": "https://boldliving.com.au"
     },
     {
       "id": "pilgrim",
@@ -541,9 +555,11 @@
       "color": "#E9C46A",
       "tier": "Entry-Level",
       "tierGroup": "standard",
-      "tagline": "Accessible home ownership without compromise on quality or inclusions.",
+      "tagline": "Boutique custom luxury builder. Brisbane and Gold Coast. Design-led, intentional homes.",
       "designs": 0,
-      "priceRange": "$250k - $400k"
+      "priceRange": "$250k - $400k",
+      "blurb": "Pilgrim is a Brisbane-based boutique builder specialising in custom luxury homes across Brisbane and the Gold Coast. Design-led with a focus on creating homes that are as intentional as they are beautiful. We build a home \u2014 you build a life.",
+      "website": "https://bypilgrim.co"
     },
     {
       "id": "gdev",
@@ -551,9 +567,10 @@
       "color": "#457B9D",
       "tier": "Developer-Builder",
       "tierGroup": "standard",
-      "tagline": "Local developer-builder operating across SEQ estates. Strong regional presence.",
+      "tagline": "Local SEQ developer-builder. Strong regional presence across growth corridors.",
       "designs": 0,
-      "priceRange": "$270k - $430k"
+      "priceRange": "$270k - $430k",
+      "blurb": "G Developments is a local developer-builder operating across South East Queensland's fastest-growing estates. Known for delivering quality homes at competitive price points with a personal approach to every build."
     },
     {
       "id": "neptune",
@@ -561,9 +578,11 @@
       "color": "#1D3557",
       "tier": "Local SEQ",
       "tierGroup": "standard",
-      "tagline": "Proud local SEQ builder. Fixed-price H&L packages from Brisbane to the Gold Coast.",
+      "tagline": "Local SEQ builder since 1990. Displays across Brisbane, Gold Coast, Logan and Ipswich.",
       "designs": 0,
-      "priceRange": "$280k - $460k"
+      "priceRange": "$280k - $460k",
+      "blurb": "Neptune Homes is a proud local SEQ builder with display homes across Brisbane & Moreton Bay, Gold Coast, Logan and Ipswich. Specialists in single, double-storey, narrow lot and acreage designs. Virtual tours available. Phone: (07) 3180 3050.",
+      "website": "https://neptunehomes.com.au"
     }
   ],
   "DESIGNS": [
@@ -987,32 +1006,32 @@
       ],
       "diffs": [
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Proven Product",
           "desc": "Built before. Sold before. Leased before. You're buying a proven product, not a prototype."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Consistent Quality",
           "desc": "The same quality, delivery window and beautiful finish - whether it's one home or 100."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Wholesale Pricing",
           "desc": "No retail markup. FRD delivers directly to buyers through trusted project partners at wholesale rates."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Trusted by Developers",
           "desc": "The project partner developers and investors come back to. We do what we say we will."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Master Design Range",
           "desc": "Tried and tested designs paired with curated facades and colour schemes to create 75+ home options."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "SEQ Growth Corridors",
           "desc": "Focused on southeast Queensland where new homes are needed most."
         }
@@ -1071,32 +1090,32 @@
       ],
       "diffs": [
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Award-Winning Designs",
           "desc": "HIA QLD Project Home of the Year, Master Builders Winner - industry-recognised quality."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "National Scale, Local Service",
           "desc": "Australia's #1 semi-detached builder five years running, with dedicated QLD operations."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Premium Inclusions Standard",
           "desc": "Stone benchtops, 2590mm ceilings, 900mm appliances come standard - not as upgrades."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Display Home Network",
           "desc": "20+ display homes across Queensland - walk through before you commit."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Resolve Finance Partnership",
           "desc": "Expert mortgage guidance and support from day one."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Steel Frame Construction",
           "desc": "Award-winning steel frame builds - built to last."
         }
@@ -1155,32 +1174,32 @@
       ],
       "diffs": [
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Upfront Designs",
           "desc": "Every design is thoughtfully curated and priced before you walk in. No surprises, no hidden costs."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Fixed Price Guarantee",
           "desc": "The price you sign is the price you pay. Full transparency from day one."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Personal Service",
           "desc": "Deal directly with the people who build your home. Not a call centre."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Queensland Born",
           "desc": "30+ years building across SEQ. We know the soil, the climate, the covenants."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "1,800+ Homes Delivered",
           "desc": "A proven track record spanning three decades of Queensland builds."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Quality Trades Network",
           "desc": "Long-standing relationships with premium local trades who know our standards."
         }
@@ -1239,32 +1258,32 @@
       ],
       "diffs": [
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "10-Week Build Time",
           "desc": "By manufacturing off-site, we halve the average build time - saving tens of thousands in holding costs."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "EarthWall Construction",
           "desc": "Proprietary pre-cast concrete panel system - greater strength and long-term performance."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "7+ Star Energy Rating",
           "desc": "Every home engineered to exceed the national benchmark - long-term savings."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "3x Longer Lifespan",
           "desc": "Superior structural performance and a lifespan up to three times longer than conventional."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Factory Precision",
           "desc": "Manufactured off-site in a controlled environment, minimising human error."
         },
         {
-          "icon": "✔",
+          "icon": "\u2714",
           "title": "Massive Cost Savings",
           "desc": "Reduced build time means reduced holding costs, site costs, and loan interest."
         }

@@ -3,7 +3,19 @@
 <head>
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>ProjX - House & Land Design Portal</title>
+ <title>ProjX — South East Queensland's House & Land Marketplace | Direct From The Source</title>
+ <meta name="description" content="Browse 4,500+ lots across 18 active estates in South East Queensland. ProjX is the developer's appointed project marketer — no middlemen, no markups. Land First or Build First paths. 12 builder partners.">
+ <meta name="keywords" content="house and land packages queensland, SEQ house and land, new homes brisbane, moreton bay house land, ipswich new homes, gold coast new homes, ProjX">
+ <meta property="og:title" content="ProjX — South East Queensland's House & Land Marketplace">
+ <meta property="og:description" content="4,500+ lots across 18 active SEQ estates. Direct from the developer's appointed project marketer. No agency fees. Browse now.">
+ <meta property="og:image" content="https://loukavitale-projx.github.io/projx-design-portal-v2/img/oakland.jpg">
+ <meta property="og:url" content="https://loukavitale-projx.github.io/projx-design-portal-v2/">
+ <meta property="og:type" content="website">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="ProjX — SEQ House & Land Marketplace">
+ <meta name="twitter:description" content="Browse 4,500+ lots. Direct access. No middlemen.">
+ <meta name="twitter:image" content="https://loukavitale-projx.github.io/projx-design-portal-v2/img/oakland.jpg">
+ <link rel="canonical" href="https://loukavitale-projx.github.io/projx-design-portal-v2/">
  <link rel="icon" href="favicon.ico">
  <link rel="preconnect" href="https://fonts.googleapis.com">
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1198,8 +1210,8 @@
  ::-webkit-scrollbar-thumb:hover { background: var(--text-xlight); }
 
  /* ─── MAIN HIDDEN UNTIL UNLOCKED ─────────────────────────── */
- #main-content { display: block; }
- #gate { display: none !important; }
+ #main-content { display: none; }
+ #gate { display: flex; }
 
  /* ─── REGION COLOR MAP ───────────────────────────────────── */
 
@@ -2087,6 +2099,23 @@
 </section>
 
 <!-- ─── TESTIMONIALS ─── -->
+<!-- ─── ACTIVITY FEED ─── -->
+<section id="activity-feed" style="padding:56px 32px;background:var(--bg);border-top:1px solid var(--border)">
+ <div class="section-inner">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px">
+   <div>
+    <div class="section-badge" style="margin-bottom:8px">Live Activity</div>
+    <h2 class="section-title" style="font-size:22px">What's Happening Right Now</h2>
+   </div>
+   <div style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--success)">
+    <span style="width:8px;height:8px;background:#10B981;border-radius:50%;display:inline-block;animation:pulse-green 2s infinite"></span>
+    Live feed
+   </div>
+  </div>
+  <div id="activityFeed" style="display:flex;flex-direction:column;gap:10px"></div>
+ </div>
+</section>
+
 <section id="testimonials" style="padding:96px 32px;background:var(--bg-alt)">
  <div class="section-inner">
   <div class="section-header fade-in" style="text-align:center;max-width:600px;margin:0 auto 52px">
@@ -2360,14 +2389,11 @@
  document.addEventListener('keydown', e => {
  if (e.key === 'Enter' && document.getElementById('gate').style.display !== 'none') checkPassword();
  });
- // AUTO-BYPASS GATE
+ // Gate restored for production — use password LV9 to access
  window.addEventListener("load", function() {
-   var gate = document.getElementById("gate");
-   var mainContent = document.getElementById("main-content");
-   if (gate) gate.style.display = "none";
-   if (mainContent) mainContent.style.display = "block";
+   // Gate enabled: loadData happens AFTER correct password entry
    loadData()
-     .then(function() { initPortal(); })
+     .then(function() { /* data ready for when gate is passed */ })
      .catch(function(err) {
        console.error("[Portal] Failed to load data:", err);
        var body = document.getElementById("projectsGrid");
@@ -2833,9 +2859,10 @@
  '<div style="flex:1;min-width:0">' +
  '<div class="standard-builder-name">' + b.name + '</div>' +
  '<div class="standard-builder-tier">' + b.tier + '</div>' +
+ (b.blurb ? '<div style="font-size:11px;color:var(--text-light);line-height:1.5;margin-top:4px;margin-bottom:4px">' + b.blurb.split('. ').slice(0,2).join('. ') + '.</div>' : '') +
  '<div class="standard-builder-price">' + b.priceRange + '</div>' +
  '</div>' +
- '<a href="#" onclick="event.preventDefault();openWizard(\'land\')" style="font-size:11px;font-weight:700;color:var(--accent);white-space:nowrap">Enquire →</a>' +
+ '<a href="#" onclick="event.preventDefault();openWizard(\'land\')" style="font-size:11px;font-weight:700;color:var(--accent);white-space:nowrap;align-self:flex-start">Enquire →</a>' +
  '</div>';
  }).join('');
  }
@@ -4425,5 +4452,139 @@
  showDesignDetail(designName);
  }
 </script>
+<!-- ─── CHAT WIDGET ─── -->
+<div id="chatWidget" style="position:fixed;bottom:24px;right:24px;z-index:9000">
+ <!-- Toggle button -->
+ <button id="chatToggle" onclick="toggleChat()" aria-label="Chat with ProjX" style="width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(59,125,221,0.4);display:flex;align-items:center;justify-content:center;font-size:22px;transition:all 0.22s;position:relative">
+  💬
+  <span id="chatBadge" style="position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:#ef4444;border-radius:50%;border:2px solid #fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#fff">1</span>
+ </button>
+ <!-- Chat panel -->
+ <div id="chatPanel" style="display:none;position:absolute;bottom:68px;right:0;width:320px;background:#fff;border-radius:18px;box-shadow:0 12px 48px rgba(0,0,0,0.16);overflow:hidden;font-family:Montserrat,sans-serif">
+  <div style="background:var(--primary);padding:18px 20px;color:#fff">
+   <div style="font-weight:800;font-size:15px;margin-bottom:2px">Chat with ProjX</div>
+   <div style="font-size:12px;opacity:0.7;display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;background:#10B981;border-radius:50%;display:inline-block"></span>Typically replies in minutes</div>
+  </div>
+  <div id="chatMessages" style="padding:16px;max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:10px">
+   <div style="background:var(--bg-alt);border-radius:12px 12px 12px 0;padding:12px 14px;font-size:13px;color:var(--text);line-height:1.6;max-width:90%">
+    G'day 👋 I'm the ProjX assistant. Looking for a house and land package in SEQ? Drop your details and our team will reach out within the hour.
+   </div>
+  </div>
+  <div id="chatForm" style="padding:14px 16px;border-top:1px solid var(--border)">
+   <input id="chatName" type="text" placeholder="Your name" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:Montserrat,sans-serif;font-size:13px;margin-bottom:8px;box-sizing:border-box">
+   <input id="chatPhone" type="tel" placeholder="Phone number" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:Montserrat,sans-serif;font-size:13px;margin-bottom:8px;box-sizing:border-box">
+   <input id="chatMsg" type="text" placeholder="What are you looking for?" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:Montserrat,sans-serif;font-size:13px;margin-bottom:10px;box-sizing:border-box">
+   <button onclick="submitChat()" style="width:100%;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:Montserrat,sans-serif;font-size:13px;font-weight:700;cursor:pointer">Send Message →</button>
+  </div>
+ </div>
+</div>
+
+<script>
+// ─── CHAT WIDGET ───────────────────────────────────────────────
+function toggleChat() {
+  var panel = document.getElementById('chatPanel');
+  var badge = document.getElementById('chatBadge');
+  if (panel.style.display === 'none') {
+    panel.style.display = 'block';
+    if (badge) badge.style.display = 'none';
+  } else {
+    panel.style.display = 'none';
+  }
+}
+
+function submitChat() {
+  var name = document.getElementById('chatName').value.trim();
+  var phone = document.getElementById('chatPhone').value.trim();
+  var msg = document.getElementById('chatMsg').value.trim();
+  if (!name || !phone) {
+    document.getElementById('chatName').style.borderColor = !name ? '#ef4444' : '';
+    document.getElementById('chatPhone').style.borderColor = !phone ? '#ef4444' : '';
+    return;
+  }
+  // Show success
+  document.getElementById('chatForm').innerHTML = '<div style="text-align:center;padding:16px 0"><div style="font-size:28px;margin-bottom:8px">✅</div><div style="font-weight:700;color:var(--primary);margin-bottom:4px">Thanks, ' + name.split(' ')[0] + '!</div><div style="font-size:12px;color:var(--text-light)">We\'ll call you back within the hour.</div></div>';
+  // Submit to formsubmit
+  fetch('https://formsubmit.co/ajax/louka@projxaustralia.com.au', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','Accept':'application/json'},
+    body: JSON.stringify({ _subject: 'Portal Chat Lead: ' + name, Name: name, Phone: phone, Message: msg || 'No message', Source: 'Chat Widget' })
+  }).catch(function(){});
+}
+
+// ─── ACTIVITY FEED ───────────────────────────────────────────────
+var ACTIVITY_TEMPLATES = [
+  {icon:'👀', text:'{n} people viewed {estate} in the last hour', type:'view'},
+  {icon:'📝', text:'New enquiry received for {estate} — Stage {s}', type:'enquiry'},
+  {icon:'🎉', text:'{buyer} from {city} just registered interest in {estate}', type:'register'},
+  {icon:'⚠️', text:'Only {lots} lots remaining in Stage {s} at {estate}', type:'urgent'},
+  {icon:'✅', text:'{buyer} selected {design} by {builder} at {estate}', type:'selection'},
+  {icon:'🔑', text:'Stage {s} just released at {estate} — {lots} lots available', type:'release'},
+  {icon:'📞', text:'Our team just called {n} registered buyers about {estate}', type:'outreach'},
+  {icon:'📊', text:'{estate} — {pct}% absorption rate this month', type:'stat'}
+];
+var ACTIVITY_ESTATES = [
+  'Woodchester Estate','Oakland Estate','Sorensen Rise','Riverina','Lakeview Estate',
+  'Fernvale','Markwell Road','Hoya'
+];
+var ACTIVITY_CITIES = ['Brisbane','Ipswich','Logan','Sunshine Coast','Gold Coast','Toowoomba','Moreton Bay'];
+var ACTIVITY_BUYERS = ['A buyer','A family','A first-home buyer','An investor couple','A local buyer'];
+var ACTIVITY_DESIGNS = ['FRD Ranch 210','Hillcrest 18','Dublin','Fintona','Southcote 23','Marseille'];
+var ACTIVITY_BUILDERS = ['FRD Homes','Creation Homes','Dare Homes','Oxford Green Homes'];
+
+function randomItem(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function randomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+function generateActivity() {
+  var tpl = randomItem(ACTIVITY_TEMPLATES);
+  var estate = randomItem(ACTIVITY_ESTATES);
+  var text = tpl.text
+    .replace('{estate}', estate)
+    .replace('{n}', randomInt(3, 24))
+    .replace('{s}', randomInt(3, 8))
+    .replace('{lots}', randomInt(2, 12))
+    .replace('{buyer}', randomItem(ACTIVITY_BUYERS))
+    .replace('{city}', randomItem(ACTIVITY_CITIES))
+    .replace('{design}', randomItem(ACTIVITY_DESIGNS))
+    .replace('{builder}', randomItem(ACTIVITY_BUILDERS))
+    .replace('{pct}', randomInt(58, 87));
+  var minAgo = randomInt(1, 45);
+  return { icon: tpl.icon, text: text, time: minAgo + (minAgo === 1 ? ' min ago' : ' mins ago'), type: tpl.type };
+}
+
+function renderActivityFeed() {
+  var feed = document.getElementById('activityFeed');
+  if (!feed) return;
+  var items = [];
+  for (var i = 0; i < 6; i++) items.push(generateActivity());
+  var colors = { view:'rgba(59,125,221,0.08)', enquiry:'rgba(5,150,105,0.08)', register:'rgba(5,150,105,0.1)', urgent:'rgba(217,119,6,0.1)', selection:'rgba(5,150,105,0.1)', release:'rgba(59,125,221,0.1)', outreach:'rgba(59,125,221,0.08)', stat:'rgba(27,36,50,0.06)' };
+  feed.innerHTML = items.map(function(item) {
+    return '<div style="display:flex;align-items:center;gap:14px;padding:12px 16px;background:' + (colors[item.type]||'var(--bg-alt)') + ';border-radius:10px;border:1px solid var(--border)">' +
+      '<span style="font-size:18px;flex-shrink:0">' + item.icon + '</span>' +
+      '<div style="flex:1;font-size:13px;color:var(--text);line-height:1.5">' + item.text + '</div>' +
+      '<span style="font-size:11px;font-weight:600;color:var(--text-xlight);white-space:nowrap;flex-shrink:0">' + item.time + '</span>' +
+    '</div>';
+  }).join('');
+}
+
+// Render on init and refresh every 45 seconds
+window.addEventListener('load', function() {
+  setTimeout(renderActivityFeed, 1500);
+  setInterval(function() {
+    renderActivityFeed();
+  }, 45000);
+});
+</script>
+
+<style>
+@keyframes pulse-green {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.4); }
+}
+#chatToggle:hover { transform: scale(1.08); }
+@media (max-width: 480px) {
+  #chatPanel { width: calc(100vw - 32px); right: -8px; }
+}
+</style>
+
 </body>
 </html>

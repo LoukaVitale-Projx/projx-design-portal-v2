@@ -3107,7 +3107,7 @@
  const design = DESIGNS.find(function(d) { return d.name === designName; });
  if (!design) return;
  const builder = BUILDERS.find(function(b) { return b.name === design.builder; });
- wizardState = { mode: 'builder', step: 2, region: null, project: null, builder: builder, design: design, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _bedsFilter: 'All', _priceFilter: 'All', _inDetail: false };
+ wizardState = { mode: 'builder', step: 2, region: null, project: null, builder: builder, design: design, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _bedsFilter: 'All', _priceFilter: 'All', selectedFrontages: [], selectedBuilders: [], _inDetail: false };
  wizardHistory = [];
     document.getElementById('wizard').classList.add('open');
  document.body.style.overflow = 'hidden';
@@ -3118,7 +3118,7 @@
  function openWizardForBuilder(builderId) {
  const builder = BUILDERS.find(function(b) { return b.id === builderId; });
  if (!builder) return;
- wizardState = { mode: 'builder', step: 1, region: null, project: null, builder: builder, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _bedsFilter: 'All', _priceFilter: 'All', _inDetail: false };
+ wizardState = { mode: 'builder', step: 1, region: null, project: null, builder: builder, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _bedsFilter: 'All', _priceFilter: 'All', selectedFrontages: [], selectedBuilders: [], _inDetail: false };
  wizardHistory = [];
     document.getElementById('wizard').classList.add('open');
  document.body.style.overflow = 'hidden';
@@ -3129,7 +3129,7 @@
  function openWizardForProject(projectId) {
  const project = PROJECTS.find(function(p) { return p.id === projectId; });
  if (!project) return;
- wizardState = { mode: 'land', step: 1, region: project.region, project: project, builder: null, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _bedsFilter: 'All', _priceFilter: 'All', _inDetail: false };
+ wizardState = { mode: 'land', step: 1, region: project.region, project: project, builder: null, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _bedsFilter: 'All', _priceFilter: 'All', selectedFrontages: [], selectedBuilders: [], _inDetail: false };
  wizardHistory = [];
     document.getElementById('wizard').classList.add('open');
  document.body.style.overflow = 'hidden';
@@ -3138,7 +3138,7 @@
  }
 
  function openWizard(mode) {
- wizardState = { mode, step: 1, region: null, project: null, builder: null, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _bedsFilter: 'All', _priceFilter: 'All', _inDetail: false };
+ wizardState = { mode, step: 1, region: null, project: null, builder: null, design: null, buyerType: null, selectedFrontage: null, financeStatus: null, upgrades: [], savedDesigns: [], _designFilter: 'All', _bedsFilter: 'All', _priceFilter: 'All', selectedFrontages: [], selectedBuilders: [], _inDetail: false };
  wizardHistory = [];
     document.getElementById('wizard').classList.add('open');
  document.body.style.overflow = 'hidden';
@@ -3182,7 +3182,7 @@
 
  function renderWizardStep() {
     wizardState._inDetail = false;
- const totalSteps = wizardState.mode === 'builder' ? 4 : 3;
+ const totalSteps = wizardState.mode === 'builder' ? 4 : 4; // land: frontage → builder select → designs → lead
  const pct = (wizardState.step / totalSteps) * 100;
  document.getElementById('wizardProgressFill').style.width = Math.min(pct, 100) + '%';
  document.getElementById('wizardStepLabel').textContent = 'Step ' + wizardState.step + ' of ' + totalSteps;
@@ -3197,9 +3197,10 @@
  if (wizardState.mode === 'land') {
  switch (wizardState.step) {
  case 1: body.innerHTML = renderLandStep3(); break;
- case 2: body.innerHTML = renderLandStep4(); break;
- case 3: body.innerHTML = renderLeadCapture(); setTimeout(updateWizardCalc, 100); break;
- default: wizardState.step = 3; body.innerHTML = renderLeadCapture(); setTimeout(updateWizardCalc, 100); break;
+ case 2: body.innerHTML = renderLandBuilderSelect(); break;
+ case 3: body.innerHTML = renderLandStep4(); break;
+ case 4: body.innerHTML = renderLeadCapture(); setTimeout(updateWizardCalc, 100); break;
+ default: wizardState.step = 4; body.innerHTML = renderLeadCapture(); setTimeout(updateWizardCalc, 100); break;
  }
  } else {
  switch (wizardState.step) {
@@ -3359,7 +3360,7 @@
  var p = wizardState.project;
  if (!p) return "<div>Loading...</div>";
  var lots = SAMPLE_LOTS[p.id] || [];
- var selectedFrontage = wizardState.selectedFrontage || null;
+ var selectedFrontages = wizardState.selectedFrontages || [];
  var suburbInfo = (typeof SUBURB_DATA !== 'undefined') ? SUBURB_DATA[p.id] : null;
  var imgSrc = getProjectImage(p);
  var status = getProjectStatus(p);
@@ -3406,7 +3407,7 @@
  '<div style="font-size:28px;margin-bottom:10px"></div>' +
  '<div style="font-size:16px;font-weight:800;color:var(--primary);margin-bottom:6px">Lots Coming Soon</div>' +
  '<div style="font-size:13px;color:var(--text-light);margin-bottom:20px">Lot details and pricing for ' + p.name + ' are being finalised. Register your interest to be first notified.</div>' +
- '<button class="wizard-submit-btn" onclick="wizardState.selectedFrontage=null;wizardState.step=3;renderWizardStep()" style="max-width:300px;margin:0 auto">Register Interest \u2192</button>' +
+ '<button class="wizard-submit-btn" onclick="wizardState.selectedFrontages=[];wizardState.selectedBuilders=[];wizardState.step=4;renderWizardStep()" style="max-width:300px;margin:0 auto">Register Interest \u2192</button>' +
  '</div>';
  }
 
@@ -3420,8 +3421,9 @@
  });
  var groups = Object.values(frontageGroups).sort(function(a,b) { return a.frontage - b.frontage; });
 
+ var selectedFrontages = wizardState.selectedFrontages || [];
  var cards = groups.map(function(g) {
- var isSel = selectedFrontage === g.frontage;
+ var isSel = selectedFrontages.indexOf(g.frontage) > -1;
  var availCount = g.lots.filter(function(l) { return l.status === 'Available'; }).length;
  return '<div style="background:var(--bg);border:2px solid ' + (isSel ? 'var(--accent)' : 'var(--border)') + ';border-radius:14px;padding:24px;cursor:pointer;transition:all 0.2s;text-align:center;position:relative" onclick="selectFrontageGroup(' + g.frontage + ')">' +
  (isSel ? '<div style="position:absolute;top:10px;right:10px;background:var(--accent);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800">\u2713</div>' : '') +
@@ -3445,38 +3447,146 @@
  '<h3 style="font-size:18px;font-weight:800;color:var(--primary);margin-bottom:6px">Select Your Lot Size</h3>' +
  '<p style="font-size:13px;color:var(--text-light);margin-bottom:20px">Choose a lot width to see compatible home designs</p>' +
  '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:24px">' + cards + '</div>' +
- (selectedFrontage ? '<div style="text-align:center"><button class="wizard-submit-btn" onclick="wizardNext()" style="max-width:360px">See Compatible Builds for ' + selectedFrontage + 'm Lots \u2192</button></div>' : '');
+ (selectedFrontages.length > 0 ? '<div style="text-align:center"><button class="wizard-submit-btn" onclick="wizardNext()" style="max-width:360px">Choose Your Builder \u2192 (' + selectedFrontages.map(function(f){return f+'m';}).join(' + ') + ')</button></div>' : '<div style="text-align:center;font-size:13px;color:var(--text-xlight);padding:8px">Select one or more lot widths above</div>');
  }
 
  function selectFrontageGroup(frontage) {
-    wizardPushState('frontage');
- wizardState.selectedFrontage = frontage;
- renderWizardStep();
+   wizardPushState('frontage');
+   var arr = wizardState.selectedFrontages ? wizardState.selectedFrontages.slice() : [];
+   var idx = arr.indexOf(frontage);
+   if (idx === -1) arr.push(frontage);
+   else arr.splice(idx, 1);
+   wizardState.selectedFrontages = arr;
+   wizardState.selectedFrontage = arr.length > 0 ? arr[0] : null; // compat alias
+   renderWizardStep();
  }
 
+ // ─── NEW STEP 2: BUILDER SELECTION ─────────────────────────────────────────
+ function renderLandBuilderSelect() {
+   var premiumBuilders = BUILDERS.filter(function(b) { return b.tierGroup === 'premium'; });
+   var standardBuilders = BUILDERS.filter(function(b) { return b.tierGroup === 'standard'; });
+   var selectedBuilders = wizardState.selectedBuilders || [];
+   var allSelected = selectedBuilders.length === 0;
+
+   // Count compatible designs for selected frontages
+   var selectedFrontages = wizardState.selectedFrontages || [];
+   function fitsAny(d) {
+     if (selectedFrontages.length === 0) return true;
+     var req = parseFloat(d.frontage);
+     return isNaN(req) || selectedFrontages.some(function(f) { return f >= req; });
+   }
+
+   function isBuilderSel(bid) {
+     return allSelected || selectedBuilders.indexOf(bid) > -1;
+   }
+
+   function toggleBuilderSel(bid) {
+     var arr = (wizardState.selectedBuilders || []).slice();
+     var idx = arr.indexOf(bid);
+     if (idx === -1) arr.push(bid);
+     else arr.splice(idx, 1);
+     wizardState.selectedBuilders = arr;
+     renderWizardStep();
+   }
+
+   // Premium builder cards
+   var premiumCards = premiumBuilders.map(function(b) {
+     var isSel = isBuilderSel(b.id);
+     var builderDesigns = DESIGNS.filter(function(d) { return d.builder === b.name && fitsAny(d); });
+     var logoSrc = BUILDER_LOGOS[b.id] || '';
+     var logoStyles = { 'frd':'max-height:50px;max-width:120px;', 'creation':'max-height:40px;max-width:40px;', 'dare':'max-height:40px;max-width:120px;', 'oxfordgreen':'max-height:40px;max-width:140px;' };
+     var logoStyle = logoStyles[b.id] || 'max-height:45px;max-width:130px;';
+     return '<div style="background:var(--bg);border:2px solid ' + (isSel ? 'var(--accent)' : 'var(--border)') + ';border-radius:16px;padding:20px;cursor:pointer;transition:all 0.2s;position:relative" onclick="wizardSelectBuilderFilter(\'' + b.id + '\')">' +
+       '<div style="position:absolute;top:14px;right:14px;width:22px;height:22px;border-radius:50%;border:2px solid ' + (isSel ? 'var(--accent)' : 'var(--border)') + ';background:' + (isSel ? 'var(--accent)' : 'transparent') + ';display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:800">' + (isSel ? '\u2713' : '') + '</div>' +
+       '<div style="background:rgba(200,169,110,0.1);border:1px solid rgba(200,169,110,0.3);border-radius:6px;padding:2px 8px;font-size:9px;font-weight:700;color:#C8A96E;letter-spacing:0.5px;text-transform:uppercase;display:inline-block;margin-bottom:12px">\u2b50 Preferred Partner</div>' +
+       '<div style="height:52px;display:flex;align-items:center;margin-bottom:14px">' +
+       '<img src="' + logoSrc + '" alt="' + b.name + '" style="' + logoStyle + 'object-fit:contain" onerror="this.style.display=\'none\'"/>' +
+       '</div>' +
+       '<div style="font-size:15px;font-weight:800;color:var(--primary);margin-bottom:6px">' + b.name + '</div>' +
+       '<div style="font-size:11px;color:var(--text-light);line-height:1.6;margin-bottom:12px">' + (b.blurb ? b.blurb.split('. ').slice(0,2).join('. ') + '.' : b.tagline) + '</div>' +
+       '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border)">' +
+       '<span style="font-size:11px;font-weight:700;color:var(--accent)">' + b.priceRange + '</span>' +
+       '<span style="font-size:11px;color:var(--text-xlight)">' + builderDesigns.length + ' compatible design' + (builderDesigns.length !== 1 ? 's' : '') + '</span>' +
+       '</div></div>';
+   }).join('');
+
+   // Standard builder compact cards
+   var standardCards = standardBuilders.map(function(b) {
+     var isSel = isBuilderSel(b.id);
+     var initials = b.name.split(' ').slice(0,2).map(function(w) { return w[0]; }).join('');
+     return '<div style="background:var(--bg);border:2px solid ' + (isSel ? 'var(--accent)' : 'var(--border)') + ';border-radius:12px;padding:14px 16px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:12px" onclick="wizardSelectBuilderFilter(\'' + b.id + '\')">' +
+       '<div style="width:40px;height:40px;border-radius:8px;background:' + b.color + ';display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0">' + initials + '</div>' +
+       '<div style="flex:1;min-width:0">' +
+       '<div style="font-size:13px;font-weight:700;color:var(--primary)">' + b.name + '</div>' +
+       '<div style="font-size:11px;color:var(--text-light)">' + b.tier + ' · ' + b.priceRange + '</div>' +
+       '</div>' +
+       '<div style="width:18px;height:18px;border-radius:50%;border:2px solid ' + (isSel ? 'var(--accent)' : 'var(--border)') + ';background:' + (isSel ? 'var(--accent)' : 'transparent') + ';display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:800;flex-shrink:0">' + (isSel ? '\u2713' : '') + '</div>' +
+       '</div>';
+   }).join('');
+
+   var selectedCount = allSelected ? 'all builders' : selectedBuilders.length + ' builder' + (selectedBuilders.length !== 1 ? 's' : '') + ' selected';
+
+   return '<div class="wizard-step-heading"><h2>Who would you like to build with?</h2><p>Select one or more builders — or continue with all. Preferred partners get priority placement.</p></div>' +
+
+     // All builders toggle
+     '<div style="margin-bottom:20px">' +
+     '<div style="display:flex;gap:8px;margin-bottom:8px">' +
+     '<button style="padding:8px 20px;border-radius:20px;font-family:Montserrat,sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:2px solid ' + (allSelected ? 'var(--primary)' : 'var(--border)') + ';background:' + (allSelected ? 'var(--primary)' : 'transparent') + ';color:' + (allSelected ? '#fff' : 'var(--text-light)') + '" onclick="wizardState.selectedBuilders=[];renderWizardStep()">All Builders</button>' +
+     '</div></div>' +
+
+     // Premium section
+     '<div style="margin-bottom:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#C8A96E">⭐ Queensland&#39;s Preferred Partners</div>' +
+     '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:28px">' + premiumCards + '</div>' +
+
+     // Standard section
+     '<div style="margin-bottom:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-xlight)">More Builders in Our Network</div>' +
+     '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:28px">' + standardCards + '</div>' +
+
+     '<div style="text-align:center">' +
+     '<div style="font-size:12px;color:var(--text-xlight);margin-bottom:12px">' + selectedCount + '</div>' +
+     '<button class="wizard-submit-btn" onclick="wizardNext()" style="max-width:400px">View Matching Designs \u2192</button>' +
+     '</div>';
+ }
+
+ function wizardSelectBuilderFilter(builderId) {
+   var arr = (wizardState.selectedBuilders || []).slice();
+   var idx = arr.indexOf(builderId);
+   if (idx === -1) arr.push(builderId);
+   else arr.splice(idx, 1);
+   wizardState.selectedBuilders = arr;
+   renderWizardStep();
+ }
+
+
  function renderLandStep4() {
- // Filter designs by selected frontage width
- const maxFrontage = wizardState.selectedFrontage || 99;
- const frontageLabel = maxFrontage < 99 ? maxFrontage + 'm' : '';
+ // Filter designs by selected frontage widths (multi-select)
+ const selectedFrontages = wizardState.selectedFrontages || [];
+ const selectedBuilderIds = wizardState.selectedBuilders || []; // empty = all
+ const maxFrontage = selectedFrontages.length > 0 ? Math.max.apply(null, selectedFrontages) : 99;
+ const frontageLabel = selectedFrontages.length > 0 ? selectedFrontages.map(function(f){return f+'m';}).join(' or ') : '';
  // Get "from" land price for this frontage
  const lots = SAMPLE_LOTS[wizardState.project ? wizardState.project.id : ''] || [];
  const matchingLots = lots.filter(function(l) { return l.frontage === maxFrontage; });
  const landFromPrice = matchingLots.length > 0 ? Math.min.apply(null, matchingLots.map(function(l) { return l.price; })) : 0;
 
- // Filter designs compatible with the selected lot frontage
+ // Filter designs compatible with ANY selected frontage
  function designFits(d) {
- var req = parseFloat(d.frontage);
- return isNaN(req) || req <= maxFrontage;
+   var req = parseFloat(d.frontage);
+   if (isNaN(req)) return true;
+   if (selectedFrontages.length === 0) return true;
+   return selectedFrontages.some(function(f) { return f >= req; });
  }
 
- const allBuilders = [];
- DESIGNS.forEach(function(d) { if (allBuilders.indexOf(d.builder) === -1) allBuilders.push(d.builder); });
- const activeBuilderFilter = wizardState._designFilter || 'All';
+ // Apply builder filter from step 2 selection
  const activeBedsFilter = wizardState._bedsFilter || 'All';
  const activePriceFilter = wizardState._priceFilter || 'All';
 
  var filtered = DESIGNS.slice();
- if (activeBuilderFilter !== 'All') filtered = filtered.filter(function(d) { return d.builder === activeBuilderFilter; });
+ // Filter by selected builders (from step 2)
+ if (selectedBuilderIds.length > 0) {
+   var selectedBuilderNames = BUILDERS.filter(function(b) { return selectedBuilderIds.indexOf(b.id) > -1; }).map(function(b) { return b.name; });
+   filtered = filtered.filter(function(d) { return selectedBuilderNames.indexOf(d.builder) > -1; });
+ }
  if (activeBedsFilter !== 'All') filtered = filtered.filter(function(d) { return String(d.beds) === activeBedsFilter; });
  if (activePriceFilter !== 'All') {
    filtered = filtered.filter(function(d) {
@@ -3490,15 +3600,8 @@
  }
  if (maxFrontage < 99) filtered = filtered.filter(designFits);
 
- // Build filter bar
- var builderOptions = '<option value="All">All Builders</option>' + allBuilders.map(function(b) {
-   return '<option value="' + b.replace(/"/g,'&quot;') + '"' + (activeBuilderFilter === b ? ' selected' : '') + '>' + b + '</option>';
- }).join('');
 
- var filterBar = '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:flex-end">' +
-   '<div>' +
-   '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-xlight);margin-bottom:5px">Builder</div>' +
-   '<select class="lga-dropdown" style="min-width:160px;font-size:12px;padding:8px 32px 8px 12px" onchange="wizardFilterDesigns(this.value)">' + builderOptions + '</select></div>' +
+  var filterBar = '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:flex-end">' +
    '<div>' +
    '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-xlight);margin-bottom:5px">Bedrooms</div>' +
    '<select class="lga-dropdown" style="min-width:120px;font-size:12px;padding:8px 32px 8px 12px" onchange="wizardFilterBeds(this.value)">' +
@@ -3516,7 +3619,7 @@
    '<option value="400-500"' + (activePriceFilter==='400-500'?' selected':'') + '>$400k – $500k</option>' +
    '<option value="500plus"' + (activePriceFilter==='500plus'?' selected':'') + '>$500k+</option>' +
    '</select></div>' +
-   (activeBuilderFilter!=='All'||activeBedsFilter!=='All'||activePriceFilter!=='All' ? '<button onclick="wizardClearDesignFilters()" style="font-family:Montserrat,sans-serif;font-size:11px;font-weight:700;background:none;border:1px solid var(--border);border-radius:8px;padding:8px 14px;cursor:pointer;color:var(--text-light);align-self:flex-end">Clear filters</button>' : '') +
+   (activeBedsFilter!=='All'||activePriceFilter!=='All' ? '<button onclick="wizardClearDesignFilters()" style="font-family:Montserrat,sans-serif;font-size:11px;font-weight:700;background:none;border:1px solid var(--border);border-radius:8px;padding:8px 14px;cursor:pointer;color:var(--text-light);align-self:flex-end">Clear filters</button>' : '') +
    '<div style="margin-left:auto;align-self:flex-end;font-size:12px;font-weight:700;color:var(--text-light)">' + filtered.length + ' design' + (filtered.length!==1?'s':'') + ' found</div>' +
    '</div>';
 
